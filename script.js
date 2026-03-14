@@ -111,23 +111,25 @@ if (modelGuruSection) {
 // Fade in animation on scroll
 const fadeElements = document.querySelectorAll('.artefak-card, .penilaian-card, .competency-card, .galeri-item');
 
+```javascript id="p4u8nk"
 const fadeObserver = new IntersectionObserver(function (entries) {
     entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
             setTimeout(() => {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                entry.target.classList.add('fade-show');
             }, index * 100);
         }
     });
-}, { threshold: 0.1 });
+}, {
+    threshold: 0.1
+});
 
 fadeElements.forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'all 0.6s ease';
+    el.classList.add('fade-init');
     fadeObserver.observe(el);
 });
+```
+
 
 // Mobile menu toggle (if needed in future)
 const mobileMenu = document.querySelector('.mobile-menu');
