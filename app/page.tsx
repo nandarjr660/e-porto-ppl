@@ -5,6 +5,7 @@ import Artifact from "@/components/artifact";
 import Lampiran from "@/components/lampiran";
 import Closing from "@/components/closing";
 import Footer from "@/components/footer";
+import Institusi from "@/components/institusi";
 
 export default function Home() {
   return (
@@ -21,9 +22,12 @@ export default function Home() {
 
       {/* SECTION 1: PEMBUKA (ID: hero) */}
       <Hero />
-      
+
       {/* SECTION 2: PROFIL (ID: profil) */}
       <Profile />
+
+      {/* SECTION 1.5: INSTITUSI (ID: institusi) */}
+      <Institusi />
       
       {/* SECTION 3: ARTEFAK & SIKLUS (ID: artifact) */}
       <Artifact />
