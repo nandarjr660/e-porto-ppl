@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: "E-Portfolio Praktik Pengalaman Lapangan (PPL) Terbimbing oleh Hasmunandar. Refleksi dan rekam jejak pembelajaran bermakna di kelas 3 SDN Pengasinan IX.",
   keywords: ['Portofolio PPL', 'PPG Prajabatan 2026', 'Hasmunandar', 'SDN Pengasinan IX', 'Universitas Muhammadiyah Indonesia', 'Guru SD', 'Bekasi'],
   authors: [{ name: 'Hasmunandar' }],
+  
+  // Konfigurasi untuk tampilan Share (WA, Telegram, FB)
   openGraph: {
     title: 'Hasmunandar | E-Portfolio PPL Terbimbing',
     description: 'Jelajahi rekam jejak, artefak pembelajaran kelas 3, dan visi mengajar saya selama Praktik Pengalaman Lapangan di SDN Pengasinan IX.',
@@ -16,9 +18,25 @@ export const metadata: Metadata = {
     siteName: 'Portofolio PPL Hasmunandar',
     locale: 'id_ID',
     type: 'website',
+    images: [
+      {
+        url: '/nandar.jpg', // Menggunakan foto profil lu
+        width: 1200,
+        height: 630,
+        alt: 'Preview Portofolio Hasmunandar',
+      },
+    ],
   },
+
+  // Perintah khusus untuk memicu tampilan "Full/Large Image" di sosmed
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/nandar.jpg'],
+  },
+
+  // Mengganti favicon tab browser dengan foto profil
   icons: {
-    icon: '/favicon.ico',
+    icon: '/nandar.jpg',
   },
 };
 
