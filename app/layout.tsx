@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  // Tentukan alamat web lu di sini sebagai pusatnya
+  // MetadataBase memastikan semua link internal jadi link lengkap (URL absolute)
   metadataBase: new URL('https://ppl-hasmunandar.vercel.app'),
   
   title: "Hasmunandar | E-Portfolio PPL Terbimbing",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/nandar.jpg', // Next.js otomatis gabungin ini sama metadataBase di atas
+        url: '/meta.jpg', // Nama file baru sesuai permintaan lu
         width: 1200,
         height: 630,
         alt: 'Preview Portofolio Hasmunandar',
@@ -32,11 +32,11 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    images: ['/nandar.jpg'],
+    images: ['/meta.jpg'], // Nama file baru untuk twitter/sosmed card
   },
 
   icons: {
-    icon: '/nandar.jpg',
+    icon: '/nandar.jpg', // Untuk ikon tab browser, tetep pake foto profil asli biar keliatan jelas
   },
 };
 
