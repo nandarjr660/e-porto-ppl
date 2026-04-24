@@ -35,8 +35,8 @@ export default function Lampiran() {
   return (
     <section
       id="lampiran"
-      /* PERUBAHAN WARNA: Diubah ke #F1F5F9 (Abu-abu Muda) agar batasnya jelas dari Artifact */
-      className="relative w-full min-h-screen bg-[#F1F5F9] text-[#1E293B] px-6 pt-24 pb-16 md:pt-32 md:px-10 lg:px-16 font-sans flex flex-col border-t border-[#1E293B]/5 shadow-[inset_0_2px_10px_rgba(30,41,59,0.02)]"
+      /* PERBAIKAN: Ganti min-h-screen (100vh) jadi min-h-[100svh] khusus untuk HP biar stabil */
+      className="relative w-full min-h-[100svh] lg:min-h-[100dvh] bg-[#F1F5F9] text-[#1E293B] px-6 pt-24 pb-16 md:pt-32 md:px-10 lg:px-16 font-sans flex flex-col border-t border-[#1E293B]/5 shadow-[inset_0_2px_10px_rgba(30,41,59,0.02)]"
     >
 
       {/* HEADER: Judul Editorial */}

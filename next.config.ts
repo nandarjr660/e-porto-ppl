@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  // Dikosongin aja biar fitur auto-compress Next.js nyala
 };
 
 export default nextConfig;

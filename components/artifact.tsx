@@ -40,10 +40,10 @@ export default function Artifact() {
       rppTitle: "Topik: Ekosistem & Rantai Makanan (IPAS)",
       tanggal: "12 APRIL 2026",
       durasi: "2 x 35 MENIT",
-      kelas: "KELAS 6",
+      kelas: "Kelas 3",
       desc: "Pembelajaran mengenai keseimbangan ekosistem menggunakan model Problem Based Learning (PBL). Siswa memecahkan masalah nyata terkait penurunan populasi hewan tertentu di lingkungan sekitar.",
       img: "/sekolah.jpg", 
-      konteks: "Diterapkan pada materi IPAS untuk mendorong siswa kelas 6 berpikir kritis melalui masalah lingkungan.",
+      konteks: "Diterapkan pada materi IPAS untuk mendorong siswa Kelas 3 berpikir kritis melalui masalah lingkungan.",
       tujuan: "Siswa mampu mengidentifikasi masalah, melakukan investigasi mandiri, dan menyajikan solusi secara kreatif.",
       plus: "Siswa sangat antusias karena materi dikaitkan dengan fenomena sehari-hari di sekitar sekolah.",
       minus: "Manajemen waktu saat fase investigasi kelompok perlu pendampingan lebih intensif.",
@@ -59,14 +59,14 @@ export default function Artifact() {
       rppTitle: "Topik: Teks Eksplanasi Ilmiah (B. Indonesia)",
       tanggal: "26 APRIL 2026",
       durasi: "2 x 35 MENIT",
-      kelas: "KELAS 6",
+      kelas: "Kelas 3",
       desc: "Menganalisis struktur teks eksplanasi ilmiah menggunakan pendekatan PBL. Siswa mengamati video fenomena alam dan menyusun teks eksplanasi berdasarkan urutan sebab-akibat.",
       img: "/sekolah.jpg",
       konteks: "Penggunaan media presentasi interaktif untuk membantu siswa memahami struktur teks yang abstrak.",
       tujuan: "Meningkatkan kemampuan literasi siswa dalam menyusun argumen yang logis dan terstruktur.",
       plus: "Partisipasi siswa meningkat drastis; siswa lebih mudah merangkai kata melalui visualisasi fenomena alam.",
       minus: "Memerlukan persiapan teknis ekstra untuk memastikan perangkat penayangan video berfungsi.",
-      teori: "Diperkuat kerangka TPACK (Technological Pedagogical Content Knowledge) dalam penyajian materi kelas 6.",
+      teori: "Diperkuat kerangka TPACK (Technological Pedagogical Content Knowledge) dalam penyajian materi Kelas 3.",
       nilai: { gp: 96, dpl: 98 },
       gallery: ["/sekolah.jpg", "/sekolah.jpg", "/sekolah.jpg", "/sekolah.jpg", "/sekolah.jpg", "/sekolah.jpg"],
       rppLink: "#",
@@ -78,7 +78,7 @@ export default function Artifact() {
       rppTitle: "Topik: Rangkaian Listrik Sederhana (IPAS)",
       tanggal: "10 MEI 2026",
       durasi: "2 x 35 MENIT",
-      kelas: "KELAS 6",
+      kelas: "Kelas 3",
       desc: "Praktikum pembuatan rangkaian listrik seri dan paralel. Siswa diberikan masalah 'padamnya lampu di satu ruangan tanpa mematikan ruangan lain' (PBL) dan mencari solusinya melalui percobaan.",
       img: "/sekolah.jpg",
       konteks: "Implementasi asesmen formatif sekaligus praktikum langsung agar siswa memahami konsep kelistrikan.",
@@ -104,7 +104,11 @@ export default function Artifact() {
   };
 
   return (
-    <section id="artifact" className="relative w-full min-h-[100dvh] lg:h-[100dvh] bg-[#F8FAFC] text-[#1E293B] font-sans overflow-x-hidden overflow-y-auto lg:overflow-hidden flex flex-col pt-24 pb-10 px-6 md:px-10 lg:px-12 border-b border-[#1E293B]/10">
+    <section 
+      id="artifact" 
+      /* PERBAIKAN: Gunakan min-h-[100svh] agar layar HP tidak memanjang saat scroll */
+      className="relative w-full min-h-[100svh] lg:h-[100dvh] bg-[#F8FAFC] text-[#1E293B] font-sans overflow-x-hidden overflow-y-auto lg:overflow-hidden flex flex-col pt-24 pb-10 px-6 md:px-10 lg:px-12 border-b border-[#1E293B]/10"
+    >
       
       {/* HEADER UTAMA */}
       <motion.header
@@ -186,9 +190,10 @@ export default function Artifact() {
                   </motion.p>
                 </motion.div>
 
-                {/* ANIMASI GAMBAR ORISINAL (Tirai/ScaleY 2) TETAP AMAN DI SINI */}
+                {/* ANIMASI GAMBAR ORISINAL DENGAN KUNCI TINGGI UNTUK HP */}
                 <motion.div
-                  className="w-full flex-1 min-h-[140px] max-h-[220px] mt-6 mb-5 rounded-xl overflow-hidden border border-[#1E293B]/10 relative cursor-pointer group bg-[#F8FAFC]"
+                  /* PERBAIKAN: Tinggi fix di HP (h-[180px]) dan kembali flex-1 di layar laptop (md) */
+                  className="w-full flex-1 h-[180px] md:h-auto min-h-[140px] max-h-[220px] mt-6 mb-5 rounded-xl overflow-hidden border border-[#1E293B]/10 relative cursor-pointer group bg-[#F8FAFC]"
                   onClick={() => setActiveCycle(isSelected ? null : item.id)}
                   initial={{ opacity: 0, scaleY: 0 }}
                   whileInView={{ opacity: 1, scaleY: 1 }}
@@ -211,7 +216,7 @@ export default function Artifact() {
 
                 <motion.button 
                   onClick={() => setActiveCycle(isSelected ? null : item.id)}
-                  className={`mt-auto w-full py-4 rounded-xl text-xs md:text-sm font-black uppercase tracking-[0.2em] transition-all duration-300 flex justify-center items-center gap-2 ${
+                  className={`mt-auto w-full py-4 rounded-xl text-xs md:text-sm font-black uppercase tracking-[0.2em] transition-all duration-300 flex justify-center items-center gap-2 flex-none ${
                     isSelected 
                       ? 'bg-[#F1F5F9] text-[#1E293B] hover:bg-[#E2E8F0] border border-[#1E293B]/10' 
                       : 'bg-[#406093] text-[#F8FAFC] hover:bg-[#1E293B] shadow-[0_4px_14px_0_rgba(64,96,147,0.39)]'

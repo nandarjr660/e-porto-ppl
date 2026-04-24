@@ -14,8 +14,8 @@ export default function Closing() {
   return (
     <section
       id="closing"
-      /* PERUBAHAN TEMA: Background Dark Navy (#0F172A), sangat kontras dengan halaman sebelumnya */
-      className="relative w-full min-h-[100dvh] bg-[#0F172A] overflow-x-hidden overflow-y-auto flex flex-col items-center justify-between px-6 md:px-12 py-16 md:py-20 text-center font-sans border-t border-[#1E293B]"
+      /* PERBAIKAN: Ganti min-h-[100dvh] jadi min-h-[100svh] khusus untuk HP biar layar kalem dan nggak memanjang saat address bar ngilang */
+      className="relative w-full min-h-[100svh] md:min-h-[100dvh] bg-[#0F172A] overflow-x-hidden overflow-y-auto flex flex-col items-center justify-between px-6 md:px-12 py-16 md:py-20 text-center font-sans border-t border-[#1E293B]"
     >
 
       {/* --- BACKGROUND GLOW (Aura Biru Baja di tengah gelap) --- */}

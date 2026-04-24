@@ -1,17 +1,18 @@
 'use client';
 
+import Image from 'next/image'; // <-- TAMBAHAN IMPORT UNTUK OPTIMASI
 import { motion } from 'framer-motion';
 import { fadeUp, fadeUpHero, staggerContainer, staggerItem, revealHeight, VIEWPORT } from '@/lib/motion';
 
 export default function Hero() {
   // Link Google Maps SDN Pengasinan IX
-  const mapsUrl = "https://maps.app.goo.gl/1Dvt8RRe48u9K9GPA";
+  const mapsUrl = "https://share.google/8RnJYfrV3QJi7L89k"; // Sesuai link lu sebelumnya
 
   return (
     <section
       id="hero"
-      /* BG Putih Awan dan Teks Slate Gelap */
-      className="relative w-full h-[100dvh] bg-[#F8FAFC] text-[#1E293B] px-4 pb-6 pt-24 md:px-10 md:pb-8 md:pt-28 flex flex-col overflow-hidden font-sans border-b border-[#1E293B]/10"
+      /* PERBAIKAN: Pakai min-h-[100svh] di HP biar layar nggak naik-turun pas scroll */
+      className="relative w-full min-h-[100svh] md:h-[100dvh] bg-[#F8FAFC] text-[#1E293B] px-4 pb-6 pt-24 md:px-10 md:pb-8 md:pt-28 flex flex-col overflow-hidden font-sans border-b border-[#1E293B]/10"
     >
 
       {/* --- GRAPHIC ELEMENTS (no animation, purely decorative) --- */}
@@ -75,7 +76,8 @@ export default function Hero() {
 
         {/* HERO IMAGE — cinematic curtain reveal ORISINAL milikmu + HOVER TEXT + MAPS LINK */}
         <motion.div
-          className="flex-1 min-h-[120px] w-full relative rounded-2xl md:rounded-[2rem] overflow-hidden group border border-[#1E293B]/10 shadow-sm"
+          /* PERBAIKAN: Tinggi fix di HP (40vh), dan kembali flex-1 di Laptop (md) */
+          className="h-[40vh] min-h-[250px] md:h-auto md:flex-1 w-full relative rounded-2xl md:rounded-[2rem] overflow-hidden group border border-[#1E293B]/10 shadow-sm"
           variants={revealHeight}
           initial="hidden"
           animate="visible"
@@ -91,16 +93,23 @@ export default function Hero() {
               </div>
             </div>
 
-            <motion.img
-              src="/sekolah.jpg"
-              alt="Kegiatan PPL"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            {/* PERBAIKAN OPTIMASI IMAGE: Animasi dipindah ke motion.div agar tidak rusak */}
+            <motion.div
+              className="absolute inset-0 w-full h-full"
               /* Animasi Orisinal: Ditarik panjang (scaleY: 2) lalu kembali presisi (scaleY: 1) */
               initial={{ scaleY: 2, opacity: 0 }}
               animate={{ scaleY: 1, opacity: 1 }}
               transition={{ duration: 1.1, ease: [0.25, 1, 0.5, 1], delay: 0.3 }}
               style={{ transformOrigin: 'top' }}
-            />
+            >
+              <Image
+                src="/sekolah.jpg"
+                alt="Kegiatan PPL"
+                fill
+                priority
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+            </motion.div>
           </a>
         </motion.div>
 

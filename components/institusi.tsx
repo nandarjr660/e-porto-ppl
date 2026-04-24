@@ -14,7 +14,8 @@ export default function Institusi() {
       {/* =========================================
           SECTION 1: KAMPUS LPTK
           ========================================= */}
-      <section className="relative w-full min-h-[100dvh] flex flex-col-reverse lg:flex-row bg-[#1E293B] text-[#F8FAFC] overflow-hidden">
+      {/* PERBAIKAN: min-h-[100svh] untuk kunci layar HP */}
+      <section className="relative w-full min-h-[100svh] lg:min-h-[100dvh] flex flex-col-reverse lg:flex-row bg-[#1E293B] text-[#F8FAFC] overflow-hidden">
         
         {/* KIRI: Area Teks */}
         <div className="w-full lg:w-1/2 flex flex-col justify-center p-8 md:p-16 lg:p-24 relative z-10">
@@ -68,15 +69,16 @@ export default function Institusi() {
               </div>
             </motion.div>
 
-            {/* DESKRIPSI KAMPUS DIUPDATE */}
+            {/* DESKRIPSI KAMPUS */}
             <motion.p className="text-sm md:text-base opacity-80 leading-relaxed font-medium" variants={staggerItem}>
               Mengawali langkah besarnya, Universitas Muhammadiyah Indonesia (UM Indonesia) resmi berdiri pada tahun 2026. Kampus yang sebelumnya bernama Universitas Islam 45 (UNISMA) Bekasi ini diakuisisi oleh organisasi Muhammadiyah dan bertransformasi menjadi kampus yang fokus memproduksi lulusan dengan kompetensi dan <i>skill</i> siap kerja.
             </motion.p>
           </motion.div>
         </div>
 
-        {/* KANAN: Area Gambar */}
-        <div className="w-full lg:w-1/2 h-[35vh] md:h-[45vh] lg:h-[100dvh] relative bg-gray-900 overflow-hidden group">
+        {/* KANAN: Area Gambar dengan Efek Reveal */}
+        {/* PERBAIKAN: Tinggi absolut min-h-[300px] untuk gambar agar stabil di HP */}
+        <div className="w-full lg:w-1/2 h-[40vh] min-h-[300px] md:h-[45vh] lg:h-[100dvh] relative bg-gray-900 overflow-hidden group">
           <motion.img 
             src="/kampus.jpg" 
             alt="Kampus LPTK" 
@@ -86,20 +88,8 @@ export default function Institusi() {
             viewport={VIEWPORT}
             transition={{ duration: 1.2, ease: "easeOut" }}
           />
-          <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-[#1E293B] via-[#1E293B]/80 to-transparent w-full pointer-events-none"></div>
-          <div className="lg:hidden absolute inset-0 bg-black/20 pointer-events-none"></div>
-
-          {/* OVERLAY LINK & TEKS + SVG PANAH */}
-          <a href={kampusMapUrl} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-30 flex items-center justify-center bg-[#1E293B]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-[2px]">
-            <div className="flex items-center gap-2 px-6 py-3 border border-white/40 bg-white/10 backdrop-blur-md rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 shadow-xl">
-              <p className="text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.4em] whitespace-nowrap">
-                LIHAT DI PETA
-              </p>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3 md:w-4 md:h-4 text-white">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
-            </div>
-          </a>
+          <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-[#1E293B] via-[#1E293B]/80 to-transparent w-full pointer-events-none transition-opacity duration-700 ease-in-out group-hover:opacity-0"></div>
+          <div className="lg:hidden absolute inset-0 bg-black/20 pointer-events-none transition-opacity duration-700 ease-in-out group-hover:opacity-0"></div>
         </div>
 
         {/* EFEK TRANSISI HALUS KE BAWAH */}
@@ -111,10 +101,12 @@ export default function Institusi() {
       {/* =========================================
           SECTION 2: SEKOLAH PPL
           ========================================= */}
-      <section className="relative w-full min-h-[100dvh] flex flex-col lg:flex-row bg-[#0F172A] text-[#F8FAFC] overflow-hidden">
+      {/* PERBAIKAN: min-h-[100svh] untuk kunci layar HP */}
+      <section className="relative w-full min-h-[100svh] lg:min-h-[100dvh] flex flex-col lg:flex-row bg-[#0F172A] text-[#F8FAFC] overflow-hidden">
         
-        {/* KIRI: Area Gambar */}
-        <div className="w-full lg:w-1/2 h-[35vh] md:h-[45vh] lg:h-[100dvh] relative bg-gray-900 overflow-hidden order-1 lg:order-1 group">
+        {/* KIRI: Area Gambar dengan Efek Reveal */}
+        {/* PERBAIKAN: Tinggi absolut min-h-[300px] untuk gambar agar stabil di HP */}
+        <div className="w-full lg:w-1/2 h-[40vh] min-h-[300px] md:h-[45vh] lg:h-[100dvh] relative bg-gray-900 overflow-hidden order-1 lg:order-1 group">
           <motion.img 
             src="/sekolah.jpg" 
             alt="SDN Pengasinan IX" 
@@ -124,20 +116,8 @@ export default function Institusi() {
             viewport={VIEWPORT}
             transition={{ duration: 1.2, ease: "easeOut" }}
           />
-          <div className="hidden lg:block absolute inset-0 bg-gradient-to-l from-[#0F172A] via-[#0F172A]/80 to-transparent w-full pointer-events-none"></div>
-          <div className="lg:hidden absolute inset-0 bg-black/20 pointer-events-none"></div>
-
-          {/* OVERLAY LINK & TEKS + SVG PANAH */}
-          <a href={sekolahMapUrl} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-30 flex items-center justify-center bg-[#0F172A]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-[2px]">
-            <div className="flex items-center gap-2 px-6 py-3 border border-white/40 bg-white/10 backdrop-blur-md rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 shadow-xl">
-              <p className="text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.4em] whitespace-nowrap">
-                LIHAT DI PETA
-              </p>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3 md:w-4 md:h-4 text-white">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
-            </div>
-          </a>
+          <div className="hidden lg:block absolute inset-0 bg-gradient-to-l from-[#0F172A] via-[#0F172A]/80 to-transparent w-full pointer-events-none transition-opacity duration-700 ease-in-out group-hover:opacity-0"></div>
+          <div className="lg:hidden absolute inset-0 bg-black/20 pointer-events-none transition-opacity duration-700 ease-in-out group-hover:opacity-0"></div>
         </div>
 
         {/* KANAN: Area Teks */}
@@ -201,7 +181,7 @@ export default function Institusi() {
               </div>
             </motion.div>
 
-            {/* DESKRIPSI SEKOLAH DIUPDATE AGAR LEBIH PROFESIONAL DAN MENYEBUT KELAS 3 */}
+            {/* DESKRIPSI SEKOLAH */}
             <motion.p className="text-sm md:text-base lg:text-lg opacity-80 leading-relaxed font-medium lg:text-right" variants={staggerItem}>
               Sekolah ini menjadi lokasi pengabdian saya dalam mempraktikkan ilmu pedagogik secara langsung. Selama masa PPL, saya bertanggung jawab sebagai guru model di kelas 3, merancang alur pembelajaran yang aktif, serta mengelola dinamika kelas secara profesional.
             </motion.p>

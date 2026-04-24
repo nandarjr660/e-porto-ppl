@@ -1,14 +1,17 @@
 'use client';
 
+import Image from 'next/image'; // <-- TAMBAHAN IMPORT
 import { motion } from 'framer-motion';
 import { fadeUp, fadeLeft, staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
 
 export default function Profile() {
   return (
-    <section id="profil" className="relative w-full min-h-[100dvh] bg-[#F8FAFC] text-[#1E293B] px-4 py-4 md:px-10 lg:py-6 font-sans overflow-hidden flex flex-col pt-24 md:pt-28">
+    <section 
+      id="profil" 
+      className="relative w-full min-h-[100svh] md:min-h-[100dvh] bg-[#F8FAFC] text-[#1E293B] px-4 py-4 md:px-10 lg:py-6 font-sans overflow-hidden flex flex-col pt-24 md:pt-28"
+    >
 
       {/* --- DEKORASI --- */}
-      {/* Titik-titik latar belakang dan garis vertikal diubah ke Slate Gelap */}
       <div className="absolute top-10 right-10 w-32 h-32 opacity-10 pointer-events-none hidden lg:block z-0" style={{ backgroundImage: 'radial-gradient(#1E293B 2px, transparent 2px)', backgroundSize: '16px 16px' }}></div>
       <div className="absolute top-0 bottom-0 left-6 md:left-10 w-[1px] bg-[#1E293B]/10 hidden md:block z-0"></div>
 
@@ -31,30 +34,27 @@ export default function Profile() {
 
         {/* KIRI: Foto Profil */}
         <motion.div
-          className="lg:col-span-4 w-full h-[45vh] md:h-[50vh] lg:h-[70vh] max-h-[600px] relative group shrink-0 lg:shrink"
+          className="lg:col-span-4 w-full h-[40vh] min-h-[300px] md:h-[50vh] lg:h-[70vh] max-h-[600px] relative group shrink-0 lg:shrink"
           variants={fadeLeft}
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
         >
-          {/* Bayangan Hover disesuaikan dengan warna Slate */}
           <div className="relative w-full h-full rounded-[2rem] overflow-hidden border border-[#1E293B]/10 bg-gray-200 z-10 shadow-sm transition-all duration-700 ease-out group-hover:-translate-y-2 group-hover:shadow-[0_25px_50px_-12px_rgba(30,41,59,0.3)]">
             
-            {/* Foto Profile dengan warna asli (grayscale DICABUT) */}
-            <img
+            {/* PERBAIKAN: Foto Profile dengan Next/Image */}
+            <Image
               src="/nandar.jpg" 
               alt="Hasmunandar"
-              className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+              fill
+              priority
+              className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
             />
             
-            {/* Efek Kaca Dibersihkan: Overlay warna Biru Baja tipis yang menghilang saat di-hover */}
             <div className="absolute inset-0 bg-[#406093]/10 mix-blend-overlay pointer-events-none transition-opacity duration-700 ease-out group-hover:opacity-0"></div>
-            
           </div>
 
-          {/* Label Nama dengan warna Biru Baja (#406093) */}
           <div className="absolute -bottom-3 -left-3 lg:-bottom-4 lg:-left-4 bg-[#406093] text-[#F8FAFC] px-5 py-2 lg:px-6 lg:py-3 rounded-full text-[10px] lg:text-xs font-bold uppercase tracking-widest z-20 shadow-xl flex items-center gap-2">
-             {/* Titik Pulse diubah menjadi Biru Muda/Cyan agar selaras */}
              <span className="w-2 h-2 bg-[#93C5FD] rounded-full animate-pulse"></span>
              Hasmunandar
           </div>
@@ -98,7 +98,6 @@ export default function Profile() {
             </p>
           </motion.div>
 
-          {/* Kotak Kutipan (Quote Box) menggunakan Slate Gelap agar tidak berebut fokus dengan foto */}
           <motion.div
             className="bg-[#1E293B] text-[#F8FAFC] p-4 lg:p-5 rounded-xl relative overflow-hidden group mt-1"
             variants={staggerItem}
@@ -111,11 +110,8 @@ export default function Profile() {
               — John Dewey
             </p>
           </motion.div>
-
         </motion.div>
-
       </main>
-
     </section>
   );
 }
