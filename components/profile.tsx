@@ -44,7 +44,7 @@ export default function Profile() {
             
             {/* PERBAIKAN: Foto Profile dengan Next/Image */}
             <Image
-              src="/nandar.jpg" 
+              src="/image/nandar.jpg" 
               alt="Hasmunandar"
               fill
               priority

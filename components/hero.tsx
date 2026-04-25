@@ -103,7 +103,7 @@ export default function Hero() {
               style={{ transformOrigin: 'top' }}
             >
               <Image
-                src="/sekolah.jpg"
+                src="/image/sekolah.jpg"
                 alt="Kegiatan PPL"
                 fill
                 priority

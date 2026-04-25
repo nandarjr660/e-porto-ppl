@@ -80,7 +80,7 @@ export default function Institusi() {
         {/* PERBAIKAN: Tinggi absolut min-h-[300px] untuk gambar agar stabil di HP */}
         <div className="w-full lg:w-1/2 h-[40vh] min-h-[300px] md:h-[45vh] lg:h-[100dvh] relative bg-gray-900 overflow-hidden group">
           <motion.img 
-            src="/kampus.jpg" 
+            src="/image/kampus.jpg" 
             alt="Kampus LPTK" 
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             initial={{ scale: 1.2, opacity: 0 }}
@@ -108,7 +108,7 @@ export default function Institusi() {
         {/* PERBAIKAN: Tinggi absolut min-h-[300px] untuk gambar agar stabil di HP */}
         <div className="w-full lg:w-1/2 h-[40vh] min-h-[300px] md:h-[45vh] lg:h-[100dvh] relative bg-gray-900 overflow-hidden order-1 lg:order-1 group">
           <motion.img 
-            src="/sekolah.jpg" 
+            src="/image/sekolah.jpg" 
             alt="SDN Pengasinan IX" 
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             initial={{ scale: 1.2, opacity: 0 }}
