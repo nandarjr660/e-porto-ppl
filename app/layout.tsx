@@ -21,6 +21,10 @@ export const metadata: Metadata = {
   keywords: ['Portofolio PPL', 'PPG Prajabatan 2026', 'Hasmunandar', 'SDN Pengasinan IX', 'Universitas Muhammadiyah Indonesia', 'Guru SD', 'Bekasi'],
   authors: [{ name: 'Hasmunandar' }],
   
+  verification: {
+    google: '4bxJJVPgCCP6EWmk2KaReb8YqjvhWA2H79ZSO7gIpZk',
+  },
+  
   openGraph: {
     title: 'Hasmunandar | E-Portfolio PPL Terbimbing',
     description: 'Jelajahi rekam jejak, artefak pembelajaran kelas 3, dan visi mengajar saya selama Praktik Pengalaman Lapangan di SDN Pengasinan IX.',
