@@ -6,6 +6,7 @@ import Lampiran from "@/components/lampiran";
 import Closing from "@/components/closing";
 import Footer from "@/components/footer";
 import Institusi from "@/components/institusi";
+import Welcome from "@/components/welcome";
 
 export default function Home() {
   return (
@@ -15,6 +16,9 @@ export default function Home() {
      */
     <main className="bg-[#0E2922] w-full min-h-screen text-[#F4F4F2] overflow-x-hidden font-sans scroll-smooth scroll-pt-[100px]">
       
+      {/* WELCOME SPLASH SCREEN */}
+      <Welcome />
+
       {/* NAVBAR MORPHING: 
           Akan menempel di atas pada Hero, lalu berubah jadi Pill saat scroll.
       */}
