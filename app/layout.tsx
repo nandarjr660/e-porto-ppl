@@ -1,8 +1,16 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import StructuredData from "./structured-data";
 
 const inter = Inter({ subsets: ["latin"] });
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#406093',
+};
 
 export const metadata: Metadata = {
   // MetadataBase memastikan semua link internal jadi link lengkap (URL absolute)
@@ -22,7 +30,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/meta.jpg', // Nama file baru sesuai permintaan lu
+        url: '/image/meta.jpg',
         width: 1200,
         height: 630,
         alt: 'Preview Portofolio Hasmunandar',
@@ -32,11 +40,11 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    images: ['/meta.jpg'], // Nama file baru untuk twitter/sosmed card
+    images: ['/image/meta.jpg'],
   },
 
   icons: {
-    icon: '/nandar.jpg', // Untuk ikon tab browser, tetep pake foto profil asli biar keliatan jelas
+    icon: '/image/nandar.jpg',
   },
 };
 
@@ -47,6 +55,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className="scroll-smooth">
+      <head>
+        <StructuredData />
+      </head>
       <body className={`${inter.className} antialiased`}>
         {children}
       </body>
