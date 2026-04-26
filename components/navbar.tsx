@@ -23,12 +23,12 @@ export default function Navbar() {
   };
 
   const menuItems = [
-    { name: 'Home', href: '#hero' },
-    { name: 'Profile', href: '#profil' },
+    { name: 'Beranda', href: '#hero' },
+    { name: 'Profil', href: '#profil' },
     { name: 'Institusi', href: '#institusi' },
-    { name: 'Artifacts', href: '#artifact' },
-    { name: 'Appendix', href: '#lampiran' },
-    { name: 'Vision', href: '#closing' },
+    { name: 'Artefak', href: '#artifact' },
+    { name: 'Lampiran', href: '#lampiran' },
+    { name: 'Penutup', href: '#closing' },
   ];
 
   return (
@@ -89,8 +89,8 @@ export default function Navbar() {
              className={`hidden md:block border text-center font-bold uppercase tracking-widest hover:bg-[#406093] hover:text-[#F8FAFC] hover:border-[#406093] transition-all duration-500 cursor-pointer
              ${scrolled 
                ? 'px-4 py-1.5 text-[9px] rounded-full text-[#F8FAFC] border-[#F8FAFC]/20' 
-               : 'px-5 py-2 text-[10px] rounded-md text-[#406093] border-[#406093]'}`}>
-             Connect
+               : 'px-5 py-2 text-[10px] rounded-md text-[#F8FAFC] border-[#F8FAFC]/60'}`}>
+             Kontak
            </a>
         </div>
 

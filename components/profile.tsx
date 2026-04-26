@@ -103,10 +103,10 @@ export default function Profile() {
             variants={staggerItem}
           >
             <div className="absolute -right-2 -top-6 text-6xl lg:text-7xl font-serif opacity-20">"</div>
-            <p className="text-sm md:text-base lg:text-lg font-bold tracking-wide relative z-10 italic">
+            <p className="text-sm md:text-base lg:text-lg font-bold tracking-wide relative z-10 italic text-center">
               "Pendidikan bukanlah persiapan untuk hidup; pendidikan itu sendiri adalah kehidupan."
             </p>
-            <p className="text-[9px] lg:text-[10px] font-bold uppercase tracking-widest mt-2 opacity-60 relative z-10">
+            <p className="text-[9px] lg:text-[10px] font-bold uppercase tracking-widest mt-2 opacity-60 relative z-10 text-center">
               — John Dewey
             </p>
           </motion.div>
