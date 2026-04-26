@@ -33,14 +33,14 @@ export default function Footer() {
         {/* Kanan: Kontak */}
         <div className="flex flex-col gap-2 items-start md:items-end">
           <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#1E293B]/40 mb-1">Hubungi Saya</p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {socialLinks.map((link, idx) => (
               <a
                 key={idx}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 rounded-full border border-[#1E293B]/15 text-[11px] font-bold uppercase tracking-widest text-[#1E293B]/60 hover:border-[#406093] hover:text-[#406093] transition-all duration-300"
+                className="px-5 py-2.5 rounded-xl border border-[#1E293B]/10 bg-white text-[11px] font-bold uppercase tracking-widest text-[#1E293B]/70 shadow-sm hover:shadow-md hover:border-[#406093]/40 hover:text-[#406093] hover:-translate-y-0.5 transition-all duration-300"
               >
                 {link.label}
               </a>
