@@ -25,7 +25,7 @@ export default function Welcome() {
           transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
         >
           {/* Teks dengan efek blur → jelas → blur */}
-          <div className="text-center px-6 max-w-3xl space-y-3">
+          <div className="text-center px-6 max-w-3xl space-y-8 md:space-y-12">
             {/* Baris 1 & 2 */}
             <motion.div
               initial={{ filter: 'blur(10px)', opacity: 0 }}
@@ -49,7 +49,7 @@ export default function Welcome() {
 
             {/* Baris 3 - dengan delay */}
             <motion.p
-              className="text-xl md:text-2xl lg:text-3xl font-bold text-[#406093] pt-2"
+              className="text-xl md:text-2xl lg:text-3xl font-bold text-[#406093] italic"
               initial={{ filter: 'blur(10px)', opacity: 0 }}
               animate={{ 
                 filter: ['blur(10px)', 'blur(10px)', 'blur(0px)', 'blur(0px)', 'blur(10px)'],
@@ -61,7 +61,7 @@ export default function Welcome() {
                 ease: 'easeInOut'
               }}
             >
-              Semoga hari Anda menyenangkan
+              "Semoga hari Anda menyenangkan"
             </motion.p>
           </div>
         </motion.div>

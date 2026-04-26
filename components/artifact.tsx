@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fadeUp, staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
 
@@ -34,6 +34,18 @@ export default function Artifact() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 const [showNothingModal, setShowNothingModal] = useState(false);
+
+  // Lock scroll saat detail panel terbuka
+  useEffect(() => {
+    if (activeCycle) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [activeCycle]);
   const dataSiklus: SiklusItem[] = [
     {
       id: "01",
@@ -184,26 +196,10 @@ const [showNothingModal, setShowNothingModal] = useState(false);
                   </motion.div>
                 </motion.div>
                 
-                {/* SOLUSI EFEK HALUS: Animasi tinggi dan transparansi khusus di layar laptop */}
+                {/* Deskripsi - hilang di desktop saat detail terbuka */}
                 <motion.p 
-                  className={`text-sm opacity-80 leading-relaxed font-medium text-justify overflow-hidden`} 
-                  initial={false}
-                  animate={{
-                    height: isSelected ? 'var(--desc-height-active)' : 'auto', 
-                    opacity: isSelected ? 'var(--desc-opacity-active)' : 1,
-                    marginTop: isSelected ? 'var(--desc-mt-active)' : 16, 
-                  }}
-                  style={{
-                    '--desc-height-active': 'auto', 
-                    '--desc-opacity-active': '1',    
-                    '--desc-mt-active': '16px',      
-                    '@media (min-width: 1024px)': { 
-                      '--desc-height-active': '0px',
-                      '--desc-opacity-active': '0',
-                      '--desc-mt-active': '0px',
-                    },
-                  } as any}
-                  transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }} 
+                  className={`text-sm opacity-80 leading-relaxed font-medium text-justify overflow-hidden transition-all duration-700
+                    ${isSelected ? 'lg:h-0 lg:opacity-0 lg:mt-0' : 'mt-4'}`}
                 >
                   {item.desc}
                 </motion.p>
@@ -311,26 +307,49 @@ const [showNothingModal, setShowNothingModal] = useState(false);
                   
                   <motion.div 
                     layoutId={`gallery-wrapper-${activeData.id}`}
-                    className="grid grid-cols-2 gap-3 cursor-pointer group bg-white p-2 rounded-2xl border border-[#1E293B]/10 shadow-sm"
+                    className="relative cursor-pointer group"
                     onClick={() => { setIsGalleryOpen(true); setCurrentPhotoIndex(0); }}
                   >
-                    {activeData.gallery.slice(0,2).map((img, i) => (
-                      <div key={i} className="aspect-square rounded-xl overflow-hidden bg-gray-200 relative">
-                        <img src={img} alt="Dokumentasi" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                        
-                        {i === 1 && activeData.gallery.length > 2 && (
-                          <div className="absolute inset-0 bg-[#1E293B]/60 backdrop-blur-sm flex items-center justify-center transition-all duration-300 group-hover:bg-[#406093]/80">
-                            <span className="text-white font-black text-xs tracking-widest uppercase">
-                              +{activeData.gallery.length - 2} Foto
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                    {/* Grid responsif: 2 foto di mobile, 4 di tablet, 2 di desktop */}
+                    <div className="grid grid-cols-2 gap-2 md:gap-3 bg-white p-3 md:p-4 rounded-2xl border border-[#1E293B]/10 shadow-md hover:shadow-xl transition-all duration-500">
+                      {activeData.gallery.slice(0, 4).map((img, i) => (
+                        <div 
+                          key={i} 
+                          className={`aspect-square rounded-xl overflow-hidden bg-gray-200 relative
+                            ${i >= 2 ? 'hidden md:block lg:hidden' : ''}`}
+                        >
+                          <img 
+                            src={img} 
+                            alt={`Dokumentasi ${i + 1}`} 
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                          />
+                          
+                          {/* Overlay +X Foto - muncul di foto terakhir yang visible */}
+                          {((i === 1 && activeData.gallery.length > 2) || 
+                            (i === 3 && activeData.gallery.length > 4)) && (
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#1E293B]/90 via-[#1E293B]/60 to-transparent backdrop-blur-[2px] flex flex-col items-center justify-center transition-all duration-500 group-hover:from-[#406093]/90 group-hover:via-[#406093]/60">
+                              <span className="text-white font-black text-2xl md:text-3xl tracking-tight">
+                                +{activeData.gallery.length - (i + 1)}
+                              </span>
+                              <span className="text-white/80 font-bold text-[10px] uppercase tracking-widest mt-1">
+                                Foto Lainnya
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* CTA Button */}
+                    <div className="mt-3 flex items-center justify-center gap-2 text-[#406093] group-hover:text-[#1E293B] transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                      </svg>
+                      <p className="text-[10px] font-bold uppercase tracking-wider">
+                        Lihat {activeData.gallery.length} Foto
+                      </p>
+                    </div>
                   </motion.div>
-                  <p className="text-[9px] font-bold text-[#406093] mt-3 opacity-70 uppercase tracking-wider text-center flex items-center justify-center gap-1">
-                    Klik untuk melihat semua
-                  </p>
                 </div>
 
                 <div>
@@ -376,84 +395,119 @@ const [showNothingModal, setShowNothingModal] = useState(false);
 
       <AnimatePresence>
         {isGalleryOpen && activeData && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10 pointer-events-auto">
+          <motion.div 
+            className="fixed inset-0 z-[200] flex flex-col bg-[#0F172A]/95 backdrop-blur-xl"
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             
-            <motion.div 
-              className="absolute inset-0 bg-[#1E293B]/80 backdrop-blur-md"
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
-              exit={{ opacity: 0 }}
-              onClick={() => setIsGalleryOpen(false)}
-            />
+            {/* HEADER */}
+            <div className="flex-none flex justify-between items-center p-4 md:p-6 border-b border-white/5">
+              <div>
+                <h3 className="text-lg md:text-xl font-black uppercase tracking-tight text-[#F8FAFC]">{activeData.title}</h3>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-[#F8FAFC]/40 mt-0.5">
+                  {currentPhotoIndex + 1} / {activeData.gallery.length}
+                </p>
+              </div>
+              <button 
+                onClick={() => setIsGalleryOpen(false)} 
+                className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 hover:bg-white/20 text-[#F8FAFC] transition-all flex items-center justify-center font-black text-xl backdrop-blur-sm"
+              >
+                ✕
+              </button>
+            </div>
 
-            <motion.div
-              layoutId={`gallery-wrapper-${activeData.id}`}
-              className="relative bg-[#F8FAFC] w-full max-w-5xl rounded-[2rem] overflow-hidden shadow-2xl flex flex-col border border-white/20 z-10"
-            >
-              <div className="flex justify-between items-center p-5 lg:px-8 border-b border-[#1E293B]/10 flex-none bg-white relative z-50">
-                <div>
-                  <h3 className="text-xl lg:text-2xl font-black uppercase tracking-tighter text-[#406093] leading-none">{activeData.title}</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#1E293B]/50 mt-1">Galeri Dokumentasi Lengkap</p>
-                </div>
+            {/* MAIN IMAGE AREA */}
+            <div className="flex-1 relative flex items-center justify-center p-4 md:p-8 overflow-hidden">
+              
+              {/* Navigation Buttons - Desktop */}
+              <button 
+                onClick={handlePrevPhoto} 
+                className="absolute left-4 md:left-8 z-40 w-12 h-12 md:w-14 md:h-14 bg-white/10 backdrop-blur-md hover:bg-white/20 rounded-full flex items-center justify-center text-white shadow-2xl transition-all hover:scale-110 hidden sm:flex"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 md:w-7 md:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
+              <button 
+                onClick={handleNextPhoto} 
+                className="absolute right-4 md:right-8 z-40 w-12 h-12 md:w-14 md:h-14 bg-white/10 backdrop-blur-md hover:bg-white/20 rounded-full flex items-center justify-center text-white shadow-2xl transition-all hover:scale-110 hidden sm:flex"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 md:w-7 md:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+
+              {/* Image Carousel */}
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={currentPhotoIndex}
+                  src={activeData.gallery[currentPhotoIndex]}
+                  alt={`Dokumentasi ${currentPhotoIndex + 1}`}
+                  className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.2}
+                  onDragEnd={(e, { offset }) => {
+                    if (offset.x < -50) handleNextPhoto();
+                    else if (offset.x > 50) handlePrevPhoto();
+                  }}
+                />
+              </AnimatePresence>
+
+              {/* Mobile Navigation Overlay */}
+              <div className="sm:hidden absolute inset-x-0 bottom-0 h-24 flex items-center justify-between px-4 bg-gradient-to-t from-[#0F172A] to-transparent">
                 <button 
-                  onClick={() => setIsGalleryOpen(false)} 
-                  className="w-10 h-10 rounded-full bg-[#F1F5F9] text-[#1E293B] hover:bg-[#E2E8F0] hover:text-red-500 transition-colors flex items-center justify-center font-black text-lg"
+                  onClick={handlePrevPhoto} 
+                  className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white"
                 >
-                  ✕
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+                <button 
+                  onClick={handleNextPhoto} 
+                  className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
                 </button>
               </div>
-              
-              <div className="relative w-full h-[50vh] md:h-[65vh] flex items-center justify-center overflow-hidden bg-[#E2E8F0] py-10">
-                <button onClick={handlePrevPhoto} className="absolute left-4 z-40 w-12 h-12 bg-white/50 backdrop-blur-md rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg hidden md:flex text-[#1E293B]">‹</button>
-                <button onClick={handleNextPhoto} className="absolute right-4 z-40 w-12 h-12 bg-white/50 backdrop-blur-md rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg hidden md:flex text-[#1E293B]">›</button>
+            </div>
 
-                <AnimatePresence initial={false}>
-                  {activeData.gallery.map((img, i) => {
-                    const total = activeData.gallery.length;
-                    let offset = i - currentPhotoIndex;
-                    if (offset < -1) offset += total;
-                    if (offset > 1) offset -= total;
-                    
-                    if (offset < -1 || offset > 1) return null; 
-
-                    return (
-                      <motion.img
-                        key={i}
-                        src={img}
-                        drag="x"
-                        dragConstraints={{ left: 0, right: 0 }}
-                        dragElastic={0.8}
-                        onDragEnd={(e, { offset, velocity }) => {
-                          const swipe = offset.x;
-                          if (swipe < -50) handleNextPhoto();
-                          else if (swipe > 50) handlePrevPhoto();
-                        }}
-                        className={`absolute w-[75%] md:w-[60%] max-w-2xl aspect-[4/3] md:aspect-video object-cover rounded-2xl shadow-xl cursor-grab active:cursor-grabbing border-4 border-white`}
-                        initial={false}
-                        animate={{
-                          x: offset === 0 ? "0%" : offset === 1 ? "60%" : "-60%", 
-                          scale: offset === 0 ? 1 : 0.85, 
-                          opacity: offset === 0 ? 1 : 0.4, 
-                          zIndex: offset === 0 ? 30 : 20,
-                        }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        onClick={() => {
-                          if (offset === 1) handleNextPhoto();
-                          if (offset === -1) handlePrevPhoto();
-                        }}
-                      />
-                    );
-                  })}
-                </AnimatePresence>
-
-                <div className="absolute bottom-4 flex gap-2 z-40">
-                  {activeData.gallery.map((_, i) => (
-                    <div key={i} className={`h-2 rounded-full transition-all duration-300 ${i === currentPhotoIndex ? 'w-8 bg-[#406093]' : 'w-2 bg-[#1E293B]/20'}`} />
-                  ))}
-                </div>
+            {/* THUMBNAIL STRIP */}
+            <div className="flex-none p-4 md:p-6 border-t border-white/5 overflow-x-auto">
+              <div className="flex gap-2 md:gap-3 justify-center min-w-max mx-auto">
+                {activeData.gallery.map((img, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentPhotoIndex(i)}
+                    className={`relative shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden transition-all duration-300
+                      ${i === currentPhotoIndex 
+                        ? 'ring-2 ring-[#406093] scale-110 opacity-100' 
+                        : 'opacity-40 hover:opacity-70 hover:scale-105'}`}
+                  >
+                    <img 
+                      src={img} 
+                      alt={`Thumbnail ${i + 1}`} 
+                      className="w-full h-full object-cover"
+                    />
+                    {i === currentPhotoIndex && (
+                      <div className="absolute inset-0 border-2 border-[#406093] rounded-xl pointer-events-none" />
+                    )}
+                  </button>
+                ))}
               </div>
-            </motion.div>
-          </div>
+            </div>
+
+          </motion.div>
         )}
       </AnimatePresence>
 

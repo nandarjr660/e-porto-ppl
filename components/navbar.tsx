@@ -36,9 +36,13 @@ export default function Navbar() {
       
       <div className={`mx-auto transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex items-center justify-between 
         ${scrolled 
-          ? 'max-w-[90%] lg:max-w-5xl bg-[#1E293B]/80 backdrop-blur-lg border border-[#F8FAFC]/10 px-6 py-2.5 rounded-full shadow-2xl' 
+          ? 'max-w-[90%] lg:max-w-5xl bg-[#1E293B]/70 backdrop-blur-xl border border-[#F8FAFC]/20 px-6 py-2.5 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]' 
           : 'max-w-full bg-[#1E293B] px-6 lg:px-12 py-4 rounded-none border-b border-[#F8FAFC]/5'
-        }`}>
+        }`}
+        style={scrolled ? {
+          boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)'
+        } : undefined}
+      >
         
         {/* Brand / Logo */}
         <div className="flex items-center gap-3">
