@@ -321,7 +321,8 @@ const [showNothingModal, setShowNothingModal] = useState(false);
                           <img 
                             src={img} 
                             alt={`Dokumentasi ${i + 1}`} 
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                            className="w-full h-full object-cover"
+                            loading="lazy"
                           />
                           
                           {/* Overlay +X Foto - muncul di foto terakhir yang visible */}
@@ -498,6 +499,7 @@ const [showNothingModal, setShowNothingModal] = useState(false);
                       src={img} 
                       alt={`Thumbnail ${i + 1}`} 
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                     {i === currentPhotoIndex && (
                       <div className="absolute inset-0 border-2 border-[#406093] rounded-xl pointer-events-none" />

@@ -87,6 +87,7 @@ export default function Institusi() {
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={VIEWPORT}
             transition={{ duration: 1.2, ease: "easeOut" }}
+            loading="lazy"
           />
           <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-[#1E293B] via-[#1E293B]/80 to-transparent w-full pointer-events-none transition-opacity duration-700 ease-in-out group-hover:opacity-0"></div>
           <div className="lg:hidden absolute inset-0 bg-black/20 pointer-events-none transition-opacity duration-700 ease-in-out group-hover:opacity-0"></div>
@@ -115,6 +116,7 @@ export default function Institusi() {
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={VIEWPORT}
             transition={{ duration: 1.2, ease: "easeOut" }}
+            loading="lazy"
           />
           <div className="hidden lg:block absolute inset-0 bg-gradient-to-l from-[#0F172A] via-[#0F172A]/80 to-transparent w-full pointer-events-none transition-opacity duration-700 ease-in-out group-hover:opacity-0"></div>
           <div className="lg:hidden absolute inset-0 bg-black/20 pointer-events-none transition-opacity duration-700 ease-in-out group-hover:opacity-0"></div>
