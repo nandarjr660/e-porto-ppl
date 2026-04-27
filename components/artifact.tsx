@@ -35,16 +35,49 @@ export default function Artifact() {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 const [showNothingModal, setShowNothingModal] = useState(false);
 
-  // Lock scroll saat detail panel terbuka
+  // Lock scroll saat detail panel terbuka - HANYA DI DESKTOP
   useEffect(() => {
-    if (activeCycle) {
+    // Check apakah layar desktop (>= 1024px)
+    const isDesktop = window.innerWidth >= 1024;
+    
+    if (activeCycle && isDesktop) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
+    
     return () => {
       document.body.style.overflow = 'unset';
     };
+  }, [activeCycle]);
+
+  // Auto-close detail panel di mobile saat scroll mendekati section lain
+  useEffect(() => {
+    if (!activeCycle) return;
+    
+    const isMobile = window.innerWidth < 1024;
+    if (!isMobile) return;
+
+    const handleScroll = () => {
+      const artifactSection = document.getElementById('artifact');
+      const lampiranSection = document.getElementById('lampiran');
+      const institusiSection = document.getElementById('institusi');
+      
+      if (!artifactSection) return;
+
+      const artifactRect = artifactSection.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      
+      // Jika section artifact sudah 70% keluar dari viewport (scroll ke bawah/atas)
+      const isScrollingAway = artifactRect.bottom < viewportHeight * 0.3 || artifactRect.top > viewportHeight * 0.7;
+      
+      if (isScrollingAway) {
+        setActiveCycle(null);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [activeCycle]);
   const dataSiklus: SiklusItem[] = [
     {
