@@ -12,7 +12,7 @@ import MaintenancePage from "./maintenance/page";
 const inter = Inter({ subsets: ["latin"] });
 
 // Set TRUE untuk mengaktifkan mode maintenance di seluruh web secara instan
-const IS_MAINTENANCE_MODE = true;
+const IS_MAINTENANCE_MODE = false;
 
 export const viewport = {
   width: 'device-width',
