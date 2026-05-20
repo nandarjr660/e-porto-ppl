@@ -6,7 +6,7 @@ export default function StructuredData() {
     "jobTitle": "Calon Guru Profesional",
     "description": "Mahasiswa PPG Prajabatan 2026 yang melaksanakan Praktik Pengalaman Lapangan (PPL) Terbimbing di SDN Pengasinan IX, Bekasi. Fokus pada pembelajaran bermakna dengan pendekatan Problem Based Learning.",
     "url": "https://ppl-hasmunandar.vercel.app",
-    "image": "https://ppl-hasmunandar.vercel.app/image/nandar.jpg",
+    "image": "https://ppl-hasmunandar.vercel.app/image/nandar.png",
     "alumniOf": {
       "@type": "EducationalOrganization",
       "name": "Universitas Muhammadiyah Indonesia",

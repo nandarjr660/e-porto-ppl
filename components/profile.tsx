@@ -1,117 +1,139 @@
 'use client';
 
-import Image from 'next/image'; // <-- TAMBAHAN IMPORT
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { fadeUp, fadeLeft, staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
+import SplitText from '@/components/split-text';
+import TypingText from '@/components/typing-text';
 
 export default function Profile() {
   return (
     <section 
       id="profil" 
-      className="relative w-full min-h-[100svh] md:min-h-[100dvh] bg-[#F8FAFC] text-[#1E293B] px-4 py-4 md:px-10 lg:py-6 font-sans overflow-hidden flex flex-col pt-24 md:pt-28"
+      className="relative w-full min-h-screen bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] text-[#1E293B] px-6 py-24 md:px-12 lg:px-24 font-sans overflow-hidden flex flex-col justify-center"
     >
+      {/* --- DECORATIVE ELEMENTS --- */}
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#406093]/[0.03] to-transparent pointer-events-none z-0" />
+      <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-gradient-to-t from-[#406093]/[0.02] to-transparent pointer-events-none z-0" />
+      <div className="absolute top-20 left-10 w-32 h-32 opacity-[0.03] pointer-events-none hidden lg:block z-0" style={{ backgroundImage: 'radial-gradient(#1E293B 2px, transparent 2px)', backgroundSize: '16px 16px' }}></div>
 
-      {/* --- DEKORASI --- */}
-      <div className="absolute top-10 right-10 w-32 h-32 opacity-10 pointer-events-none hidden lg:block z-0" style={{ backgroundImage: 'radial-gradient(#1E293B 2px, transparent 2px)', backgroundSize: '16px 16px' }}></div>
-      <div className="absolute top-0 bottom-0 left-6 md:left-10 w-[1px] bg-[#1E293B]/10 hidden md:block z-0"></div>
-
-      {/* --- HEADER --- */}
-      <motion.header
-        className="flex-none relative z-10 flex items-center gap-4 mb-3 lg:mb-4"
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={VIEWPORT}
-      >
-        <div className="w-12 h-[1px] bg-[#1E293B]"></div>
-        <h2 className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em]">
-          Profil Mahasiswa
-        </h2>
-      </motion.header>
-
-      {/* --- MAIN CONTENT --- */}
-      <main className="flex-1 min-h-0 relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
-
-        {/* KIRI: Foto Profil */}
+      <main className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+        
+        {/* KIRI: FOTO PROFIL */}
         <motion.div
-          className="lg:col-span-4 w-full h-[40vh] min-h-[300px] md:h-[50vh] lg:h-[70vh] max-h-[600px] relative group shrink-0 lg:shrink"
+          className="lg:col-span-5 w-full flex flex-col gap-6"
           variants={fadeLeft}
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
         >
-          <div className="relative w-full h-full rounded-[2rem] overflow-hidden border border-[#1E293B]/10 bg-gray-200 z-10 shadow-sm transition-all duration-700 ease-out group-hover:-translate-y-2 group-hover:shadow-[0_25px_50px_-12px_rgba(30,41,59,0.3)]">
-            
-            {/* PERBAIKAN: Foto Profile dengan Next/Image */}
-            <Image
-              src="/image/nandar.jpg" 
-              alt="Hasmunandar"
-              fill
-              priority
-              className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-            />
-            
-            <div className="absolute inset-0 bg-[#406093]/10 mix-blend-overlay pointer-events-none transition-opacity duration-700 ease-out group-hover:opacity-0"></div>
-          </div>
+          {/* Container Foto */}
+          <div className="relative w-full aspect-[4/5] md:aspect-auto md:w-fit mx-auto lg:mx-0">
+             <div className="relative rounded-[2.5rem] overflow-hidden border-[6px] border-white shadow-[0_20px_60px_rgba(0,0,0,0.12)] group">
+                <div className="relative overflow-hidden">
+                  <Image
+                    src="/image/nandar.png" 
+                    alt="Hasmunandar"
+                    width={500}
+                    height={625}
+                    priority
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1E293B]/50 via-transparent to-transparent opacity-60" />
+                </div>
+             </div>
+             
+             {/* Badge Nama — bottom edge */}
+             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[85%] md:w-[80%] bg-[#0F172A]/40 backdrop-blur-2xl text-white px-6 py-2.5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.3)] z-20 border border-white/10 hover:bg-[#0F172A]/50 hover:scale-105 transition-all duration-500 overflow-hidden group flex items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                
+                <div className="flex items-center gap-3 relative z-10">
+                   <div className="relative shrink-0 flex items-center justify-center">
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 border-[2px] border-[#0F172A]/40 z-10" />
+                      <div className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping opacity-60" />
+                      <div className="absolute inset-0 w-5 h-5 -translate-x-1 -translate-y-1 rounded-full bg-emerald-400/20 blur-sm" />
+                   </div>
+                   <div className="flex flex-col justify-center text-left">
+                      <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.25em] text-emerald-300 mb-0.5">Mahasiswa PPG</p>
+                      <p className="text-xs md:text-sm font-bold tracking-tight truncate text-white drop-shadow-md">Hasmunandar, S.Pd.</p>
+                   </div>
+                </div>
+             </div>
 
-          <div className="absolute -bottom-3 -left-3 lg:-bottom-4 lg:-left-4 bg-[#406093] text-[#F8FAFC] px-5 py-2 lg:px-6 lg:py-3 rounded-full text-[10px] lg:text-xs font-bold uppercase tracking-widest z-20 shadow-xl flex items-center gap-2">
-             <span className="w-2 h-2 bg-[#93C5FD] rounded-full animate-pulse"></span>
-             Hasmunandar
+             {/* Decorative corner */}
+             <div className="absolute -top-3 -left-3 w-16 h-16 border-t-2 border-l-2 border-[#406093]/20 rounded-tl-2xl pointer-events-none hidden md:block" />
           </div>
         </motion.div>
 
-        {/* KANAN: Narasi Profil */}
+        {/* KANAN: KONTEN NARASI */}
         <motion.div
-          className="lg:col-span-8 w-full flex flex-col justify-center min-h-0"
+          className="lg:col-span-7 flex flex-col gap-8"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
         >
-          <motion.p
-            className="text-[10px] lg:text-xs font-bold uppercase tracking-[0.4em] text-[#406093] mb-1 lg:mb-2"
-            variants={staggerItem}
-          >
-            Hasmunandar
-          </motion.p>
-
-          <motion.h3
-            className="text-xl md:text-2xl lg:text-3xl font-black uppercase tracking-tighter leading-[1.1] mb-3 lg:mb-4 text-[#1E293B]"
-            variants={staggerItem}
-          >
-            "Mewarisi Keberanian Gowa, Mendidik dengan Kepedulian."
-          </motion.h3>
-
-          <motion.p
-            className="text-sm md:text-base lg:text-[1.05rem] font-medium leading-relaxed mb-3 lg:mb-4 pr-2 text-justify"
-            variants={staggerItem}
-          >
-            Saya lahir dan ditempa di <span className="font-black uppercase tracking-wide text-[#406093]">Kabupaten Gowa, Sulawesi Selatan</span>—tanah yang melahirkan ketangguhan Sultan Hasanuddin, sang 'Ayam Jantan dari Timur'. Keunikan daerah saya tidak hanya terletak pada sejarah heroiknya, tetapi pada filosofi luhur <span className="italic font-bold">Siri' Na Pacce</span>. Bagi saya, wujud nyata dari <span className="italic text-[#406093] font-bold">Pacce</span> (kepedulian dan empati sosial) di era modern adalah dengan menjadi seorang guru; sebuah keberanian untuk mengambil peran dalam mencerdaskan anak-anak bangsa dan merangkul setiap potensi yang mereka miliki.
-          </motion.p>
-
-          <motion.div
-            className="pl-4 border-l-2 border-[#406093] mb-3 lg:mb-4"
-            variants={staggerItem}
-          >
-            <p className="text-xs md:text-sm lg:text-base leading-relaxed opacity-80 font-medium pr-2 text-justify">
-              Membawa semangat juang tersebut, saya menjadikan filosofi <span className="font-bold text-[#406093]">Ki Hajar Dewantara</span> sebagai kompas. Mengajar bukan sekadar mentransfer ilmu, melainkan 'menuntun' kodrat anak. Visi saya bermuara pada penciptaan ekosistem kelas yang <span className="italic font-bold text-[#406093]">Joyful, Mindful, dan Meaningful</span>—di mana setiap murid merasa bahagia, hadir secara sadar, dan menemukan makna sejati dalam proses belajar mereka.
+          {/* 01. TENTANG SAYA */}
+          <motion.div variants={staggerItem} className="space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-8 rounded-lg bg-[#406093] text-white flex items-center justify-center text-[10px] font-black">01</span>
+              <div className="h-[1px] flex-1 bg-gradient-to-r from-[#406093]/30 to-transparent"></div>
+            </div>
+            <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter leading-none text-[#1E293B]">
+              <SplitText text="Tentang Saya" delay={50} />
+            </h3>
+            <p className="text-base md:text-lg font-medium leading-relaxed text-[#1E293B]/75 text-justify">
+              Saya <span className="text-[#406093] font-bold">Hasmunandar</span>, seorang pendidik muda yang lahir dan dibesarkan di tanah bersejarah <span className="font-bold">Kabupaten Gowa, Sulawesi Selatan</span>. Sebagai putra daerah yang mewarisi nilai-nilai ketangguhan, saya percaya bahwa pendidikan adalah jembatan terbaik untuk membawa perubahan nyata bagi generasi mendatang. Perjalanan profesional saya kini berfokus pada pengembangan diri melalui program Pendidikan Profesi Guru (PPG) Prajabatan.
             </p>
           </motion.div>
 
-          <motion.div
-            className="bg-[#1E293B] text-[#F8FAFC] p-4 lg:p-5 rounded-xl relative overflow-hidden group mt-1"
-            variants={staggerItem}
-          >
-            <div className="absolute -right-2 -top-6 text-6xl lg:text-7xl font-serif opacity-20">"</div>
-            <p className="text-sm md:text-base lg:text-lg font-bold tracking-wide relative z-10 italic text-center">
-              "Pendidikan bukanlah persiapan untuk hidup; pendidikan itu sendiri adalah kehidupan."
-            </p>
-            <p className="text-[9px] lg:text-[10px] font-bold uppercase tracking-widest mt-2 opacity-60 relative z-10 text-center">
-              — John Dewey
+          {/* 02. INSPIRASI */}
+          <motion.div variants={staggerItem} className="space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-8 rounded-lg bg-[#406093] text-white flex items-center justify-center text-[10px] font-black">02</span>
+              <div className="h-[1px] flex-1 bg-gradient-to-r from-[#406093]/30 to-transparent"></div>
+            </div>
+            <h4 className="text-xl font-bold uppercase tracking-tight text-[#1E293B]">
+              Filosofi <span className="italic font-serif text-[#406093]">Siri&apos; Na Pacce</span>
+            </h4>
+            <p className="text-base md:text-lg font-medium leading-relaxed text-[#1E293B]/75 text-justify">
+              Inspirasi mengajar saya berakar pada falsafah luhur <span className="italic font-bold">Siri&apos; Na Pacce</span>. Bagi saya, <span className="font-bold">Siri&apos;</span> melambangkan harga diri dan integritas dalam menjalankan tugas, sementara <span className="font-bold text-[#406093]">Pacce</span> adalah wujud empati serta kasih sayang yang mendalam kepada sesama. Dalam konteks kelas, nilai ini saya terjemahkan sebagai komitmen untuk tidak hanya mengajar, tetapi juga peduli sepenuhnya terhadap pertumbuhan karakter dan kebahagiaan setiap peserta didik.
             </p>
           </motion.div>
+
+
         </motion.div>
       </main>
+
+      {/* 04. QUOTES - PILL STYLE */}
+      <motion.div 
+        className="relative z-10 w-full max-w-6xl mx-auto mt-16 md:mt-24 px-4"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={VIEWPORT}
+      >
+        <div className="bg-gradient-to-r from-[#1E293B] via-[#1E293B] to-[#1E293B]/95 px-8 md:px-16 py-6 md:py-8 rounded-[2rem] border border-[#406093]/20 shadow-2xl flex flex-col md:flex-row items-center justify-center gap-4 md:gap-10 relative overflow-hidden group">
+          <div className="absolute -inset-1 bg-gradient-to-r from-[#406093]/20 to-[#60A5FA]/20 rounded-[2.1rem] blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+          <div className="absolute top-0 left-1/4 w-32 h-full bg-gradient-to-r from-[#406093]/10 to-transparent blur-2xl rounded-full pointer-events-none"></div>
+
+          <div className="flex items-center gap-4">
+            <span className="text-3xl md:text-4xl text-[#406093]/40 font-serif leading-none italic">&quot;</span>
+            <div className="text-base md:text-lg lg:text-xl font-medium italic text-[#F8FAFC] text-center leading-relaxed">
+              <TypingText text="Pendidikan tidak merubah dunia, pendidikan merubah manusia, manusia merubah dunia." speed={30} />
+            </div>
+            <span className="text-3xl md:text-4xl text-[#406093]/40 font-serif leading-none italic rotate-180">&quot;</span>
+          </div>
+          
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="h-[1px] w-8 bg-gradient-to-r from-[#406093]/50 to-transparent hidden md:block"></div>
+            <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[#93C5FD]">
+              Paulo Freire
+            </p>
+          </div>
+        </div>
+      </motion.div>
     </section>
   );
 }
