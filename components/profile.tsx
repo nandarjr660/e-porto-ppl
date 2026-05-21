@@ -33,7 +33,7 @@ export default function Profile() {
                 <div className="relative overflow-hidden">
                   <Image
                     src="/image/nandar.png" 
-                    alt="Hasmunandar"
+                    alt="Hasmunandar, S.Pd. - Mahasiswa PPG Prajabatan 2026"
                     width={500}
                     height={625}
                     priority
@@ -83,7 +83,7 @@ export default function Profile() {
             <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter leading-none text-[#1E293B]">
               <SplitText text="Tentang Saya" delay={50} />
             </h3>
-            <p className="text-base md:text-lg font-medium leading-relaxed text-[#1E293B]/75 text-justify">
+            <p className="text-base md:text-lg font-medium leading-relaxed text-[#334155] text-left">
               Saya <span className="text-[#406093] font-bold">Hasmunandar</span>, seorang pendidik muda yang lahir dan dibesarkan di tanah bersejarah <span className="font-bold">Kabupaten Gowa, Sulawesi Selatan</span>. Sebagai putra daerah yang mewarisi nilai-nilai ketangguhan, saya percaya bahwa pendidikan adalah jembatan terbaik untuk membawa perubahan nyata bagi generasi mendatang. Perjalanan profesional saya kini berfokus pada pengembangan diri melalui program Pendidikan Profesi Guru (PPG) Prajabatan.
             </p>
           </motion.div>
@@ -97,7 +97,7 @@ export default function Profile() {
             <h4 className="text-xl font-bold uppercase tracking-tight text-[#1E293B]">
               Filosofi <span className="italic font-serif text-[#406093]">Siri&apos; Na Pacce</span>
             </h4>
-            <p className="text-base md:text-lg font-medium leading-relaxed text-[#1E293B]/75 text-justify">
+            <p className="text-base md:text-lg font-medium leading-relaxed text-[#334155] text-left">
               Inspirasi mengajar saya berakar pada falsafah luhur <span className="italic font-bold">Siri&apos; Na Pacce</span>. Bagi saya, <span className="font-bold">Siri&apos;</span> melambangkan harga diri dan integritas dalam menjalankan tugas, sementara <span className="font-bold text-[#406093]">Pacce</span> adalah wujud empati serta kasih sayang yang mendalam kepada sesama. Dalam konteks kelas, nilai ini saya terjemahkan sebagai komitmen untuk tidak hanya mengajar, tetapi juga peduli sepenuhnya terhadap pertumbuhan karakter dan kebahagiaan setiap peserta didik.
             </p>
           </motion.div>
@@ -114,7 +114,7 @@ export default function Profile() {
         whileInView="visible"
         viewport={VIEWPORT}
       >
-        <div className="bg-gradient-to-r from-[#1E293B] via-[#1E293B] to-[#1E293B]/95 px-8 md:px-16 py-6 md:py-8 rounded-[2rem] border border-[#406093]/20 shadow-2xl flex flex-col md:flex-row items-center justify-center gap-4 md:gap-10 relative overflow-hidden group">
+        <div className="bg-gradient-to-r from-[#1E293B] via-[#1E293B] to-[#1E293B]/95 px-8 md:px-16 py-6 md:py-8 rounded-[2rem] border border-[#406093]/20 shadow-2xl flex flex-col md:flex-row items-center justify-center gap-4 md:gap-10 relative overflow-hidden group transition-all duration-500 hover:shadow-[#406093]/20 hover:scale-[1.01]">
           <div className="absolute -inset-1 bg-gradient-to-r from-[#406093]/20 to-[#60A5FA]/20 rounded-[2.1rem] blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
           <div className="absolute top-0 left-1/4 w-32 h-full bg-gradient-to-r from-[#406093]/10 to-transparent blur-2xl rounded-full pointer-events-none"></div>
 

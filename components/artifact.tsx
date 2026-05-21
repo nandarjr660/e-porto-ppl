@@ -46,7 +46,7 @@ const dataSiklus: SiklusItem[] = [
     plus: 'Siswa sangat antusias karena penggunaan benda konkret memudahkan mereka dalam mengaitkan materi sumber energi dengan kehidupan sehari-hari.',
     minus: 'Manajemen kelas belum optimal serta diperlukannya penguatan pada penyusunan instrumen asesmen dan artikulasi Tujuan Pembelajaran (TP).',
     teori: 'Berlandaskan teori konstruktivisme Piaget, di mana siswa membangun pemahaman bermakna melalui manipulasi benda konkret dan interaksi sosial dalam kelompok.',
-    hasilKerja: 'Siswa berhasil mengelompokkan gambar dan benda konkret ke dalam tabel pengamatan energi dengan akurasi 85%. LKPD diisi secara berkelompok dengan diskusi yang aktif.',
+    hasilKerja: 'Siswa berhasil mengelompokkan gambar/benda konkret ke tabel pengamatan energi dengan akurasi 85%. LKPD diisi secara berkelompok dengan diskusi yang aktif.',
     mediaBelajar: 'Benda-benda konkret di sekitar (kipas angin kecil, senter), kartu gambar sumber energi, dan proyektor untuk video interaktif.',
     nilai: { gp: 86, dpl: 87 },
     galleryMedia: ['/image/sekolah.jpg', '/image/kampus.jpg', '/image/sekolah.jpg'],
@@ -123,19 +123,19 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
         <span className="w-3 h-[2px] bg-[#406093] inline-block" />
         {title}
       </h4>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {images.map((img, i) => (
           <button
             key={i}
             onClick={() => setLightbox(i)}
-            className="aspect-square rounded-xl overflow-hidden bg-[#E2E8F0] group relative"
+            className="aspect-square rounded-xl overflow-hidden bg-[#E2E8F0] group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2"
           >
             <Image
               src={img}
               alt={`${title} ${i + 1}`}
               fill
               className="object-cover group-hover:scale-110 transition-transform duration-500"
-              sizes="(max-width: 768px) 33vw, 200px"
+              sizes="(max-width: 768px) 50vw, 200px"
             />
             <div className="absolute inset-0 bg-[#0F172A]/0 group-hover:bg-[#0F172A]/30 transition-all duration-300 flex items-center justify-center">
               <svg className="w-7 h-7 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
@@ -155,7 +155,7 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
           >
             <div className="flex-none flex justify-between items-center px-6 py-4 border-b border-white/10">
               <p className="text-xs font-black uppercase tracking-widest text-white/50">{title} — {lightbox + 1} / {images.length}</p>
-              <button onClick={() => setLightbox(null)} className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors">
+              <button onClick={() => setLightbox(null)} className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -165,10 +165,10 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
               </motion.div>
               {images.length > 1 && (
                 <>
-                  <button onClick={() => setLightbox((lightbox - 1 + images.length) % images.length)} className="absolute left-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20">
+                  <button onClick={() => setLightbox((lightbox - 1 + images.length) % images.length)} className="absolute left-6 md:left-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
                   </button>
-                  <button onClick={() => setLightbox((lightbox + 1) % images.length)} className="absolute right-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20">
+                  <button onClick={() => setLightbox((lightbox + 1) % images.length)} className="absolute right-6 md:right-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
                   </button>
                 </>
@@ -176,7 +176,7 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
             </div>
             <div className="flex-none flex items-center justify-center gap-2 p-6 overflow-x-auto custom-scrollbar border-t border-white/10">
               {images.map((img, i) => (
-                <button key={i} onClick={() => setLightbox(i)} className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden transition-all duration-300 relative ${i === lightbox ? 'ring-2 ring-[#406093] scale-110' : 'opacity-40 hover:opacity-80'}`}>
+                <button key={i} onClick={() => setLightbox(i)} className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden transition-all duration-300 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] ${i === lightbox ? 'ring-2 ring-[#406093] scale-110' : 'opacity-40 hover:opacity-80'}`}>
                   <Image src={img} alt="" fill className="object-cover" sizes="100px" />
                 </button>
               ))}
@@ -207,7 +207,7 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
           <button
             key={i}
             onClick={() => setLightbox(i)}
-            className={`group relative overflow-hidden rounded-2xl bg-gray-100 border border-[#1E293B]/10 transition-all duration-500 hover:shadow-xl
+            className={`group relative overflow-hidden rounded-2xl bg-gray-100 border border-[#1E293B]/10 transition-all duration-500 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2
               ${i === 0 ? 'md:col-span-2 md:row-span-2' : 'aspect-[4/3]'}
             `}
           >
@@ -243,7 +243,7 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#93C5FD] mb-1">Dokumentasi Praktik</span>
                   <p className="text-xs font-bold text-white/50 tracking-widest">{title} — Foto {lightbox + 1}</p>
                 </div>
-                <button onClick={() => setLightbox(null)} className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all border border-white/10">
+                <button onClick={() => setLightbox(null)} className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all border border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
              </div>
@@ -255,10 +255,10 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
                 
                 {images.length > 1 && (
                   <>
-                    <button onClick={() => setLightbox((lightbox - 1 + images.length) % images.length)} className="absolute left-6 md:left-12 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all">
+                    <button onClick={() => setLightbox((lightbox - 1 + images.length) % images.length)} className="absolute left-6 md:left-12 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                       <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
                     </button>
-                    <button onClick={() => setLightbox((lightbox + 1) % images.length)} className="absolute right-6 md:right-12 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all">
+                    <button onClick={() => setLightbox((lightbox + 1) % images.length)} className="absolute right-6 md:right-12 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
                     </button>
                   </>
@@ -267,7 +267,7 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
 
              <div className="flex-none p-8 flex items-center justify-center gap-3 overflow-x-auto max-w-full custom-scrollbar">
                 {images.map((img, i) => (
-                   <button key={i} onClick={() => setLightbox(i)} className={`shrink-0 w-16 h-16 rounded-xl overflow-hidden transition-all duration-300 border-2 relative ${i === lightbox ? 'border-[#93C5FD] scale-110 shadow-lg shadow-[#93C5FD]/20' : 'border-transparent opacity-30 hover:opacity-100'}`}>
+                   <button key={i} onClick={() => setLightbox(i)} className={`shrink-0 w-16 h-16 rounded-xl overflow-hidden transition-all duration-300 border-2 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#93C5FD] ${i === lightbox ? 'border-[#93C5FD] scale-110 shadow-lg shadow-[#93C5FD]/20' : 'border-transparent opacity-30 hover:opacity-100'}`}>
                     <Image src={img} alt="" fill className="object-cover" sizes="100px" />
                   </button>
                 ))}
@@ -290,7 +290,7 @@ export default function Artifact() {
       <div className="sticky top-[56px] z-40 bg-[#F8FAFC]/80 backdrop-blur-xl border-b border-[#1E293B]/10">
         <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#406093]/70 mb-1">Dedikasi di SDN Pengasinan IX</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#406093] mb-1">Dedikasi di SDN Pengasinan IX</p>
             <h1 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-[#1E293B] leading-none">
               <SplitText text="Rekam Jejak Mengajar" delay={40} />
             </h1>
@@ -301,10 +301,10 @@ export default function Artifact() {
               <button
                 key={s.id}
                 onClick={() => setActiveId(s.id)}
-                className={`relative px-5 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-300 ${
+                className={`relative px-5 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] ${
                   activeId === s.id
                     ? 'text-white shadow-md'
-                    : 'text-[#1E293B]/40 hover:text-[#1E293B]/70'
+                    : 'text-[#475569] hover:text-[#1E293B]'
                 }`}
               >
                 <span className="relative z-10">{s.title}</span>
@@ -340,7 +340,7 @@ export default function Artifact() {
               </div>
               <div>
                 <h2 className="text-2xl font-black uppercase text-[#1E293B] mb-2">Sedang Berlangsung</h2>
-                <div className="text-[#1E293B]/60 max-w-md leading-relaxed text-center mx-auto">
+                <div className="text-[#475569] max-w-md leading-relaxed text-center mx-auto">
                   <TypingText text="Siklus 3 saat ini sedang berlangsung sehingga dokumen pendukung belum tersedia. Pantau terus untuk pembaruan." speed={25} />
                 </div>
               </div>
@@ -367,15 +367,15 @@ export default function Artifact() {
                     <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg">{data.durasi}</span>
                     <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg">{data.kelas}</span>
                   </motion.div>
-                  <motion.p variants={staggerItem} className="text-base text-[#1E293B]/70 leading-relaxed font-medium text-justify">{data.desc}</motion.p>
+                  <motion.p variants={staggerItem} className="text-base text-[#475569] leading-relaxed font-medium text-left">{data.desc}</motion.p>
 
                   {/* DOKUMEN PEMBELAJARAN */}
                   <motion.div variants={staggerItem} className="flex flex-col sm:flex-row gap-4 pt-4">
-                    <a href={data.rppLink} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-3 bg-[#1E293B] hover:bg-[#406093] text-white px-6 py-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-lg group">
+                    <a href={data.rppLink} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-3 bg-[#1E293B] hover:bg-[#406093] text-white px-6 py-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-lg group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2">
                       <svg className="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                       <span className="text-xs font-black uppercase tracking-widest">Modul Ajar</span>
                     </a>
-                    <a href={data.mediaLink} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-3 bg-white hover:bg-[#F1F5F9] text-[#1E293B] border border-[#1E293B]/15 px-6 py-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-sm group">
+                    <a href={data.mediaLink} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-3 bg-white hover:bg-[#F1F5F9] text-[#1E293B] border border-[#1E293B]/15 px-6 py-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-sm group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2">
                       <svg className="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
                       <span className="text-xs font-black uppercase tracking-widest">Akses Media</span>
                     </a>
@@ -402,7 +402,7 @@ export default function Artifact() {
                     </span> 
                     Konteks Pembelajaran
                   </h4>
-                  <p className="text-[1.05rem] font-semibold leading-relaxed text-[#1E293B] opacity-90 text-justify">{data.konteks}</p>
+                  <p className="text-[1.05rem] font-semibold leading-relaxed text-[#334155] text-left">{data.konteks}</p>
                 </div>
 
                 <div className="group bg-gradient-to-br from-white to-[#F8FAFC] rounded-3xl p-8 border border-[#1E293B]/10 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
@@ -415,7 +415,7 @@ export default function Artifact() {
                     </span> 
                     Tujuan Pembelajaran
                   </h4>
-                  <p className="text-[1.05rem] font-semibold leading-relaxed text-[#1E293B] opacity-90 text-justify">{data.tujuan}</p>
+                  <p className="text-[1.05rem] font-semibold leading-relaxed text-[#334155] text-left">{data.tujuan}</p>
                 </div>
               </motion.div>
 
@@ -429,7 +429,7 @@ export default function Artifact() {
                     </span>
                     Kelebihan
                   </h4>
-                  <p className="text-lg font-bold leading-relaxed text-[#065F46] relative z-10 text-justify">{data.plus}</p>
+                  <p className="text-lg font-bold leading-relaxed text-[#065F46] relative z-10 text-left">{data.plus}</p>
                 </div>
 
                 <div className="relative group p-8 rounded-3xl bg-[#F59E0B]/5 border border-[#F59E0B]/20 overflow-hidden transition-all duration-500 hover:bg-[#F59E0B]/10">
@@ -440,7 +440,7 @@ export default function Artifact() {
                     </span>
                     Kekurangan
                   </h4>
-                  <p className="text-lg font-bold leading-relaxed text-[#92400E] relative z-10 text-justify">{data.minus}</p>
+                  <p className="text-lg font-bold leading-relaxed text-[#92400E] relative z-10 text-left">{data.minus}</p>
                 </div>
               </motion.div>
 
@@ -453,7 +453,7 @@ export default function Artifact() {
                       Media Pembelajaran
                     </span>
                   </h3>
-                  <p className="mt-2 text-[0.95rem] font-medium text-[#1E293B]/70 leading-relaxed text-justify">{data.mediaBelajar}</p>
+                  <p className="mt-2 text-[0.95rem] font-medium text-[#475569] leading-relaxed text-left">{data.mediaBelajar}</p>
                 </div>
                 {data.galleryMedia.length > 0 && (
                   <div className="p-6 bg-slate-50">
@@ -471,7 +471,7 @@ export default function Artifact() {
                       Hasil Kerja Siswa
                     </span>
                   </h3>
-                  <p className="mt-2 text-[0.95rem] font-medium text-[#1E293B]/70 leading-relaxed text-justify">{data.hasilKerja}</p>
+                  <p className="mt-2 text-[0.95rem] font-medium text-[#475569] leading-relaxed text-left">{data.hasilKerja}</p>
                 </div>
                 {data.galleryHasil.length > 0 && (
                   <div className="p-6 bg-slate-50">
@@ -483,10 +483,10 @@ export default function Artifact() {
               {/* TEORI */}
               <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="p-6 border-l-4 border-[#406093] bg-[#EEF2FF] rounded-r-2xl border border-[#406093]/10">
                 <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-[#406093]/60 mb-3">Kajian Teori Pendukung</h4>
-                <p className="text-lg font-serif italic text-[#1E293B] leading-relaxed text-justify">&quot;{data.teori}&quot;</p>
+                <p className="text-lg font-serif italic text-[#334155] leading-relaxed text-left">&quot;{data.teori}&quot;</p>
               </motion.div>
 
-              {/* DOKUMENTASI SIKLUS (BENTO) */}
+              {/* DOKUMEN SIKLUS (BENTO) */}
               <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="bg-white rounded-2xl border border-[#1E293B]/10 shadow-sm p-6">
                 <BentoGallery images={data.galleryDokumentasi} title="Dokumentasi Siklus" />
               </motion.div>

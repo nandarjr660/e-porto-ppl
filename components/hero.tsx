@@ -28,13 +28,13 @@ export default function Hero() {
       className="relative w-full min-h-[100svh] bg-[#F8FAFC] text-[#1E293B] px-4 pb-6 pt-24 md:px-10 md:pb-8 md:pt-28 flex flex-col overflow-hidden font-sans"
     >
 
-      {/* --- GRAPHIC ELEMENTS --- */}
+      {/* --- GRAPHIC ELEMENTS (Original) --- */}
       <div className="absolute top-0 right-0 w-[40vw] h-[40vw] bg-gradient-to-bl from-[#406093]/5 to-transparent rounded-full blur-[80px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-gradient-to-tr from-[#406093]/3 to-transparent rounded-full blur-[60px] pointer-events-none" />
       <div className="absolute top-1/3 left-10 w-40 h-40 opacity-[0.04] pointer-events-none hidden md:block" style={{ backgroundImage: 'radial-gradient(#1E293B 2px, transparent 2px)', backgroundSize: '16px 16px' }} />
       <div className="absolute bottom-1/3 right-10 w-40 h-40 opacity-[0.04] pointer-events-none hidden md:block" style={{ backgroundImage: 'radial-gradient(#1E293B 2px, transparent 2px)', backgroundSize: '16px 16px' }} />
 
-      {/* --- TOP HEADER --- */}
+      {/* --- TOP HEADER (Original) --- */}
       <motion.header
         className="flex-none relative z-10 flex justify-between items-center w-full pb-3 border-b border-[#1E293B]/20"
         variants={fadeUp}
@@ -44,49 +44,57 @@ export default function Hero() {
       >
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-[#406093] animate-pulse" />
-          <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[#1E293B]/70">
+          <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[#475569]">
             E-Portfolio PPL
           </span>
         </div>
-        <div className="text-[10px] md:text-xs font-bold tracking-[0.2em] text-[#1E293B]/60 uppercase">
+        <div className="text-[10px] md:text-xs font-bold tracking-[0.2em] text-[#475569] uppercase">
           Bekasi, 2026
         </div>
       </motion.header>
 
       {/* --- MAIN AREA --- */}
-      <main className="flex-1 relative z-10 flex flex-col md:flex-row justify-center items-center md:items-stretch w-full min-h-0 py-4 md:py-0 max-w-7xl mx-auto">
+      <main className="flex-1 relative z-10 flex flex-col md:flex-row justify-center items-center md:items-center w-full min-h-0 py-8 md:py-0 gap-10 md:gap-16 lg:gap-20 max-w-7xl mx-auto">
         
-        {/* Kiri: Foto */}
+        {/* Kiri: Foto dengan Bingkai Modern & Efek Hover (Pusatkan di Mobile) */}
         <motion.div 
-          className="relative w-full md:w-1/2 h-[45vh] md:h-auto flex-shrink-0 flex flex-col items-end justify-center md:justify-center z-10"
+          className="relative w-full md:w-[45%] h-auto md:h-auto flex-shrink-0 flex flex-col items-center md:items-end justify-center z-10"
           variants={fadeLeft}
           initial="hidden"
           animate="visible"
           transition={{ delay: getDelay(8.1) }}
         >
-          <div className="relative w-[90%] md:w-[130%] lg:w-[140%] flex-1 md:translate-x-10 lg:translate-x-16 group">
-            <div className="relative w-full h-full transition-all duration-700 ease-out group-hover:scale-[1.03] group-hover:-translate-y-3 group-hover:rotate-1 group-hover:brightness-105 group-hover:shadow-2xl group-hover:shadow-[#406093]/30 rounded-lg">
+          <div className="relative w-[65%] sm:w-[55%] md:w-[90%] lg:w-[85%] aspect-[4/5] md:translate-x-0 lg:translate-x-4 group cursor-default">
+            {/* Outer Glow/Shadow - Only visible on hover */}
+            <div className="absolute inset-0 bg-[#406093]/20 blur-2xl rounded-full scale-90 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
+            
+            {/* Image Frame (Modern Format) */}
+            <div className="relative w-full h-full rounded-2xl overflow-hidden border border-transparent bg-transparent transition-all duration-700 ease-out group-hover:scale-[1.02] group-hover:-translate-y-2 group-hover:rotate-1 group-hover:bg-white/50 group-hover:backdrop-blur-sm group-hover:border-[#406093]/40 group-hover:shadow-[0_40px_80px_rgba(64,96,147,0.3)]">
               <Image 
                 src="/image/berandaaa.png" 
                 alt="Hero Portofolio Hasmunandar" 
                 fill 
-                sizes="(max-width: 768px) 100vw, 70vw"
-                className="object-contain object-top md:object-[center_15%]" 
+                className="object-cover object-top filter contrast-[1.02] brightness-100 group-hover:brightness-105 transition-all duration-700"
                 priority 
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#F8FAFC]/50 via-transparent to-transparent opacity-60" />
             </div>
+
+            {/* Decorative Corner Elements */}
+            <div className="absolute -top-4 -left-4 w-12 h-12 border-t-2 border-l-2 border-[#406093]/40 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 group-hover:translate-y-2 transition-all duration-500" />
+            <div className="absolute -bottom-4 -right-4 w-12 h-12 border-b-2 border-r-2 border-[#406093]/40 opacity-0 group-hover:opacity-100 group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all duration-500" />
           </div>
         </motion.div>
 
-        {/* Kanan: Teks Hero Utama */}
+        {/* Kanan: Teks Hero Utama (Original Font & Layout) */}
         <motion.div 
-          className="w-full md:w-1/2 flex flex-col items-center md:items-start justify-center text-center md:text-left z-20 mt-6 md:mt-0 md:-ml-4 lg:-ml-8"
+          className="w-full md:w-[55%] flex flex-col items-center md:items-start justify-center text-center md:text-left z-20 md:pl-0"
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
           transition={{ delayChildren: getDelay(8.4) }}
         >
-          <motion.h2 variants={staggerItem} className="text-3xl md:text-4xl lg:text-[45px] xl:text-[55px] font-medium tracking-tight text-[#406093] mb-1 md:mb-2 leading-none font-serif italic lowercase">
+          <motion.h2 variants={staggerItem} className="text-3xl md:text-4xl lg:text-[48px] xl:text-[58px] font-medium tracking-tight text-[#406093] mb-1 md:mb-2 leading-none font-serif italic lowercase relative">
             <Shuffle
               text="Welcome to my"
               shuffleDirection="right"
@@ -109,7 +117,7 @@ export default function Hero() {
             <SplitText
               tag="h1"
               text="PORTOFOLIO"
-              className="text-[clamp(3rem,12vw,8rem)] md:text-[clamp(3.5rem,6vw,8rem)] lg:text-[80px] xl:text-[100px] font-black uppercase tracking-tighter leading-none text-[#1E293B]"
+              className="text-[clamp(3rem,12vw,8rem)] md:text-[clamp(3.5rem,6vw,8rem)] lg:text-[85px] xl:text-[105px] font-black uppercase tracking-tighter leading-none text-[#1E293B]"
               delay={50}
               duration={1.25}
               ease="power3.out"
@@ -134,14 +142,14 @@ export default function Hero() {
             />
           </motion.div>
           
-          <motion.p variants={staggerItem} className="text-sm md:text-base lg:text-lg font-medium leading-relaxed max-w-md lg:max-w-xl text-[#1E293B]/70 mt-6 md:mt-10 px-4 md:px-0">
+          <motion.p variants={staggerItem} className="text-sm md:text-base lg:text-lg font-medium leading-relaxed max-w-md lg:max-w-xl xl:max-w-2xl text-[#475569] mt-6 md:mt-10 px-4 md:px-0">
             Portofolio ini merupakan rangkuman pengalaman belajar selama praktik lapangan yang berlokasi di <span className="text-[#406093] font-bold">SDN Pengasinan IX</span>.
           </motion.p>
         </motion.div>
 
       </main>
 
-      {/* --- BOTTOM PILLS --- */}
+      {/* --- BOTTOM PILLS (Original) --- */}
       <motion.footer
         className="flex-none relative z-10 flex flex-col md:flex-row justify-between items-center gap-3 w-full pt-4 mt-auto border-t border-[#1E293B]/10"
         variants={staggerContainer}
@@ -150,7 +158,7 @@ export default function Hero() {
         transition={{ delayChildren: getDelay(8.8) }}
       >
         <motion.div
-          className="w-full md:w-auto px-5 py-2 md:py-2.5 rounded-full border border-[#1E293B]/20 text-center text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-[#1E293B] hover:text-[#F8FAFC] text-[#1E293B]/60"
+          className="w-full md:w-auto px-5 py-2 md:py-2.5 rounded-full border border-[#1E293B]/20 text-center text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#475569] cursor-default"
           variants={staggerItem}
         >
           Hasmunandar
@@ -158,14 +166,28 @@ export default function Hero() {
 
         <motion.a
           href="#intro"
-          className="w-full md:w-auto px-8 py-3 md:py-3.5 rounded-full bg-[#406093] text-[#F8FAFC] text-center text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-[#1E293B] shadow-lg shadow-[#406093]/25 hover:shadow-[#1E293B]/25 hover:scale-[1.02] active:scale-[0.98]"
+          className="group w-full md:w-auto px-8 py-3 md:py-3.5 rounded-full bg-[#406093] text-[#F8FAFC] flex items-center justify-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-[#1E293B] shadow-lg shadow-[#406093]/25 hover:shadow-[#1E293B]/25 hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2"
           variants={staggerItem}
         >
-          Jelajahi Portofolio ↓
+          <span>Jelajahi Portofolio</span>
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="14" 
+            height="14" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2.5" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            className="transition-transform duration-300 group-hover:translate-y-0.5"
+          >
+            <path d="M12 5v14M19 12l-7 7-7-7"/>
+          </svg>
         </motion.a>
 
         <motion.div
-          className="w-full md:w-auto px-5 py-2 md:py-2.5 rounded-full bg-[#1E293B]/5 text-center text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-[#1E293B] hover:text-[#F8FAFC] text-[#1E293B]/60"
+          className="w-full md:w-auto px-5 py-2 md:py-2.5 rounded-full bg-[#1E293B]/5 text-center text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#475569] cursor-default"
           variants={staggerItem}
         >
           SDN Pengasinan IX

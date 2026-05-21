@@ -6,73 +6,79 @@ import { fadeUp, staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
 
 const cultureItems = [
   {
+    title: "Balla Lompoa",
+    desc: "Balla Lompoa merupakan mahakarya arsitektur tradisional Makassar yang berfungsi sebagai istana Kerajaan Gowa sekaligus pusat pemerintahan di masa lalu. Dibangun pada tahun 1936, struktur panggung berbahan kayu jati ini kini menjadi museum yang menyimpan koleksi benda pusaka kerajaan, termasuk mahkota emas Salokoa. Secara filosofis, bentuk bangunannya yang megah mencerminkan kejayaan Gowa sebagai kekuatan maritim dan perdagangan yang disegani di Nusantara.",
+    img: "/image/balla.jpg",
+    tag: "Architecture",
+    year: "1936",
+    color: "#D97706",
+    gridClass: "lg:col-span-6 lg:row-span-2 h-[450px] md:h-[600px]",
+  },
+  {
     title: "Baju Bodo",
-    desc: "Salah satu busana adat tertua di dunia khas suku Bugis-Makassar, yang sering dikenakan dalam upacara adat di Gowa.",
+    desc: "Diakui sebagai salah satu busana adat tertua di dunia, Baju Bodo adalah pakaian tradisional perempuan Bugis-Makassar yang memiliki ciri khas potongan segi empat dengan lengan pendek. Terbuat dari kain kasa atau sutra alam, warna Baju Bodo secara tradisional menandakan status sosial dan usia pemakainya. Busana ini bukan sekadar pakaian, melainkan simbol keanggunan, martabat, dan kelembutan perempuan Sulawesi Selatan yang tetap eksis melintasi berbagai zaman.",
     img: "/image/bajubodo.jpg",
-    tag: "Busana Adat",
+    tag: "Textile",
+    year: "16th Century",
     color: "#E11D48",
-    fact: "Warisan budaya sejak abad ke-16"
+    gridClass: "lg:col-span-6 lg:row-span-1 h-[300px] md:h-[288px]",
   },
   {
     title: "Es Pisang Ijo",
-    desc: "Kuliner ikonik Makassar berbahan pisang raja yang dibalut adonan tepung hijau, disajikan dengan sumsum dan sirup merah.",
+    desc: "Kuliner ikonik ini merupakan representasi harmonis dari kekayaan hasil alam Sulawesi Selatan. Terdiri dari pisang raja yang dibalut adonan tepung berwarna hijau dari perasan daun suji, disajikan dengan bubur sumsum lembut, sirup DHT khas Makassar, dan es serut. Warna hijaunya melambangkan kesuburan dan harapan, menjadikannya bukan hanya sekadar hidangan penutup yang menyegarkan, tetapi juga warisan rasa yang mengakar kuat dalam memori kolektif masyarakat.",
     img: "/image/pisjo.jpg",
-    tag: "Kuliner Khas",
+    tag: "Culinary",
+    year: "Traditional",
     color: "#059669",
-    fact: "Hidangan wajib saat Ramadhan tiba"
-  },
-  {
-    title: "Balla Lompoa",
-    desc: "Rumah adat kerajaan Gowa yang berarti 'Rumah Besar', kini menjadi museum yang menyimpan sejarah kebesaran Gowa.",
-    img: "/image/balla.jpg",
-    tag: "Rumah Adat",
-    color: "#D97706",
-    fact: "Saksi bisu kejayaan kerajaan Gowa"
+    gridClass: "lg:col-span-6 lg:row-span-1 h-[300px] md:h-[288px]",
   },
   {
     title: "Aksara Lontara",
-    desc: "Sistem tulisan tradisional masyarakat Bugis-Makassar yang digunakan untuk menuliskan sejarah, hukum, dan sastra luhur.",
+    desc: "Aksara Lontara adalah sistem tulisan tradisional masyarakat Bugis-Makassar yang memiliki bentuk dasar geometris berupa garis lurus dan titik. Nama 'Lontara' berasal dari pohon lontar, karena pada awalnya tulisan ini digoreskan pada daun lontar yang disusun menjadi gulungan panjang. Lebih dari sekadar alat komunikasi, aksara ini merupakan jembatan literasi kuno yang mendokumentasikan kearifan lokal, sejarah, hukum (Pappaseng), hingga mahakarya sastra dunia, I La Galigo.",
     img: "/image/Lontara-1.jpg",
-    tag: "Huruf Lontarak",
-    color: "#6366F1",
-    fact: "Aksara kuno yang masih dipelajari hingga kini"
+    tag: "Scripts",
+    year: "Ancient",
+    color: "#406093",
+    gridClass: "lg:col-span-12 lg:row-span-1 h-[300px] md:h-[350px]",
   }
 ];
 
-const accentColors = ["bg-rose-600", "bg-emerald-600", "bg-amber-600", "bg-indigo-500"];
-
 export default function LocalCulture() {
   return (
-    <section className="relative w-full py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] overflow-hidden">
-      {/* Decorative background element */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#406093]/[0.02] rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#406093]/[0.02] rounded-full blur-3xl pointer-events-none" />
-
+    <section className="relative w-full py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-[#FFFFFF] text-[#1E293B] overflow-hidden">
+      {/* Subtle Background Decoration */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0" 
+           style={{ backgroundImage: 'radial-gradient(#406093 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+      
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* Header Section */}
         <motion.div 
-          className="text-center mb-16 md:mb-20"
+          className="flex flex-col md:flex-row items-end justify-between mb-16 md:mb-24 gap-8"
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
         >
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-8 h-[1px] bg-[#406093]/40" />
-            <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#406093]">Warisan Budaya</span>
-            <div className="w-8 h-[1px] bg-[#406093]/40" />
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#406093]">Identitas Lokal</span>
+              <div className="w-12 h-[1px] bg-[#406093]/20" />
+            </div>
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.85] text-[#1E293B]">
+              Tanah <br />
+              <span className="font-serif italic lowercase tracking-normal text-[#406093]">Gowa</span>
+            </h2>
           </div>
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter text-[#1E293B] leading-[0.9]">
-            Identitas <br className="md:hidden" />
-            <span className="font-serif italic lowercase tracking-normal text-[#406093] bg-gradient-to-r from-[#406093] to-[#60A5FA] bg-clip-text text-transparent">Gowa</span>
-          </h2>
-          <p className="text-sm md:text-base text-[#1E293B]/50 font-medium mt-4 max-w-xl mx-auto">
-            Beberapa keunikan dari tanah kelahiran saya
-          </p>
-          <div className="w-16 h-[3px] bg-gradient-to-r from-[#406093] to-[#60A5FA] mx-auto mt-6 rounded-full" />
+          <div className="max-w-xs text-left md:text-right">
+             <p className="text-[11px] text-[#475569] font-medium uppercase tracking-widest leading-relaxed">
+               Menelusuri akar budaya yang membentuk karakter dan ketangguhan Sulawesi Selatan.
+             </p>
+          </div>
         </motion.div>
 
+        {/* Bento Grid Gallery */}
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 md:gap-6"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
@@ -81,101 +87,72 @@ export default function LocalCulture() {
           {cultureItems.map((item, idx) => (
             <motion.div 
               key={idx}
-              className="group relative bg-white rounded-[2rem] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.12)] transition-all duration-500 ease-out border border-[#1E293B]/5 hover:border-[#406093]/20 hover:-translate-y-1.5"
+              className={`group relative overflow-hidden bg-[#F8FAFC] rounded-[2rem] border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#406093]/10 ${item.gridClass}`}
               variants={staggerItem}
             >
-              {/* Decorative corner gradient */}
-              <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gradient-to-bl from-[#406093]/10 to-transparent pointer-events-none group-hover:scale-150 transition-transform duration-700" />
-
-              {/* Image container */}
-              <div className="relative h-52 w-full overflow-hidden">
+              {/* Image Container with Zoom & Parallax-ish Effect */}
+              <div className="absolute inset-0 z-0">
                 <Image 
                   src={item.img}
                   alt={item.title}
                   fill
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110 brightness-[0.85] group-hover:brightness-[0.7]"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
-                {/* Dark gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1E293B]/70 via-[#1E293B]/10 to-transparent" />
-
-                {/* Tag badge - styled with icon */}
-                <div className="absolute top-4 left-4">
-                  <div className="flex items-center gap-1.5 bg-white/20 backdrop-blur-md text-white text-[8px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border border-white/20 shadow-lg">
-                    <span className={`w-1.5 h-1.5 rounded-full ${accentColors[idx]}`} />
-                    {item.tag}
-                  </div>
-                </div>
-
-                {/* Number indicator */}
-                <div className="absolute bottom-4 right-4">
-                  <span className="text-[40px] font-black text-white/10 leading-none select-none">0{idx + 1}</span>
-                </div>
-
-                {/* Subtle corner ornament */}
-                <div className="absolute top-4 right-4 w-6 h-6 opacity-30">
-                  <svg viewBox="0 0 24 24" fill="none" className="w-full h-full text-white">
-                    <path d="M4 4L20 20M4 20L20 4" stroke="currentColor" strokeWidth="1.5" />
-                  </svg>
-                </div>
+                {/* Subtle Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/80 via-[#0F172A]/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
               </div>
 
-              {/* Content */}
-              <div className="p-6 md:p-7 relative">
-                {/* Accent line */}
-                <div className={`w-10 h-[3px] rounded-full mb-4 transition-all duration-500 group-hover:w-16 ${accentColors[idx]}`} />
+              {/* Content Overlay */}
+              <div className="relative h-full flex flex-col justify-between p-6 md:p-8 z-10">
+                <div className="flex justify-between items-start">
+                  <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[9px] font-black uppercase tracking-widest text-white">
+                    {item.tag}
+                  </span>
+                  <span className="text-[10px] font-bold text-white/60 tracking-tighter uppercase">{item.year}</span>
+                </div>
 
-                {/* Title with decorative element */}
-                <div className="flex items-start justify-between gap-3 mb-3">
-                  <h3 className="text-xl md:text-2xl font-black text-[#1E293B] tracking-tight leading-tight group-hover:text-[#406093] transition-colors duration-300">
+                <div className="transform transition-transform duration-500 group-hover:-translate-y-2">
+                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tighter text-white mb-3 leading-none">
                     {item.title}
                   </h3>
-                  <div className="shrink-0 mt-1">
-                    <svg className={`w-5 h-5 ${accentColors[idx].replace('bg-', 'text-')} opacity-0 group-hover:opacity-100 transition-all duration-500 -translate-x-2 group-hover:translate-x-0`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </div>
+                  <p className="text-xs md:text-sm text-white/90 font-medium leading-relaxed max-w-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+                    {item.desc}
+                  </p>
                 </div>
-
-                {/* Description */}
-                <p className="text-sm md:text-[0.95rem] text-[#1E293B]/70 leading-relaxed font-medium text-justify">
-                  {item.desc}
-                </p>
-
-                {/* Fun fact */}
-                <div className="mt-4 pt-4 border-t border-[#1E293B]/5 flex items-center gap-2">
-                  <svg className="w-3.5 h-3.5 shrink-0 text-[#406093]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-[#1E293B]/40">
-                    {item.fact}
-                  </span>
-                </div>
-
-                {/* Bottom gradient line on hover */}
-                <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] rounded-full transition-all duration-500 group-hover:w-3/4 ${accentColors[idx]}`} />
               </div>
+
+              {/* Decorative Corner Number */}
+              <div className="absolute top-4 right-6 opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none">
+                 <span className="text-6xl font-black text-white">0{idx + 1}</span>
+              </div>
+              
+              {/* Interaction Hint (Bottom Bar) */}
+              <div 
+                className="absolute bottom-0 left-0 h-1.5 w-0 transition-all duration-700 group-hover:w-full"
+                style={{ backgroundColor: item.color }}
+              />
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Footer quote */}
+        {/* Section Footer */}
         <motion.div 
-          className="text-center mt-16 md:mt-20"
+          className="mt-20 pt-10 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6"
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
         >
-          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white border border-[#1E293B]/5 shadow-sm">
-            <span className="text-[#406093] text-lg leading-none italic font-serif">&quot;</span>
-            <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[#1E293B]/50">
-              Menghargai budaya sendiri adalah <span className="text-[#406093]">langkah pertama</span> mengenali jati diri
-            </p>
-            <span className="text-[#406093] text-lg leading-none italic font-serif rotate-180">&quot;</span>
-          </div>
+           <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#475569]/40">Warisan Tanah Para Daeng</span>
+           <div className="flex items-center gap-4">
+              <div className="w-12 h-[1px] bg-[#406093]/10" />
+              <p className="font-serif italic text-xl text-[#406093]">Siri&apos; na Pacce</p>
+              <div className="w-12 h-[1px] bg-[#406093]/10" />
+           </div>
         </motion.div>
       </div>
     </section>
   );
 }
+

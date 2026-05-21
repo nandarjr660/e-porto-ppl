@@ -1,0 +1,37 @@
+name: Auto Push Maintenance to Main
+
+on:
+  schedule:
+    # Baris cron di bawah ini yang akan diubah-ubah otomatis oleh Gemini CLI
+    - cron: "0 17 * * *"
+  workflow_dispatch:
+
+jobs:
+  push-to-main:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ambil file dari ruang tunggu dan push ke main
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin
+
+          if git show-ref --verify --quiet refs/remotes/origin/antrean-maintenance; then
+            echo "Antrean ditemukan! Memproses push ke main..."
+            git checkout main
+            git checkout origin/antrean-maintenance -- .
+            git commit -m "chore: aktivasi mode maintenance otomatis [skip ci]" || echo "No changes"
+            git push origin main
+            git push origin --delete antrean-maintenance
+          else
+            echo "Tidak ada antrean maintenance malam ini."
+          fi
