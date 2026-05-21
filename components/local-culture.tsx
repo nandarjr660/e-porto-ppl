@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { fadeUp, staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
@@ -44,6 +45,12 @@ const cultureItems = [
 ];
 
 export default function LocalCulture() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const toggleItem = (idx: number) => {
+    setActiveIndex(activeIndex === idx ? null : idx);
+  };
+
   return (
     <section className="relative w-full py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-[#FFFFFF] text-[#1E293B] overflow-hidden">
       {/* Subtle Background Decoration */}
@@ -87,7 +94,8 @@ export default function LocalCulture() {
           {cultureItems.map((item, idx) => (
             <motion.div 
               key={idx}
-              className={`group relative overflow-hidden bg-[#F8FAFC] rounded-[2rem] border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#406093]/10 ${item.gridClass}`}
+              onClick={() => toggleItem(idx)}
+              className={`group relative overflow-hidden bg-[#F8FAFC] rounded-[2rem] border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#406093]/10 cursor-pointer ${item.gridClass}`}
               variants={staggerItem}
             >
               {/* Image Container with Zoom & Parallax-ish Effect */}
@@ -96,11 +104,11 @@ export default function LocalCulture() {
                   src={item.img}
                   alt={item.title}
                   fill
-                  className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110 brightness-[0.85] group-hover:brightness-[0.7]"
+                  className={`object-cover transition-transform duration-1000 ease-out brightness-[0.85] group-hover:scale-110 group-hover:brightness-[0.7] ${activeIndex === idx ? 'scale-110 brightness-[0.7]' : ''}`}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 {/* Subtle Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/80 via-[#0F172A]/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+                <div className={`absolute inset-0 bg-gradient-to-t from-[#0F172A]/80 via-[#0F172A]/20 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-80 ${activeIndex === idx ? 'opacity-80' : ''}`} />
               </div>
 
               {/* Content Overlay */}
@@ -112,24 +120,26 @@ export default function LocalCulture() {
                   <span className="text-[10px] font-bold text-white/60 tracking-tighter uppercase">{item.year}</span>
                 </div>
 
-                <div className="transform transition-transform duration-500 group-hover:-translate-y-2">
+                <div className={`transform transition-all duration-500 group-hover:-translate-y-2 ${activeIndex === idx ? '-translate-y-2' : ''}`}>
                   <h3 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tighter text-white mb-3 leading-none">
                     {item.title}
                   </h3>
-                  <p className="text-xs md:text-sm text-white/90 font-medium leading-relaxed max-w-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
-                    {item.desc}
-                  </p>
+                  <div className={`overflow-hidden transition-all duration-500 ease-in-out ${activeIndex === idx ? 'max-h-[500px] opacity-100 mt-2' : 'max-h-0 opacity-0 md:group-hover:max-h-[300px] md:group-hover:opacity-100 md:group-hover:mt-2'}`}>
+                    <p className="text-xs md:text-sm text-white/90 font-medium leading-relaxed max-w-2xl">
+                      {item.desc}
+                    </p>
+                  </div>
                 </div>
               </div>
 
               {/* Decorative Corner Number */}
-              <div className="absolute top-4 right-6 opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none">
+              <div className={`absolute top-4 right-6 opacity-0 transition-opacity duration-500 pointer-events-none group-hover:opacity-20 ${activeIndex === idx ? 'opacity-20' : ''}`}>
                  <span className="text-6xl font-black text-white">0{idx + 1}</span>
               </div>
               
               {/* Interaction Hint (Bottom Bar) */}
               <div 
-                className="absolute bottom-0 left-0 h-1.5 w-0 transition-all duration-700 group-hover:w-full"
+                className={`absolute bottom-0 left-0 h-1.5 transition-all duration-700 group-hover:w-full ${activeIndex === idx ? 'w-full' : 'w-0'}`}
                 style={{ backgroundColor: item.color }}
               />
             </motion.div>
@@ -155,4 +165,3 @@ export default function LocalCulture() {
     </section>
   );
 }
-

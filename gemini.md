@@ -107,14 +107,32 @@ An E-Portfolio for **Praktik Pengalaman Lapangan (PPL)** within the **PPG Prajab
 
 # Agent Workflow Instructions
 
+## Alur 1: Mengatur Jadwal Jam (Pemicu Cloud)
+
 Jika saya memberikan perintah dengan format:
-"saya mau melakukan git push di jam X dan jalankan git antrean"
+"saya mau melakukan git push di jam X"
 
-Kamu HARUS langsung mengeksekusi langkah-langkah berikut secara otonom menggunakan capability tools kamu tanpa perlu konfirmasi teks panjang lagi:
+Kamu HARUS langsung mengeksekusi langkah ini secara otonom:
 
-1. Hitung jam X tersebut dari waktu lokal (WIB) ke format CRON UTC (Ingat: WIB dikurangi 7 jam. Contoh: Jam 8 malam WIB adalah 20:00 WIB, dikurangi 7 menjadi 13:00 UTC, maka format cron-nya adalah '0 13 \* \* \*').
+1. Hitung jam X tersebut dari waktu lokal (WIB) ke format CRON UTC (WIB dikurangi 7 jam).
 2. Gunakan file-writing tool kamu untuk mengedit file `.github/workflows/auto-maintenance-push.yml`. Cari baris `- cron: '...'` dan ganti nilainya dengan hasil hitungan CRON UTC tadi.
-3. Setelah file berhasil disimpan, jalankan perintah shell/terminal `git antrean` secara otomatis di lingkungan lokal workspace ini.
-4. Berikan laporan singkat jika file sudah berhasil diedit dan perintah git sudah dieksekusi.
+3. Laporkan jika file workflow berhasil di-update.
+
+## Alur 2: Eksekusi Git Lokal (Pemicu Terminal)
+
+Jika saya memberikan perintah:
+"jalankan git"
+
+Kamu HARUS langsung mengeksekusi rentetan perintah terminal/shell berikut secara otonom dan berurutan di workspace ini:
+
+1. Hitung tanggal hari ini untuk membuat format versi "V1.[2 digit tahun terakhir].[tanggal][bulan]".
+   - Contoh: Jika hari ini tanggal 21 Mei 2026, formatnya adalah "V1.26.2105".
+2. Jalankan perintah terminal: `git checkout -b antrean-maintenance` (untuk membuat branch ruang tunggu).
+3. Jalankan perintah terminal: `git add .`
+4. Jalankan perintah terminal: `git commit -m "V1.26.DDMM"` (Ganti DDMM dengan hasil hitungan tanggal dan bulan hari ini).
+5. Jalankan perintah terminal: `git push origin antrean-maintenance --force` (untuk mengirim kodenya ke ruang tunggu cloud).
+6. Jalankan perintah terminal: `git checkout main` (kembali ke branch utama agar workspace lokal aman).
+7. Jalankan perintah terminal: `git branch -D antrean-maintenance` (hapus branch lokalnya agar bersih).
+8. Berikan laporan singkat jika semua perintah terminal di atas sudah sukses dijalankan.
 
 _Last Updated: May 20, 2026_

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { fadeUp, fadeLeft, staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
 import SplitText from '@/components/split-text';
-import TypingText from '@/components/typing-text';
+import BlurText from '@/components/blur-text';
 
 export default function Profile() {
   return (
@@ -121,7 +121,7 @@ export default function Profile() {
           <div className="flex items-center gap-4">
             <span className="text-3xl md:text-4xl text-[#406093]/40 font-serif leading-none italic">&quot;</span>
             <div className="text-base md:text-lg lg:text-xl font-medium italic text-[#F8FAFC] text-center leading-relaxed">
-              <TypingText text="Pendidikan tidak merubah dunia, pendidikan merubah manusia, manusia merubah dunia." speed={30} />
+              <BlurText text="Pendidikan tidak merubah dunia, pendidikan merubah manusia, manusia merubah dunia." delay={50} />
             </div>
             <span className="text-3xl md:text-4xl text-[#406093]/40 font-serif leading-none italic rotate-180">&quot;</span>
           </div>
