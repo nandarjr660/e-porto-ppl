@@ -1,13 +1,13 @@
 import Profile from "@/components/profile";
 import LocalCulture from "@/components/local-culture";
-import Closing from "@/components/closing";
+import Footer from "@/components/footer";
 
 export default function ProfilPage() {
   return (
     <div className="w-full">
       <Profile />
       <LocalCulture />
-      <Closing />
+      <Footer variant="simple" />
     </div>
   );
 }

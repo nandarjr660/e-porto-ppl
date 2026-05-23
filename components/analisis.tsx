@@ -1,8 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { fadeUp, staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
-import SplitText from '@/components/split-text';
+import { fadeUp, VIEWPORT } from '@/lib/motion';
 
 const data = {
   kendala: [
@@ -86,7 +85,7 @@ export default function Analisis() {
       <div className="pointer-events-none absolute bottom-[-4rem] left-[-4rem] h-[22rem] w-[22rem] rounded-full bg-gradient-to-tr from-emerald-200/40 to-transparent blur-[100px]" />
       <div className="pointer-events-none absolute top-1/3 left-10 hidden h-40 w-40 opacity-[0.03] md:block" style={{ backgroundImage: 'radial-gradient(#1E293B 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
 
-      <div className="sticky top-[56px] z-40 border-b border-[#1E293B]/10 bg-[#F8FAFC]/85 backdrop-blur-xl shadow-[0_8px_30px_rgba(15,23,42,0.03)]">
+      <div className="sticky top-[56px] z-40 border-b border-[#1E293B]/10 bg-white/90 backdrop-blur-xl shadow-[0_8px_30px_rgba(15,23,42,0.03)]">
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-6 py-5 md:flex-row md:items-center md:justify-between md:px-10 lg:px-16">
           <div>
             <div className="mb-1.5 flex items-center gap-2.5">
@@ -95,10 +94,10 @@ export default function Analisis() {
               <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#406093]/70">Evaluasi Keseluruhan Siklus</p>
             </div>
             <h1 className="text-2xl font-black uppercase leading-none tracking-tight text-[#1E293B] md:text-3xl">
-              <SplitText text="Analisis Pedagogi" delay={40} />
+              Analisis Pedagogi
             </h1>
           </div>
-          <div className="hidden items-center gap-2 text-[9px] font-bold uppercase tracking-widest text-[#1E293B]/30 md:flex">
+          <div className="hidden items-center gap-2 text-[9px] font-bold uppercase tracking-widest text-slate-500 md:flex">
             <span>Refleksi</span>
             <span className="w-8 h-px bg-[#1E293B]/20" />
             <span>Teori</span>
@@ -110,7 +109,7 @@ export default function Analisis() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 py-12 md:px-10 md:py-16 lg:px-16 lg:py-20">
         <motion.div
-          variants={staggerContainer}
+          variants={fadeUp}
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
@@ -123,10 +122,9 @@ export default function Analisis() {
             const layoutClass = isWide ? 'lg:col-span-12' : 'lg:col-span-6';
 
             return (
-              <motion.div
+              <div
                 key={card.id}
-                variants={staggerItem}
-                className={`group relative flex h-full flex-col overflow-hidden rounded-[2.25rem] border p-8 shadow-[0_18px_50px_rgba(15,23,42,0.06)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(15,23,42,0.1)] md:p-9 lg:p-10 ${layoutClass}
+                className={`group relative flex h-full flex-col overflow-hidden rounded-[2.25rem] border p-8 shadow-[0_18px_50px_rgba(15,23,42,0.06)] transition-all duration-500 hover:shadow-[0_24px_70px_rgba(15,23,42,0.12)] hover:border-[#406093]/20 md:p-9 lg:p-10 ${layoutClass}
                   ${isDark
                     ? 'bg-[linear-gradient(145deg,#0F172A,#162235,#1E293B)] border-[#1E293B] text-white'
                     : `${c.bg} ${c.border} text-[#1E293B]`
@@ -152,13 +150,13 @@ export default function Analisis() {
 
                       <div>
                         <div className="mb-2 flex items-center gap-3">
-                          <span className={`text-[10px] font-black uppercase tracking-[0.28em] ${isDark ? 'text-white/40' : 'text-[#1E293B]/30'}`}>
+                          <span className={`text-[10px] font-black uppercase tracking-[0.28em] ${isDark ? 'text-white/50' : 'text-slate-500'}`}>
                             {card.id}
                           </span>
                           <span className={`h-px w-10 ${isDark ? 'bg-white/10' : 'bg-[#406093]/15'}`} />
                         </div>
 
-                        <h3 className={`mb-2 text-[10px] font-black uppercase tracking-[0.32em] ${isDark ? 'text-white/40' : 'text-[#1E293B]/40'}`}>
+                        <h3 className={`mb-2 text-[10px] font-black uppercase tracking-[0.32em] ${isDark ? 'text-white/50' : 'text-slate-500'}`}>
                           {card.label}
                         </h3>
                         <h2 className={`text-xl font-black uppercase tracking-tight md:text-2xl ${isWide ? 'lg:text-[2rem]' : ''} ${isDark ? 'text-white' : 'text-[#1E293B]'}`}>
@@ -181,13 +179,13 @@ export default function Analisis() {
                       {Array.isArray(card.text) ? (
                         <div className={isWide ? 'grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-8' : 'space-y-4'}>
                           {card.text.map((paragraph, i) => (
-                            <p key={i} className={`text-[0.98rem] font-medium leading-8 text-justify ${isDark ? 'text-white/75' : 'text-slate-600'}`}>
+                            <p key={i} className={`text-base font-medium leading-relaxed text-left ${isDark ? 'text-white/80' : 'text-slate-700'}`}>
                               {paragraph}
                             </p>
                           ))}
                         </div>
                       ) : (
-                        <p className={`text-[0.98rem] font-medium leading-8 text-justify ${isDark ? 'text-white/75' : 'text-slate-600'} ${isWide ? 'max-w-5xl' : ''}`}>
+                        <p className={`text-base font-medium leading-relaxed text-left ${isDark ? 'text-white/80' : 'text-slate-700'} ${isWide ? 'max-w-4xl' : 'max-w-prose'}`}>
                           {card.text}
                         </p>
                       )}
@@ -201,12 +199,12 @@ export default function Analisis() {
                       <span className={`h-2 w-2 rounded-full ${isDark ? 'bg-white/20' : 'bg-[#406093]/20'}`} />
                     </div>
 
-                    <div className={`rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] ${isDark ? 'border-white/15 text-white/50' : 'border-[#1E293B]/10 text-[#1E293B]/40'}`}>
+                    <div className={`rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] ${isDark ? 'border-white/15 text-white/50' : 'border-[#1E293B]/10 text-slate-500'}`}>
                       {card.id}
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </motion.div>
@@ -216,7 +214,7 @@ export default function Analisis() {
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
-          className="mt-12 flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-[0.32em] text-[#1E293B]/40 md:mt-16"
+          className="mt-12 flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-[0.32em] text-slate-500 md:mt-16"
         >
           <span className="h-px w-8 bg-gradient-to-r from-transparent to-[#1E293B]/25" />
           Sintesis Refleksi — Siklus 1–3

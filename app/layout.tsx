@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import dynamic from "next/dynamic";
 import "./globals.css";
 import StructuredData from "./structured-data";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import ClickSpark from "@/components/click-spark";
-import Preloader from "@/components/preloader";
-import NavigationEvents from "@/components/navigation-events";
 import MaintenancePage from "./maintenance/page";
+
+const ClickSpark = dynamic(() => import("@/components/click-spark"));
+const Preloader = dynamic(() => import("@/components/preloader"));
+const NavigationEvents = dynamic(() => import("@/components/navigation-events"));
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -100,7 +102,7 @@ export default function RootLayout({
               {children}
             </main>
 
-            <Footer />
+            <Footer variant="full" />
           </div>
         </ClickSpark>
       </body>

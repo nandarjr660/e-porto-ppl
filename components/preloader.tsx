@@ -87,12 +87,12 @@ export default function Preloader() {
 
       const timer1 = setTimeout(() => {
         setIndex(1);
-      }, 3500); 
+      }, 2000);
 
       const timer2 = setTimeout(() => {
         setIsVisible(false);
         sessionStorage.setItem('hasSeenPreloader', 'true');
-      }, 7000); 
+      }, 4000);
 
       return () => {
         document.body.style.overflow = 'unset';

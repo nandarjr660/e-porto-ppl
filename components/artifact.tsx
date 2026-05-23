@@ -134,6 +134,8 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
               src={img}
               alt={`${title} ${i + 1}`}
               fill
+              quality={50}
+              loading="lazy"
               className="object-cover group-hover:scale-110 transition-transform duration-500"
               sizes="(max-width: 768px) 50vw, 200px"
             />
@@ -161,7 +163,7 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
             </div>
             <div className="flex-1 relative flex items-center justify-center p-6">
               <motion.div key={lightbox} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative w-full h-full max-w-5xl">
-                <Image src={images[lightbox]} alt="" fill className="object-contain" sizes="90vw" />
+                <Image src={images[lightbox]} alt="" fill quality={60} className="object-contain" sizes="90vw" />
               </motion.div>
               {images.length > 1 && (
                 <>
@@ -177,7 +179,7 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
             <div className="flex-none flex items-center justify-center gap-2 p-6 overflow-x-auto custom-scrollbar border-t border-white/10">
               {images.map((img, i) => (
                 <button key={i} onClick={() => setLightbox(i)} className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden transition-all duration-300 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] ${i === lightbox ? 'ring-2 ring-[#406093] scale-110' : 'opacity-40 hover:opacity-80'}`}>
-                  <Image src={img} alt="" fill className="object-cover" sizes="100px" />
+                  <Image src={img} alt="" fill quality={50} className="object-cover" sizes="100px" />
                 </button>
               ))}
             </div>
@@ -216,6 +218,8 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
                 src={img}
                 alt=""
                 fill
+                quality={50}
+                loading="lazy"
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
                 sizes="(max-width: 768px) 50vw, 30vw"
               />
@@ -249,9 +253,9 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
              </div>
              
               <div className="flex-1 relative flex items-center justify-center p-4 md:p-10">
-                 <motion.div key={lightbox} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4 }} className="relative w-full h-full">
-                   <Image src={images[lightbox]} alt="" fill className="object-contain" sizes="80vw" />
-                 </motion.div>
+                  <motion.div key={lightbox} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4 }} className="relative w-full h-full">
+                    <Image src={images[lightbox]} alt="" fill quality={60} className="object-contain" sizes="80vw" />
+                  </motion.div>
                 
                 {images.length > 1 && (
                   <>
@@ -268,7 +272,7 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
              <div className="flex-none p-8 flex items-center justify-center gap-3 overflow-x-auto max-w-full custom-scrollbar">
                 {images.map((img, i) => (
                    <button key={i} onClick={() => setLightbox(i)} className={`shrink-0 w-16 h-16 rounded-xl overflow-hidden transition-all duration-300 border-2 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#93C5FD] ${i === lightbox ? 'border-[#93C5FD] scale-110 shadow-lg shadow-[#93C5FD]/20' : 'border-transparent opacity-30 hover:opacity-100'}`}>
-                    <Image src={img} alt="" fill className="object-cover" sizes="100px" />
+                    <Image src={img} alt="" fill quality={50} className="object-cover" sizes="100px" />
                   </button>
                 ))}
              </div>
@@ -345,7 +349,7 @@ export default function Artifact() {
                 </div>
               </div>
               <div className="relative w-full max-w-md h-48 opacity-60 mt-4 overflow-hidden rounded-2xl border border-[#1E293B]/10">
-                <Image src={data.img} alt="SDN Pengasinan IX" fill className="object-cover" sizes="(max-width: 768px) 100vw, 450px" />
+                <Image src={data.img} alt="SDN Pengasinan IX" fill quality={50} className="object-cover" sizes="(max-width: 768px) 100vw, 450px" />
               </div>
             </motion.div>
           ) : (
@@ -384,7 +388,7 @@ export default function Artifact() {
 
                 {/* COVER IMAGE */}
                 <motion.div variants={staggerItem} className="relative rounded-2xl overflow-hidden aspect-video bg-[#E2E8F0] shadow-xl border border-[#1E293B]/10 group">
-                  <Image src={data.img} alt={data.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px" />
+                  <Image src={data.img} alt={data.title} fill quality={60} className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px" />
                 </motion.div>
               </motion.div>
 

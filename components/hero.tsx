@@ -20,7 +20,7 @@ export default function Hero() {
     }
   }, []);
 
-  const getDelay = (delay: number) => isFirstVisit ? delay : delay - 7.5;
+  const getDelay = (delay: number) => isFirstVisit ? delay : delay - 4.5;
 
   return (
     <section
@@ -73,7 +73,8 @@ export default function Hero() {
               <Image 
                 src="/image/berandaaa.png" 
                 alt="Hero Portofolio Hasmunandar" 
-                fill 
+                fill
+                sizes="(max-width: 768px) 65vw, 45vw"
                 className="object-cover object-top filter contrast-[1.02] brightness-100 group-hover:brightness-105 transition-all duration-700"
                 priority 
               />

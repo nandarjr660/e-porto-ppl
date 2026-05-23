@@ -1,11 +1,12 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import SplitText from '@/components/split-text';
 import { staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
 
-export default function Intro() {
+const Intro = memo(function Intro() {
   return (
     <section
       id="intro"
@@ -120,4 +121,6 @@ export default function Intro() {
       </motion.div>
     </section>
   );
-}
+});
+
+export default Intro;

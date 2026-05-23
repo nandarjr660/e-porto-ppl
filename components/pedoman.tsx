@@ -1,9 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { fadeUp, staggerItem, VIEWPORT } from '@/lib/motion';
-import SplitText from '@/components/split-text';
-import TypingText from '@/components/typing-text';
+import { fadeUp, VIEWPORT } from '@/lib/motion';
 
 const dataPedoman = [
   {
@@ -86,7 +84,7 @@ export default function Pedoman() {
       <div className="pointer-events-none absolute right-[-8rem] top-28 h-64 w-64 rounded-full bg-[#406093]/10 blur-[110px]" />
       <div className="pointer-events-none absolute bottom-16 left-[-5rem] h-56 w-56 rounded-full bg-emerald-200/30 blur-[100px]" />
 
-      <div className="sticky top-[56px] z-40 border-b border-[#1E293B]/10 bg-[#F8FAFC]/85 backdrop-blur-xl">
+      <div className="sticky top-[56px] z-40 border-b border-[#1E293B]/10 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4 md:px-10 lg:px-16">
           <div className="flex items-center gap-3">
             <div className="h-2 w-2 rounded-full bg-[#406093] animate-pulse" />
@@ -100,7 +98,7 @@ export default function Pedoman() {
             <span className="rounded-full border border-[#406093]/20 bg-white/80 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-[#406093]">
               4 Pilar
             </span>
-            <span className="rounded-full border border-[#1E293B]/10 bg-white/80 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-[#1E293B]/60">
+            <span className="rounded-full border border-[#1E293B]/10 bg-white/80 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">
               Humanis & Adaptif
             </span>
           </div>
@@ -127,17 +125,17 @@ export default function Pedoman() {
               </div>
 
               <div className="mt-6 max-w-4xl">
-                <p className="mb-4 text-[11px] font-black uppercase tracking-[0.32em] text-[#406093]/65">Pedoman Mengajar</p>
+                <p className="mb-4 text-[11px] font-black uppercase tracking-[0.25em] text-[#406093]">Pedoman Mengajar</p>
                 <h2 className="text-5xl font-black leading-[1.05] tracking-tight text-[#1E293B] md:text-6xl lg:text-[5.5rem]">
-                  <SplitText tag="span" text="Disegani," delay={40} className="inline-block pb-2" />
+                  <span className="inline-block pb-2">Disegani,</span>
                   <br />
-                  <SplitText tag="span" text="bukan ditakuti." delay={40} className="inline-block font-serif font-normal italic text-[#406093]/70 pt-2 pb-2 pr-4" />
+                  <span className="inline-block font-serif font-normal italic text-[#406093]/70 pt-2 pb-2 pr-4">bukan ditakuti.</span>
                 </h2>
                 <div className="mt-6 h-1.5 w-16 rounded-full bg-[#406093]" />
               </div>
 
               <div className="mt-8 max-w-4xl text-base font-medium leading-relaxed text-[#475569] md:text-lg">
-                <TypingText text="Bagi saya, otoritas seorang pendidik tidak dibangun lewat ancaman atau hukuman, melainkan melalui keramahan, kepedulian, dan empati yang tulus. Saya tidak merujuk pada satu sosok spesifik yang sempurna, melainkan berupaya mewujudkan nilai-nilai keteladanan itu sendiri secara nyata. Dengan memposisikan diri sebagai pendidik yang bersahabat namun tetap tegas dalam prinsip, saya percaya rasa hormat dari siswa akan tumbuh secara alami, menjadikan saya sosok yang disegani, bukan ditakuti." speed={20} />
+                Bagi saya, otoritas seorang pendidik tidak dibangun lewat ancaman atau hukuman, melainkan melalui keramahan, kepedulian, dan empati yang tulus. Saya tidak merujuk pada satu sosok spesifik yang sempurna, melainkan berupaya mewujudkan nilai-nilai keteladanan itu sendiri secara nyata. Dengan memposisikan diri sebagai pendidik yang bersahabat namun tetap tegas dalam prinsip, saya percaya rasa hormat dari siswa akan tumbuh secara alami, menjadikan saya sosok yang disegani, bukan ditakuti.
               </div>
 
               <div className="mt-8 flex flex-wrap gap-3">
@@ -191,9 +189,9 @@ export default function Pedoman() {
             viewport={VIEWPORT}
           >
             <div className="rounded-[2rem] border border-white/70 bg-white/85 p-7 shadow-[0_18px_50px_rgba(15,23,42,0.06)] backdrop-blur-xl md:p-8">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#406093]/70">Empat Pilar</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#406093]">Empat Pilar</p>
               <h3 className="mt-3 text-2xl lg:text-[1.65rem] font-black leading-tight tracking-tight text-[#1E293B]">
-                <SplitText text="Nilai yang menopang cara saya mengajar" delay={30} />
+                Nilai yang menopang cara saya mengajar
               </h3>
               <p className="mt-4 text-sm font-medium leading-relaxed text-[#475569] md:text-base">
                 Empat pilar ini menjadi turunan praktis dari prinsip utama di atas: bagaimana rasa hormat dibangun, dijaga, dan diterjemahkan ke dalam pengalaman belajar siswa.
@@ -215,7 +213,7 @@ export default function Pedoman() {
             </div>
 
             <div className="rounded-[1.75rem] border border-[#406093]/10 bg-gradient-to-r from-[#406093]/[0.08] via-white to-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.05)]">
-              <p className="mb-3 text-[10px] font-black uppercase tracking-[0.28em] text-[#406093]/70">Arah Utama</p>
+              <p className="mb-3 text-[10px] font-black uppercase tracking-[0.28em] text-[#406093]">Arah Utama</p>
               <p className="text-sm font-semibold leading-relaxed text-[#334155] md:text-base">
                 Ketegasan tetap hadir, tetapi dibangun melalui keteladanan, empati, pembelajaran yang relevan, dan inovasi yang dekat dengan kebutuhan siswa.
               </p>
@@ -228,13 +226,9 @@ export default function Pedoman() {
               const c = colorMap[card.color];
 
               return (
-                <motion.article
+                <article
                   key={card.id}
-                  variants={staggerItem}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={VIEWPORT}
-                  className={`group relative overflow-hidden rounded-[2rem] border p-7 shadow-[0_18px_60px_rgba(15,23,42,0.08)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(15,23,42,0.12)] md:p-8 ${c.bg} ${c.border}`}
+                  className={`group relative overflow-hidden rounded-[2rem] border p-7 shadow-[0_18px_60px_rgba(15,23,42,0.08)] transition-all duration-500 hover:shadow-[0_24px_70px_rgba(15,23,42,0.12)] hover:border-[#406093]/20 md:p-8 ${c.bg} ${c.border}`}
                 >
                   <div className={`pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r ${isDark ? 'from-white/50 via-white/20 to-transparent' : 'from-[#406093]/80 via-[#60A5FA]/25 to-transparent'}`} />
                   <div className={`pointer-events-none absolute -right-8 -top-8 h-36 w-36 rounded-full blur-3xl transition-transform duration-500 group-hover:scale-125 ${c.glow}`} />
@@ -270,11 +264,11 @@ export default function Pedoman() {
 
                     <div className={`mt-6 h-px w-full ${isDark ? 'bg-gradient-to-r from-white/20 via-white/10 to-transparent' : 'bg-gradient-to-r from-[#1E293B]/10 via-[#406093]/10 to-transparent'}`} />
 
-                    <p className={`mt-6 text-base font-medium leading-relaxed md:text-lg ${isDark ? 'text-white/80' : 'text-[#475569]'}`}>
+                    <p className={`mt-6 text-base font-medium leading-relaxed md:text-lg max-w-prose ${isDark ? 'text-white/80' : 'text-[#475569]'}`}>
                       {card.text}
                     </p>
                   </div>
-                </motion.article>
+                </article>
               );
             })}
           </div>

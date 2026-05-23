@@ -1,10 +1,11 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
 import Image from 'next/image';
 
-export default function Institusi() {
+const Institusi = memo(function Institusi() {
   const kampusMapUrl = "https://maps.app.goo.gl/LPfTj2g1xCYwtz8U7";
   const sekolahMapUrl = "https://maps.google.com/?q=SDN+Pengasinan+IX+Bekasi";
   const kampusWebUrl = "https://unismabekasi.ac.id/";
@@ -71,6 +72,8 @@ export default function Institusi() {
             src="/image/kampus.jpg" 
             alt="Kampus LPTK" 
             fill
+            quality={50}
+            loading="lazy"
             className="object-cover md:grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out scale-100 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
@@ -146,6 +149,8 @@ export default function Institusi() {
             src="/image/sekolah.jpg" 
             alt="SDN Pengasinan IX" 
             fill
+            quality={50}
+            loading="lazy"
             className="object-cover md:grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out scale-100 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
@@ -165,4 +170,6 @@ export default function Institusi() {
 
     </div>
   );
-}
+});
+
+export default Institusi;

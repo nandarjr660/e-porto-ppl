@@ -104,6 +104,8 @@ export default function LocalCulture() {
                   src={item.img}
                   alt={item.title}
                   fill
+                  quality={50}
+                  loading="lazy"
                   className={`object-cover transition-transform duration-1000 ease-out brightness-[0.85] group-hover:scale-110 group-hover:brightness-[0.7] ${activeIndex === idx ? 'scale-110 brightness-[0.7]' : ''}`}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
