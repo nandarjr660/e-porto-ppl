@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fadeUp, staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
 import Image from 'next/image';
@@ -112,10 +113,45 @@ const dataSiklus: SiklusItem[] = [
   },
 ];
 
+function useLightboxNavigation(
+  lightboxIndex: number | null,
+  onClose: () => void
+) {
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    window.history.pushState({ lightbox: true }, '');
+
+    const handlePopState = () => onClose();
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [lightboxIndex, onClose]);
+}
+
 function GallerySection({ images, title }: { images: string[]; title: string }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [direction, setDirection] = useState(0);
+  useLightboxNavigation(lightbox, () => setLightbox(null));
 
   if (images.length === 0) return null;
+
+  const variants = {
+    enter: (dir: number) => ({ x: dir * 300, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+  };
 
   return (
     <div>
@@ -127,7 +163,10 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
         {images.map((img, i) => (
           <button
             key={i}
-            onClick={() => setLightbox(i)}
+            onClick={() => {
+              setDirection(0);
+              setLightbox(i);
+            }}
             className="aspect-square rounded-xl overflow-hidden bg-[#E2E8F0] group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2"
           >
             <Image
@@ -146,10 +185,10 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
         ))}
       </div>
 
-      <AnimatePresence>
-        {lightbox !== null && (
+      {lightbox !== null && createPortal(
+        <AnimatePresence>
           <motion.div
-            className="fixed inset-0 z-[300] bg-[#0F172A]/95 backdrop-blur-xl flex flex-col"
+            className="fixed inset-0 z-[9999] bg-[#0F172A]/95 backdrop-blur-xl flex flex-col"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -157,20 +196,46 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
           >
             <div className="flex-none flex justify-between items-center px-6 py-4 border-b border-white/10">
               <p className="text-xs font-black uppercase tracking-widest text-white/50">{title} — {lightbox + 1} / {images.length}</p>
-              <button onClick={() => setLightbox(null)} className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+              <button 
+                onClick={() => setLightbox(null)} 
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                aria-label="Tutup galeri"
+              >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
             <div className="flex-1 relative flex items-center justify-center p-6">
-              <motion.div key={lightbox} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative w-full h-full max-w-5xl">
+              <motion.div
+                key={lightbox}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+                className="relative w-full h-full max-w-5xl"
+              >
                 <Image src={images[lightbox]} alt="" fill quality={60} className="object-contain" sizes="90vw" />
               </motion.div>
               {images.length > 1 && (
                 <>
-                  <button onClick={() => setLightbox((lightbox - 1 + images.length) % images.length)} className="absolute left-6 md:left-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                  <button 
+                    onClick={() => {
+                      setDirection(-1);
+                      setLightbox((lightbox - 1 + images.length) % images.length);
+                    }} 
+                    className="absolute left-6 md:left-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    aria-label="Foto sebelumnya"
+                  >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
                   </button>
-                  <button onClick={() => setLightbox((lightbox + 1) % images.length)} className="absolute right-6 md:right-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                  <button 
+                    onClick={() => {
+                      setDirection(1);
+                      setLightbox((lightbox + 1) % images.length);
+                    }} 
+                    className="absolute right-6 md:right-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    aria-label="Foto selanjutnya"
+                  >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
                   </button>
                 </>
@@ -178,27 +243,43 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
             </div>
             <div className="flex-none flex items-center justify-center gap-2 p-6 overflow-x-auto custom-scrollbar border-t border-white/10">
               {images.map((img, i) => (
-                <button key={i} onClick={() => setLightbox(i)} className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden transition-all duration-300 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] ${i === lightbox ? 'ring-2 ring-[#406093] scale-110' : 'opacity-40 hover:opacity-80'}`}>
+                <button 
+                  key={i} 
+                  onClick={() => {
+                    setDirection(i > lightbox ? 1 : -1);
+                    setLightbox(i);
+                  }} 
+                  className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden transition-all duration-300 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] ${i === lightbox ? 'ring-2 ring-[#406093] scale-110' : 'opacity-40 hover:opacity-80'}`}
+                  aria-label={`Lihat foto ${i + 1}`}
+                >
                   <Image src={img} alt="" fill quality={50} className="object-cover" sizes="100px" />
                 </button>
               ))}
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }
 
 function BentoGallery({ images, title }: { images: string[]; title: string }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [direction, setDirection] = useState(0);
+  useLightboxNavigation(lightbox, () => setLightbox(null));
+
+  const variants = {
+    enter: (dir: number) => ({ x: dir * 300, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-base font-black uppercase tracking-wider text-[#1E293B]">
           <span className="flex items-center gap-2">
-            <svg className="w-5 h-5 shrink-0 text-[#406093]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            <svg aria-hidden="true" className="w-5 h-5 shrink-0 text-[#406093]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
             {title}
           </span>
         </h3>
@@ -208,10 +289,14 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
         {images.map((img, i) => (
           <button
             key={i}
-            onClick={() => setLightbox(i)}
+            onClick={() => {
+              setDirection(0);
+              setLightbox(i);
+            }}
             className={`group relative overflow-hidden rounded-2xl bg-gray-100 border border-[#1E293B]/10 transition-all duration-500 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2
               ${i === 0 ? 'md:col-span-2 md:row-span-2' : 'aspect-[4/3]'}
             `}
+            aria-label={`Perbesar foto ${i + 1}`}
           >
             <div className={`relative ${i === 0 ? 'aspect-[4/3] md:aspect-auto md:h-full' : 'aspect-[4/3]'}`}>
               <Image
@@ -226,7 +311,7 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
               <div className="absolute inset-0 bg-gradient-to-t from-[#1E293B]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-y-4 group-hover:translate-y-0">
                  <div className="w-12 h-12 rounded-full bg-white/40 backdrop-blur-md flex items-center justify-center text-white border border-white/30">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                    <svg aria-hidden="true" className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                  </div>
               </div>
             </div>
@@ -234,10 +319,10 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
         ))}
       </div>
 
-      <AnimatePresence>
-        {lightbox !== null && (
+      {lightbox !== null && createPortal(
+        <AnimatePresence>
           <motion.div
-            className="fixed inset-0 z-[300] bg-[#0F172A]/98 backdrop-blur-2xl flex flex-col"
+            className="fixed inset-0 z-[9999] bg-[#0F172A]/98 backdrop-blur-2xl flex flex-col"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -247,22 +332,48 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#93C5FD] mb-1">Dokumentasi Praktik</span>
                   <p className="text-xs font-bold text-white/50 tracking-widest">{title} — Foto {lightbox + 1}</p>
                 </div>
-                <button onClick={() => setLightbox(null)} className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all border border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                <button 
+                  onClick={() => setLightbox(null)} 
+                  className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all border border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  aria-label="Tutup galeri"
+                >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
              </div>
-             
+              
               <div className="flex-1 relative flex items-center justify-center p-4 md:p-10">
-                  <motion.div key={lightbox} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4 }} className="relative w-full h-full">
+                  <motion.div
+                    key={lightbox}
+                    custom={direction}
+                    variants={variants}
+                    initial="enter"
+                    animate="center"
+                    transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+                    className="relative w-full h-full"
+                  >
                     <Image src={images[lightbox]} alt="" fill quality={60} className="object-contain" sizes="80vw" />
                   </motion.div>
                 
                 {images.length > 1 && (
                   <>
-                    <button onClick={() => setLightbox((lightbox - 1 + images.length) % images.length)} className="absolute left-6 md:left-12 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                    <button 
+                      onClick={() => {
+                        setDirection(-1);
+                        setLightbox((lightbox - 1 + images.length) % images.length);
+                      }} 
+                      className="absolute left-6 md:left-12 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                      aria-label="Foto sebelumnya"
+                    >
                       <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
                     </button>
-                    <button onClick={() => setLightbox((lightbox + 1) % images.length)} className="absolute right-6 md:right-12 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                    <button 
+                      onClick={() => {
+                        setDirection(1);
+                        setLightbox((lightbox + 1) % images.length);
+                      }} 
+                      className="absolute right-6 md:right-12 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                      aria-label="Foto selanjutnya"
+                    >
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
                     </button>
                   </>
@@ -271,14 +382,23 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
 
              <div className="flex-none p-8 flex items-center justify-center gap-3 overflow-x-auto max-w-full custom-scrollbar">
                 {images.map((img, i) => (
-                   <button key={i} onClick={() => setLightbox(i)} className={`shrink-0 w-16 h-16 rounded-xl overflow-hidden transition-all duration-300 border-2 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#93C5FD] ${i === lightbox ? 'border-[#93C5FD] scale-110 shadow-lg shadow-[#93C5FD]/20' : 'border-transparent opacity-30 hover:opacity-100'}`}>
+                   <button 
+                    key={i} 
+                    onClick={() => {
+                      setDirection(i > lightbox ? 1 : -1);
+                      setLightbox(i);
+                    }} 
+                    className={`shrink-0 w-16 h-16 rounded-xl overflow-hidden transition-all duration-300 border-2 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#93C5FD] ${i === lightbox ? 'border-[#93C5FD] scale-110 shadow-lg shadow-[#93C5FD]/20' : 'border-transparent opacity-30 hover:opacity-100'}`}
+                    aria-label={`Pilih foto ${i + 1}`}
+                  >
                     <Image src={img} alt="" fill quality={50} className="object-cover" sizes="100px" />
                   </button>
                 ))}
              </div>
            </motion.div>
-         )}
-       </AnimatePresence>
+         </AnimatePresence>,
+         document.body
+      )}
     </div>
   );
 }
@@ -292,10 +412,10 @@ export default function Artifact() {
 
       {/* STICKY HEADER + TABS */}
       <div className="sticky top-[56px] z-40 bg-[#F8FAFC]/80 backdrop-blur-xl border-b border-[#1E293B]/10">
-        <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 py-3 md:py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#406093] mb-1">Dedikasi di SDN Pengasinan IX</p>
-            <h1 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-[#1E293B] leading-none">
+            <h1 className="text-xl md:text-3xl font-black uppercase tracking-tight text-[#1E293B] leading-none">
               <SplitText text="Rekam Jejak Mengajar" delay={40} />
             </h1>
           </div>

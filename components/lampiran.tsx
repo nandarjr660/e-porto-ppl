@@ -61,19 +61,6 @@ export default function Lampiran() {
           </h1>
         </motion.div>
 
-        <motion.div className="text-left md:text-right" variants={staggerItem}>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-[#1E293B]/40 mb-1">Rata-Rata Nilai Akhir</p>
-          <div className="flex items-baseline gap-2 md:justify-end">
-            <span className="text-5xl md:text-7xl font-black leading-none text-[#406093]">84,5</span>
-            <span className="text-lg md:text-xl font-bold text-[#1E293B]/20">/ 100</span>
-          </div>
-          <div className="mt-2 flex items-center gap-1.5 md:justify-end">
-            {[1,2,3].map(i => (
-              <div key={i} className={`w-2 h-2 rounded-full ${i <= 2 ? 'bg-[#406093]' : 'bg-[#1E293B]/10'}`} />
-            ))}
-            <span className="text-[8px] font-bold uppercase tracking-widest text-[#1E293B]/30 ml-1">2/3 Siklus</span>
-          </div>
-        </motion.div>
       </motion.header>
 
       <motion.div

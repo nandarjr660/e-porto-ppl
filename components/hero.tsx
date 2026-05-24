@@ -118,8 +118,7 @@ export default function Hero() {
             <SplitText
               tag="h1"
               text="PORTOFOLIO"
-<<<<<<< HEAD
-              className="text-[clamp(2.5rem,11vw,8rem)] md:text-[clamp(3rem,8vw,10rem)] lg:text-[85px] xl:text-[105px] font-black uppercase tracking-tighter leading-none text-[#1E293B] whitespace-nowrap"
+              className="text-[clamp(2rem,10vw,8rem)] md:text-[clamp(2.5rem,7.5vw,10rem)] lg:text-[75px] xl:text-[95px] font-black uppercase tracking-tighter leading-none text-[#1E293B] whitespace-nowrap"
               delay={50}
               duration={1.25}
               ease="power3.out"
