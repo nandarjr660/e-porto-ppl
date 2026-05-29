@@ -6,25 +6,13 @@ import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
 
 function useReducedMotion() {
   const [prefersReduced, setPrefersReduced] = useState(false);
-
   useEffect(() => {
-    // Only run on client
-    if (typeof window === 'undefined') return;
-
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    
-    // Initial check without triggering a sync setState if we can help it
-    // but the linter is very strict. Let's use the handler approach.
-    const handler = (e: MediaQueryListEvent | { matches: boolean }) => 
-      setPrefersReduced(e.matches);
-
-    // Set initial state
-    handler(mq);
-
-    mq.addEventListener('change', handler as EventListener);
-    return () => mq.removeEventListener('change', handler as EventListener);
+    setPrefersReduced(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
   }, []);
-
   return prefersReduced;
 }
 
@@ -44,9 +32,9 @@ export default function Navbar() {
     { name: 'Beranda', href: '/' },
     { name: 'Profil', href: '/profil' },
     { name: 'Artefak', href: '/artefak' },
-    { name: 'Analisis', href: '/analisis' },
+
     { name: 'Lampiran', href: '/lampiran' },
-    { name: 'Pedoman', href: '/pedoman' },
+    { name: 'Refleksi', href: '/refleksi' },
   ], []);
 
   useEffect(() => {
@@ -119,7 +107,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`fixed left-0 right-0 z-50 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${scrolled ? 'top-0 md:top-4' : 'top-0'}`}>
+      <nav className={`fixed left-0 right-0 z-[100] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${scrolled ? 'top-0 md:top-4' : 'top-0'}`}>
 
         <div className={`mx-auto transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex items-center justify-between
           ${scrolled
@@ -195,7 +183,7 @@ export default function Navbar() {
             <button
               ref={toggleRef}
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden relative w-11 h-11 flex items-center justify-center transition-all duration-300 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E293B] rounded-lg"
+              className="md:hidden relative w-10 h-10 flex items-center justify-center transition-all duration-300 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E293B] rounded-lg"
               aria-label={isOpen ? 'Tutup menu' : 'Buka menu'}
               aria-expanded={isOpen}
             >
@@ -230,7 +218,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={prefersReduced ? { duration: 0 } : { duration: 0.25 }}
-            className="fixed inset-0 z-40 bg-[#0F172A]/60 backdrop-blur-md md:hidden flex flex-col items-center justify-center"
+            className="fixed inset-0 z-[90] bg-[#0F172A]/60 backdrop-blur-md md:hidden flex flex-col items-center justify-center"
             aria-hidden={!isOpen}
           >
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] bg-[#406093]/8 blur-[80px] rounded-full pointer-events-none" />

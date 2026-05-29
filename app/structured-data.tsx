@@ -35,6 +35,9 @@ export default function StructuredData() {
       "Asesmen Pembelajaran",
       "Kurikulum Merdeka"
     ],
+    "award": [
+      "Nilai Rata-rata PPL: 84.5/100"
+    ],
     "sameAs": [
       "https://instagram.com/hsmnandar",
       "https://linkedin.com/in/hasmunandar"

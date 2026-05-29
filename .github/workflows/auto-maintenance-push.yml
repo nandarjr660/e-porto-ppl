@@ -3,7 +3,7 @@ name: Auto Push Maintenance to Main
 on:
   schedule:
     # Baris cron di bawah ini yang akan diubah-ubah otomatis oleh Gemini CLI
-    - cron: "0 15 * * *"
+    - cron: "0 19 29 5 *"
   workflow_dispatch:
 
 jobs:

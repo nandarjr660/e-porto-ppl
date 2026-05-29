@@ -1,6 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fadeUp, staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
 import Image from 'next/image';
@@ -113,45 +112,10 @@ const dataSiklus: SiklusItem[] = [
   },
 ];
 
-function useLightboxNavigation(
-  lightboxIndex: number | null,
-  onClose: () => void
-) {
-  useEffect(() => {
-    if (lightboxIndex === null) return;
-
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    window.history.pushState({ lightbox: true }, '');
-
-    const handlePopState = () => onClose();
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener('popstate', handlePopState);
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [lightboxIndex, onClose]);
-}
-
 function GallerySection({ images, title }: { images: string[]; title: string }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
-  const [direction, setDirection] = useState(0);
-  useLightboxNavigation(lightbox, () => setLightbox(null));
 
   if (images.length === 0) return null;
-
-  const variants = {
-    enter: (dir: number) => ({ x: dir * 300, opacity: 0 }),
-    center: { x: 0, opacity: 1 },
-  };
 
   return (
     <div>
@@ -163,10 +127,7 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
         {images.map((img, i) => (
           <button
             key={i}
-            onClick={() => {
-              setDirection(0);
-              setLightbox(i);
-            }}
+            onClick={() => setLightbox(i)}
             className="aspect-square rounded-xl overflow-hidden bg-[#E2E8F0] group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2"
           >
             <Image
@@ -185,10 +146,10 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
         ))}
       </div>
 
-      {lightbox !== null && createPortal(
-        <AnimatePresence>
+      <AnimatePresence>
+        {lightbox !== null && (
           <motion.div
-            className="fixed inset-0 z-[9999] bg-[#0F172A]/95 backdrop-blur-xl flex flex-col"
+            className="fixed inset-0 z-[300] bg-[#0F172A]/95 backdrop-blur-xl flex flex-col"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -196,46 +157,20 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
           >
             <div className="flex-none flex justify-between items-center px-6 py-4 border-b border-white/10">
               <p className="text-xs font-black uppercase tracking-widest text-white/50">{title} — {lightbox + 1} / {images.length}</p>
-              <button 
-                onClick={() => setLightbox(null)} 
-                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                aria-label="Tutup galeri"
-              >
+              <button onClick={() => setLightbox(null)} className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
             <div className="flex-1 relative flex items-center justify-center p-6">
-              <motion.div
-                key={lightbox}
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-                className="relative w-full h-full max-w-5xl"
-              >
+              <motion.div key={lightbox} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative w-full h-full max-w-5xl">
                 <Image src={images[lightbox]} alt="" fill quality={60} className="object-contain" sizes="90vw" />
               </motion.div>
               {images.length > 1 && (
                 <>
-                  <button 
-                    onClick={() => {
-                      setDirection(-1);
-                      setLightbox((lightbox - 1 + images.length) % images.length);
-                    }} 
-                    className="absolute left-6 md:left-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                    aria-label="Foto sebelumnya"
-                  >
+                  <button onClick={() => setLightbox((lightbox - 1 + images.length) % images.length)} className="absolute left-6 md:left-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
                   </button>
-                  <button 
-                    onClick={() => {
-                      setDirection(1);
-                      setLightbox((lightbox + 1) % images.length);
-                    }} 
-                    className="absolute right-6 md:right-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                    aria-label="Foto selanjutnya"
-                  >
+                  <button onClick={() => setLightbox((lightbox + 1) % images.length)} className="absolute right-6 md:right-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
                   </button>
                 </>
@@ -243,43 +178,27 @@ function GallerySection({ images, title }: { images: string[]; title: string }) 
             </div>
             <div className="flex-none flex items-center justify-center gap-2 p-6 overflow-x-auto custom-scrollbar border-t border-white/10">
               {images.map((img, i) => (
-                <button 
-                  key={i} 
-                  onClick={() => {
-                    setDirection(i > lightbox ? 1 : -1);
-                    setLightbox(i);
-                  }} 
-                  className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden transition-all duration-300 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] ${i === lightbox ? 'ring-2 ring-[#406093] scale-110' : 'opacity-40 hover:opacity-80'}`}
-                  aria-label={`Lihat foto ${i + 1}`}
-                >
+                <button key={i} onClick={() => setLightbox(i)} className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden transition-all duration-300 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] ${i === lightbox ? 'ring-2 ring-[#406093] scale-110' : 'opacity-40 hover:opacity-80'}`}>
                   <Image src={img} alt="" fill quality={50} className="object-cover" sizes="100px" />
                 </button>
               ))}
             </div>
           </motion.div>
-        </AnimatePresence>,
-        document.body
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
 function BentoGallery({ images, title }: { images: string[]; title: string }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
-  const [direction, setDirection] = useState(0);
-  useLightboxNavigation(lightbox, () => setLightbox(null));
-
-  const variants = {
-    enter: (dir: number) => ({ x: dir * 300, opacity: 0 }),
-    center: { x: 0, opacity: 1 },
-  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-base font-black uppercase tracking-wider text-[#1E293B]">
           <span className="flex items-center gap-2">
-            <svg aria-hidden="true" className="w-5 h-5 shrink-0 text-[#406093]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            <svg className="w-5 h-5 shrink-0 text-[#406093]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
             {title}
           </span>
         </h3>
@@ -289,14 +208,10 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
         {images.map((img, i) => (
           <button
             key={i}
-            onClick={() => {
-              setDirection(0);
-              setLightbox(i);
-            }}
+            onClick={() => setLightbox(i)}
             className={`group relative overflow-hidden rounded-2xl bg-gray-100 border border-[#1E293B]/10 transition-all duration-500 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2
               ${i === 0 ? 'md:col-span-2 md:row-span-2' : 'aspect-[4/3]'}
             `}
-            aria-label={`Perbesar foto ${i + 1}`}
           >
             <div className={`relative ${i === 0 ? 'aspect-[4/3] md:aspect-auto md:h-full' : 'aspect-[4/3]'}`}>
               <Image
@@ -311,7 +226,7 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
               <div className="absolute inset-0 bg-gradient-to-t from-[#1E293B]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-y-4 group-hover:translate-y-0">
                  <div className="w-12 h-12 rounded-full bg-white/40 backdrop-blur-md flex items-center justify-center text-white border border-white/30">
-                    <svg aria-hidden="true" className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                  </div>
               </div>
             </div>
@@ -319,10 +234,10 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
         ))}
       </div>
 
-      {lightbox !== null && createPortal(
-        <AnimatePresence>
+      <AnimatePresence>
+        {lightbox !== null && (
           <motion.div
-            className="fixed inset-0 z-[9999] bg-[#0F172A]/98 backdrop-blur-2xl flex flex-col"
+            className="fixed inset-0 z-[300] bg-[#0F172A]/98 backdrop-blur-2xl flex flex-col"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -332,48 +247,22 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#93C5FD] mb-1">Dokumentasi Praktik</span>
                   <p className="text-xs font-bold text-white/50 tracking-widest">{title} — Foto {lightbox + 1}</p>
                 </div>
-                <button 
-                  onClick={() => setLightbox(null)} 
-                  className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all border border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                  aria-label="Tutup galeri"
-                >
+                <button onClick={() => setLightbox(null)} className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all border border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
              </div>
-              
+            
               <div className="flex-1 relative flex items-center justify-center p-4 md:p-10">
-                  <motion.div
-                    key={lightbox}
-                    custom={direction}
-                    variants={variants}
-                    initial="enter"
-                    animate="center"
-                    transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-                    className="relative w-full h-full"
-                  >
+                  <motion.div key={lightbox} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4 }} className="relative w-full h-full">
                     <Image src={images[lightbox]} alt="" fill quality={60} className="object-contain" sizes="80vw" />
                   </motion.div>
                 
                 {images.length > 1 && (
                   <>
-                    <button 
-                      onClick={() => {
-                        setDirection(-1);
-                        setLightbox((lightbox - 1 + images.length) % images.length);
-                      }} 
-                      className="absolute left-6 md:left-12 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                      aria-label="Foto sebelumnya"
-                    >
+                    <button onClick={() => setLightbox((lightbox - 1 + images.length) % images.length)} className="absolute left-6 md:left-12 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                       <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
                     </button>
-                    <button 
-                      onClick={() => {
-                        setDirection(1);
-                        setLightbox((lightbox + 1) % images.length);
-                      }} 
-                      className="absolute right-6 md:right-12 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                      aria-label="Foto selanjutnya"
-                    >
+                    <button onClick={() => setLightbox((lightbox + 1) % images.length)} className="absolute right-6 md:right-12 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 backdrop-blur-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
                     </button>
                   </>
@@ -382,40 +271,93 @@ function BentoGallery({ images, title }: { images: string[]; title: string }) {
 
              <div className="flex-none p-8 flex items-center justify-center gap-3 overflow-x-auto max-w-full custom-scrollbar">
                 {images.map((img, i) => (
-                   <button 
-                    key={i} 
-                    onClick={() => {
-                      setDirection(i > lightbox ? 1 : -1);
-                      setLightbox(i);
-                    }} 
-                    className={`shrink-0 w-16 h-16 rounded-xl overflow-hidden transition-all duration-300 border-2 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#93C5FD] ${i === lightbox ? 'border-[#93C5FD] scale-110 shadow-lg shadow-[#93C5FD]/20' : 'border-transparent opacity-30 hover:opacity-100'}`}
-                    aria-label={`Pilih foto ${i + 1}`}
-                  >
+                   <button key={i} onClick={() => setLightbox(i)} className={`shrink-0 w-16 h-16 rounded-xl overflow-hidden transition-all duration-300 border-2 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#93C5FD] ${i === lightbox ? 'border-[#93C5FD] scale-110 shadow-lg shadow-[#93C5FD]/20' : 'border-transparent opacity-30 hover:opacity-100'}`}>
                     <Image src={img} alt="" fill quality={50} className="object-cover" sizes="100px" />
                   </button>
                 ))}
              </div>
            </motion.div>
-         </AnimatePresence>,
-         document.body
-      )}
+         )}
+       </AnimatePresence>
     </div>
   );
 }
 
+const sectionNav = [
+  { id: 'konteks', label: 'Konteks & Tujuan', icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+  { id: 'refleksi', label: 'Refleksi', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+  { id: 'media', label: 'Media', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' },
+  { id: 'hasil', label: 'Hasil Kerja', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+  { id: 'teori', label: 'Teori', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' },
+  { id: 'dokumentasi', label: 'Dokumentasi', icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' },
+];
+
+const cardStagger = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const cardItem = {
+  hidden: { opacity: 0, y: 40, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.6, ease: [0.25, 1, 0.5, 1] as const },
+  },
+};
+
 export default function Artifact() {
   const [activeId, setActiveId] = useState('01');
+  const [activeSection, setActiveSection] = useState('konteks');
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+
   const data = dataSiklus.find(s => s.id === activeId)!;
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        }
+      },
+      { rootMargin: '-120px 0px -60% 0px', threshold: 0 }
+    );
+
+    const refs = sectionRefs.current;
+    Object.values(refs).forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [activeId]);
+
+  const scrollTo = (id: string) => {
+    const el = sectionRefs.current[id];
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - 130;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
+  const setRef = (id: string) => (el: HTMLElement | null) => {
+    sectionRefs.current[id] = el;
+  };
 
   return (
     <section id="artifact" className="w-full bg-[#F8FAFC] bg-noise text-[#1E293B] font-sans overflow-x-hidden pt-[56px]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#406093]/[0.06] to-transparent" />
 
       {/* STICKY HEADER + TABS */}
       <div className="sticky top-[56px] z-40 bg-[#F8FAFC]/80 backdrop-blur-xl border-b border-[#1E293B]/10">
-        <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 py-3 md:py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#406093] mb-1">Dedikasi di SDN Pengasinan IX</p>
-            <h1 className="text-xl md:text-3xl font-black uppercase tracking-tight text-[#1E293B] leading-none">
+            <h1 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-[#1E293B] leading-none">
               <SplitText text="Rekam Jejak Mengajar" delay={40} />
             </h1>
           </div>
@@ -457,7 +399,6 @@ export default function Artifact() {
           className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 py-10"
         >
           {data.isOngoing ? (
-            /* ── ONGOING STATE ── */
             <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="flex flex-col items-center justify-center min-h-[60vh] text-center gap-6">
               <div className="w-20 h-20 rounded-full bg-[#F1F5F9] border-2 border-dashed border-[#406093]/30 flex items-center justify-center text-[#406093]">
                 <svg className="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -473,148 +414,202 @@ export default function Artifact() {
               </div>
             </motion.div>
           ) : (
-            /* ── FULL DETAIL ── */
-            <div className="space-y-12">
+            <div className="flex gap-10">
+              {/* SIDEBAR NAV — desktop only */}
+              <nav className="hidden lg:block w-48 shrink-0">
+                <div className="sticky top-[152px] space-y-1">
+                  <p className="text-[9px] font-black uppercase tracking-[0.3em] text-[#406093]/60 mb-3 pl-3">Navigasi</p>
+                  {sectionNav.map((s) => {
+                    const isActive = activeSection === s.id;
+                    return (
+                      <button
+                        key={s.id}
+                        onClick={() => scrollTo(s.id)}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] ${
+                          isActive
+                            ? 'bg-[#406093] text-white shadow-md shadow-[#406093]/20'
+                            : 'text-[#475569] hover:bg-white/80 hover:text-[#1E293B]'
+                        }`}
+                      >
+                        <svg className={`w-4 h-4 shrink-0 transition-transform duration-300 ${isActive ? '' : 'group-hover:scale-110'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d={s.icon} />
+                        </svg>
+                        <span className="text-[11px] font-bold tracking-tight">{s.label}</span>
+                      </button>
+                    );
+                  })}
 
-              {/* HERO SECTION */}
-              <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-4">
-                  <motion.div variants={staggerItem} className="flex items-center gap-3">
-                    <span className="text-6xl font-black text-[#1E293B]/5 leading-none select-none">{data.id}</span>
-                    <div>
-                      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#406093] mb-1">Topik Pembelajaran</p>
-                      <h2 className="text-2xl lg:text-3xl font-black text-[#1E293B] leading-tight">{data.rppTitle}</h2>
+                  <div className="pt-4 mt-4 border-t border-[#1E293B]/10 px-3">
+                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[#406093]">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#406093] animate-pulse" />
+                      <span>Skor</span>
+                    </div>
+                    <p className="mt-1.5 text-sm font-bold text-[#1E293B]">
+                      {data.nilai.gp > 0 ? (
+                        <>GP: <span className="text-[#406093]">{data.nilai.gp}</span> · DPL: <span className="text-[#406093]">{data.nilai.dpl}</span></>
+                      ) : (
+                        <span className="text-[#475569]/50">Belum dinilai</span>
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </nav>
+
+              {/* CONTENT */}
+              <div className="flex-1 min-w-0 space-y-14">
+                {/* HERO */}
+                <motion.div
+                  variants={cardStagger}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={VIEWPORT}
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-white/70 backdrop-blur-xl rounded-[2rem] border border-white/80 p-6 md:p-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)]"
+                >
+                  <div className="space-y-4">
+                    <motion.div variants={cardItem} className="flex items-center gap-3">
+                      <span className="text-6xl font-black text-[#1E293B]/5 leading-none select-none">{data.id}</span>
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#406093] mb-1">Topik Pembelajaran</p>
+                        <h2 className="text-2xl lg:text-3xl font-black text-[#1E293B] leading-tight">{data.rppTitle}</h2>
+                      </div>
+                    </motion.div>
+                    <motion.div variants={cardItem} className="flex flex-wrap gap-2">
+                      <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg">{data.tanggal}</span>
+                      <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg">{data.durasi}</span>
+                      <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg">{data.kelas}</span>
+                    </motion.div>
+                    <motion.p variants={cardItem} className="text-base text-[#475569] leading-relaxed font-medium text-left">{data.desc}</motion.p>
+
+                    <motion.div variants={cardItem} className="flex flex-col sm:flex-row gap-4 pt-4">
+                      <a href={data.rppLink} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-3 bg-[#1E293B] hover:bg-[#406093] text-white px-6 py-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-lg group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2">
+                        <svg className="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        <span className="text-xs font-black uppercase tracking-widest">Modul Ajar</span>
+                      </a>
+                      <a href={data.mediaLink} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-3 bg-white hover:bg-[#F1F5F9] text-[#1E293B] border border-[#1E293B]/15 px-6 py-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-sm group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2">
+                        <svg className="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                        <span className="text-xs font-black uppercase tracking-widest">Akses Media</span>
+                      </a>
+                    </motion.div>
+                  </div>
+
+                  <motion.div variants={cardItem} className="relative rounded-2xl overflow-hidden aspect-video bg-[#E2E8F0] shadow-xl border border-[#1E293B]/10 group">
+                    <Image src={data.img} alt={data.title} fill quality={60} className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px" />
+                  </motion.div>
+                </motion.div>
+
+                {/* KONTEKS & TUJUAN */}
+                <section id="konteks" ref={setRef('konteks')} className="scroll-mt-[140px]">
+                  <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="group bg-white/70 backdrop-blur-xl rounded-3xl p-8 border border-white/80 shadow-[0_12px_40px_rgba(15,23,42,0.05)] hover:shadow-[0_20px_60px_rgba(15,23,42,0.08)] transition-all duration-500 hover:-translate-y-0.5 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
+                        <svg className="w-24 h-24 text-[#406093]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                      </div>
+                      <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#406093] mb-4 flex items-center gap-3">
+                        <span className="w-8 h-8 rounded-xl bg-[#406093] text-white flex items-center justify-center shadow-lg shadow-[#406093]/20">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </span> 
+                        Konteks Pembelajaran
+                      </h4>
+                      <p className="text-[1.05rem] font-semibold leading-relaxed text-[#334155] text-left">{data.konteks}</p>
+                    </div>
+
+                    <div className="group bg-white/70 backdrop-blur-xl rounded-3xl p-8 border border-white/80 shadow-[0_12px_40px_rgba(15,23,42,0.05)] hover:shadow-[0_20px_60px_rgba(15,23,42,0.08)] transition-all duration-500 hover:-translate-y-0.5 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
+                        <svg className="w-24 h-24 text-[#406093]" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+                      </div>
+                      <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#406093] mb-4 flex items-center gap-3">
+                        <span className="w-8 h-8 rounded-xl bg-[#406093] text-white flex items-center justify-center shadow-lg shadow-[#406093]/20">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </span> 
+                        Tujuan Pembelajaran
+                      </h4>
+                      <p className="text-[1.05rem] font-semibold leading-relaxed text-[#334155] text-left">{data.tujuan}</p>
                     </div>
                   </motion.div>
-                  <motion.div variants={staggerItem} className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg">{data.tanggal}</span>
-                    <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg">{data.durasi}</span>
-                    <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg">{data.kelas}</span>
+                </section>
+
+                {/* REFLEKSI / PLUS MINUS */}
+                <section id="refleksi" ref={setRef('refleksi')} className="scroll-mt-[140px]">
+                  <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="relative group p-8 rounded-3xl bg-[#10B981]/5 border border-[#10B981]/20 overflow-hidden transition-all duration-500 hover:bg-[#10B981]/10 hover:-translate-y-0.5 shadow-[0_8px_30px_rgba(16,185,129,0.06)]">
+                      <div className="absolute -right-4 -bottom-4 text-[120px] font-black text-[#10B981]/5 select-none transition-transform group-hover:scale-110">+</div>
+                      <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#10B981] mb-6 flex items-center gap-3">
+                        <span className="w-10 h-10 rounded-2xl bg-[#10B981] text-white flex items-center justify-center shadow-lg shadow-[#10B981]/30">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" /></svg>
+                        </span>
+                        Kelebihan
+                      </h4>
+                      <p className="text-lg font-bold leading-relaxed text-[#065F46] relative z-10 text-left">{data.plus}</p>
+                    </div>
+
+                    <div className="relative group p-8 rounded-3xl bg-[#F59E0B]/5 border border-[#F59E0B]/20 overflow-hidden transition-all duration-500 hover:bg-[#F59E0B]/10 hover:-translate-y-0.5 shadow-[0_8px_30px_rgba(245,158,11,0.06)]">
+                      <div className="absolute -right-4 -bottom-4 text-[120px] font-black text-[#F59E0B]/5 select-none transition-transform group-hover:scale-110">−</div>
+                      <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#F59E0B] mb-6 flex items-center gap-3">
+                        <span className="w-10 h-10 rounded-2xl bg-[#F59E0B] text-white flex items-center justify-center shadow-lg shadow-[#F59E0B]/30">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" /></svg>
+                        </span>
+                        Kekurangan
+                      </h4>
+                      <p className="text-lg font-bold leading-relaxed text-[#92400E] relative z-10 text-left">{data.minus}</p>
+                    </div>
                   </motion.div>
-                  <motion.p variants={staggerItem} className="text-base text-[#475569] leading-relaxed font-medium text-left">{data.desc}</motion.p>
+                </section>
 
-                  {/* DOKUMEN PEMBELAJARAN */}
-                  <motion.div variants={staggerItem} className="flex flex-col sm:flex-row gap-4 pt-4">
-                    <a href={data.rppLink} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-3 bg-[#1E293B] hover:bg-[#406093] text-white px-6 py-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-lg group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2">
-                      <svg className="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                      <span className="text-xs font-black uppercase tracking-widest">Modul Ajar</span>
-                    </a>
-                    <a href={data.mediaLink} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-3 bg-white hover:bg-[#F1F5F9] text-[#1E293B] border border-[#1E293B]/15 px-6 py-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-sm group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2">
-                      <svg className="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
-                      <span className="text-xs font-black uppercase tracking-widest">Akses Media</span>
-                    </a>
+                {/* MEDIA PEMBELAJARAN */}
+                <section id="media" ref={setRef('media')} className="scroll-mt-[140px]">
+                  <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="bg-white/70 backdrop-blur-xl rounded-[2rem] border border-white/80 shadow-[0_12px_40px_rgba(15,23,42,0.05)] overflow-hidden">
+                    <div className="p-6 border-b border-[#1E293B]/10">
+                      <h3 className="text-base font-black uppercase tracking-wider text-[#1E293B]">
+                        <span className="flex items-center gap-2">
+                          <svg className="w-5 h-5 shrink-0 text-[#406093]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                          Media Pembelajaran
+                        </span>
+                      </h3>
+                      <p className="mt-2 text-[0.95rem] font-medium text-[#475569] leading-relaxed text-left">{data.mediaBelajar}</p>
+                    </div>
+                    {data.galleryMedia.length > 0 && (
+                      <div className="p-6 bg-slate-50/50">
+                        <GallerySection images={data.galleryMedia} title="Media & Alat Peraga" />
+                      </div>
+                    )}
                   </motion.div>
-                </div>
+                </section>
 
-                {/* COVER IMAGE */}
-                <motion.div variants={staggerItem} className="relative rounded-2xl overflow-hidden aspect-video bg-[#E2E8F0] shadow-xl border border-[#1E293B]/10 group">
-                  <Image src={data.img} alt={data.title} fill quality={60} className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px" />
-                </motion.div>
-              </motion.div>
+                {/* HASIL KERJA SISWA */}
+                <section id="hasil" ref={setRef('hasil')} className="scroll-mt-[140px]">
+                  <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="bg-white/70 backdrop-blur-xl rounded-[2rem] border border-white/80 shadow-[0_12px_40px_rgba(15,23,42,0.05)] overflow-hidden">
+                    <div className="p-6 border-b border-[#1E293B]/10">
+                      <h3 className="text-base font-black uppercase tracking-wider text-[#1E293B]">
+                        <span className="flex items-center gap-2">
+                          <svg className="w-5 h-5 shrink-0 text-[#406093]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          Hasil Kerja Siswa
+                        </span>
+                      </h3>
+                      <p className="mt-2 text-[0.95rem] font-medium text-[#475569] leading-relaxed text-left">{data.hasilKerja}</p>
+                    </div>
+                    {data.galleryHasil.length > 0 && (
+                      <div className="p-6 bg-slate-50/50">
+                        <GallerySection images={data.galleryHasil} title="Sampel Pekerjaan Siswa" />
+                      </div>
+                    )}
+                  </motion.div>
+                </section>
 
-              <div className="w-full h-px bg-[#1E293B]/10" />
+                {/* TEORI */}
+                <section id="teori" ref={setRef('teori')} className="scroll-mt-[140px]">
+                  <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="p-6 border-l-4 border-[#406093] bg-[#EEF2FF]/80 backdrop-blur-sm rounded-r-2xl border border-[#406093]/10 hover:shadow-[0_8px_30px_rgba(64,96,147,0.08)] transition-all duration-500">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-[#406093]/60 mb-3">Kajian Teori Pendukung</h4>
+                    <p className="text-lg font-serif italic text-[#334155] leading-relaxed text-left">&quot;{data.teori}&quot;</p>
+                  </motion.div>
+                </section>
 
-              {/* KONTEKS & TUJUAN */}
-              <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="group bg-gradient-to-br from-white to-[#F8FAFC] rounded-3xl p-8 border border-[#1E293B]/10 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
-                    <svg className="w-24 h-24 text-[#406093]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                  </div>
-                  <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#406093] mb-4 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-xl bg-[#406093] text-white flex items-center justify-center shadow-lg shadow-[#406093]/20">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    </span> 
-                    Konteks Pembelajaran
-                  </h4>
-                  <p className="text-[1.05rem] font-semibold leading-relaxed text-[#334155] text-left">{data.konteks}</p>
-                </div>
-
-                <div className="group bg-gradient-to-br from-white to-[#F8FAFC] rounded-3xl p-8 border border-[#1E293B]/10 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
-                    <svg className="w-24 h-24 text-[#406093]" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
-                  </div>
-                  <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#406093] mb-4 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-xl bg-[#406093] text-white flex items-center justify-center shadow-lg shadow-[#406093]/20">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    </span> 
-                    Tujuan Pembelajaran
-                  </h4>
-                  <p className="text-[1.05rem] font-semibold leading-relaxed text-[#334155] text-left">{data.tujuan}</p>
-                </div>
-              </motion.div>
-
-              {/* REFLEKSI / PLUS MINUS */}
-              <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="relative group p-8 rounded-3xl bg-[#10B981]/5 border border-[#10B981]/20 overflow-hidden transition-all duration-500 hover:bg-[#10B981]/10">
-                  <div className="absolute -right-4 -bottom-4 text-[120px] font-black text-[#10B981]/5 select-none transition-transform group-hover:scale-110">+</div>
-                  <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#10B981] mb-6 flex items-center gap-3">
-                    <span className="w-10 h-10 rounded-2xl bg-[#10B981] text-white flex items-center justify-center shadow-lg shadow-[#10B981]/30">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" /></svg>
-                    </span>
-                    Kelebihan
-                  </h4>
-                  <p className="text-lg font-bold leading-relaxed text-[#065F46] relative z-10 text-left">{data.plus}</p>
-                </div>
-
-                <div className="relative group p-8 rounded-3xl bg-[#F59E0B]/5 border border-[#F59E0B]/20 overflow-hidden transition-all duration-500 hover:bg-[#F59E0B]/10">
-                  <div className="absolute -right-4 -bottom-4 text-[120px] font-black text-[#F59E0B]/5 select-none transition-transform group-hover:scale-110">−</div>
-                  <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#F59E0B] mb-6 flex items-center gap-3">
-                    <span className="w-10 h-10 rounded-2xl bg-[#F59E0B] text-white flex items-center justify-center shadow-lg shadow-[#F59E0B]/30">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" /></svg>
-                    </span>
-                    Kekurangan
-                  </h4>
-                  <p className="text-lg font-bold leading-relaxed text-[#92400E] relative z-10 text-left">{data.minus}</p>
-                </div>
-              </motion.div>
-
-              {/* MEDIA PEMBELAJARAN + FOTO */}
-              <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="bg-white rounded-2xl border border-[#1E293B]/10 shadow-sm overflow-hidden">
-                <div className="p-6 border-b border-[#1E293B]/10">
-                  <h3 className="text-base font-black uppercase tracking-wider text-[#1E293B]">
-                    <span className="flex items-center gap-2">
-                      <svg className="w-5 h-5 shrink-0 text-[#406093]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-                      Media Pembelajaran
-                    </span>
-                  </h3>
-                  <p className="mt-2 text-[0.95rem] font-medium text-[#475569] leading-relaxed text-left">{data.mediaBelajar}</p>
-                </div>
-                {data.galleryMedia.length > 0 && (
-                  <div className="p-6 bg-slate-50">
-                    <GallerySection images={data.galleryMedia} title="Media & Alat Peraga" />
-                  </div>
-                )}
-              </motion.div>
-
-              {/* HASIL KERJA SISWA */}
-              <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="bg-white rounded-2xl border border-[#1E293B]/10 shadow-sm overflow-hidden">
-                <div className="p-6 border-b border-[#1E293B]/10">
-                  <h3 className="text-base font-black uppercase tracking-wider text-[#1E293B]">
-                    <span className="flex items-center gap-2">
-                      <svg className="w-5 h-5 shrink-0 text-[#406093]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                      Hasil Kerja Siswa
-                    </span>
-                  </h3>
-                  <p className="mt-2 text-[0.95rem] font-medium text-[#475569] leading-relaxed text-left">{data.hasilKerja}</p>
-                </div>
-                {data.galleryHasil.length > 0 && (
-                  <div className="p-6 bg-slate-50">
-                    <GallerySection images={data.galleryHasil} title="Sampel Pekerjaan Siswa" />
-                  </div>
-                )}
-              </motion.div>
-
-              {/* TEORI */}
-              <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="p-6 border-l-4 border-[#406093] bg-[#EEF2FF] rounded-r-2xl border border-[#406093]/10">
-                <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-[#406093]/60 mb-3">Kajian Teori Pendukung</h4>
-                <p className="text-lg font-serif italic text-[#334155] leading-relaxed text-left">&quot;{data.teori}&quot;</p>
-              </motion.div>
-
-              {/* DOKUMEN SIKLUS (BENTO) */}
-              <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="bg-white rounded-2xl border border-[#1E293B]/10 shadow-sm p-6">
-                <BentoGallery images={data.galleryDokumentasi} title="Dokumentasi Siklus" />
-              </motion.div>
-
+                {/* DOKUMENTASI */}
+                <section id="dokumentasi" ref={setRef('dokumentasi')} className="scroll-mt-[140px]">
+                  <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="bg-white/70 backdrop-blur-xl rounded-[2rem] border border-white/80 shadow-[0_12px_40px_rgba(15,23,42,0.05)] p-6">
+                    <BentoGallery images={data.galleryDokumentasi} title="Dokumentasi Siklus" />
+                  </motion.div>
+                </section>
+              </div>
             </div>
           )}
         </motion.div>

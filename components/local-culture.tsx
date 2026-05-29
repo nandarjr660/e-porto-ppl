@@ -53,6 +53,10 @@ export default function LocalCulture() {
 
   return (
     <section className="relative w-full py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-[#FFFFFF] text-[#1E293B] overflow-hidden">
+      {/* Blur Orbs */}
+      <div className="absolute top-1/4 -left-20 w-80 h-80 bg-[#406093]/8 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-1/3 -right-20 w-72 h-72 bg-[#D97706]/6 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#60A5FA]/5 rounded-full blur-[150px] pointer-events-none" />
       {/* Subtle Background Decoration */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0" 
            style={{ backgroundImage: 'radial-gradient(#406093 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
@@ -95,7 +99,8 @@ export default function LocalCulture() {
             <motion.div 
               key={idx}
               onClick={() => toggleItem(idx)}
-              className={`group relative overflow-hidden bg-[#F8FAFC] rounded-[2rem] border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#406093]/10 cursor-pointer ${item.gridClass}`}
+              whileTap={{ scale: 0.97 }}
+              className={`group relative overflow-hidden backdrop-blur-xl bg-white/40 border border-white/60 rounded-[2rem] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#406093]/15 hover:-translate-y-1 cursor-pointer ${item.gridClass}`}
               variants={staggerItem}
             >
               {/* Image Container with Zoom & Parallax-ish Effect */}
@@ -141,9 +146,11 @@ export default function LocalCulture() {
               
               {/* Interaction Hint (Bottom Bar) */}
               <div 
-                className={`absolute bottom-0 left-0 h-1.5 transition-all duration-700 group-hover:w-full ${activeIndex === idx ? 'w-full' : 'w-0'}`}
+                className={`absolute bottom-0 left-0 h-2 transition-all duration-700 group-hover:w-full group-hover:h-2.5 ${activeIndex === idx ? 'w-full h-2.5' : 'w-0'}`}
                 style={{ backgroundColor: item.color }}
               />
+              <div className={`absolute bottom-2.5 left-1/2 -translate-x-1/2 w-0 h-0.5 rounded-full transition-all duration-500 delay-100 ${activeIndex === idx || 'group-hover:w-1/3'} opacity-30`}
+                style={{ backgroundColor: item.color }} />
             </motion.div>
           ))}
         </motion.div>
@@ -156,11 +163,17 @@ export default function LocalCulture() {
           whileInView="visible"
           viewport={VIEWPORT}
         >
-           <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#475569]/40">Warisan Tanah Para Daeng</span>
+           <div className="flex items-center gap-3">
+              <span className="flex items-center gap-1.5 text-[8px] font-black uppercase tracking-[0.1em] text-[#475569]/20">
+                <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M4 7V4h16v3" /><path d="M9 20h6" /><path d="M12 4v16" /><path d="M4 11l8-4 8 4" /><path d="M6 11v5" /><path d="M18 11v5" /></svg>
+                &#x2022; &#x2022; &#x2022;
+              </span>
+              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#475569]/40">Warisan Tanah Para Daeng</span>
+           </div>
            <div className="flex items-center gap-4">
-              <div className="w-12 h-[1px] bg-[#406093]/10" />
+              <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-[#406093]/30 to-transparent" />
               <p className="font-serif italic text-xl text-[#406093]">Siri&apos; na Pacce</p>
-              <div className="w-12 h-[1px] bg-[#406093]/10" />
+              <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-[#406093]/30 to-transparent" />
            </div>
         </motion.div>
       </div>
