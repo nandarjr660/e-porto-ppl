@@ -10,17 +10,25 @@ import TypingText from '@/components/typing-text';
 
 export default function Hero() {
   const [isFirstVisit, setIsFirstVisit] = useState(true);
+  const [morphDone, setMorphDone] = useState(false);
 
   useEffect(() => {
     const hasSeenPreloader = sessionStorage.getItem('hasSeenPreloader');
     if (hasSeenPreloader === 'true') {
+      setMorphDone(true);
       setTimeout(() => {
         setIsFirstVisit(false);
       }, 0);
     }
   }, []);
 
-  const getDelay = (delay: number) => isFirstVisit ? delay : delay - 4.5;
+  useEffect(() => {
+    const handler = () => setMorphDone(true);
+    window.addEventListener('preloader:morph', handler);
+    return () => window.removeEventListener('preloader:morph', handler);
+  }, []);
+
+  const getDelay = (delay: number) => isFirstVisit ? delay : delay - 1.2;
 
   return (
     <section
@@ -40,7 +48,7 @@ export default function Hero() {
         variants={fadeUp}
         initial="hidden"
         animate="visible"
-        transition={{ delay: getDelay(7.8) }}
+        transition={{ delay: getDelay(2.2) }}
       >
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-[#406093] animate-pulse" />
@@ -62,7 +70,7 @@ export default function Hero() {
           variants={fadeLeft}
           initial="hidden"
           animate="visible"
-          transition={{ delay: getDelay(8.1) }}
+          transition={{ delay: getDelay(2.5) }}
         >
           <div className="relative w-[65%] sm:w-[55%] md:w-[90%] lg:w-[85%] aspect-[4/5] md:translate-x-0 lg:translate-x-4 group cursor-default">
             {/* Outer Glow/Shadow - Only visible on hover */}
@@ -93,9 +101,9 @@ export default function Hero() {
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
-          transition={{ delayChildren: getDelay(8.4) }}
+          transition={{ delayChildren: getDelay(2.7) }}
         >
-          <motion.h2 variants={staggerItem} className="text-3xl md:text-4xl lg:text-[48px] xl:text-[58px] font-medium tracking-tight text-[#406093] mb-1 md:mb-2 leading-none font-serif italic lowercase relative">
+          <motion.h2 variants={staggerItem} className="relative text-3xl md:text-4xl lg:text-[48px] xl:text-[58px] font-medium tracking-tight text-[#406093] mb-1 md:mb-2 leading-none font-serif italic lowercase inline-flex items-center gap-0">
             <Shuffle
               text="Welcome to my"
               shuffleDirection="right"
@@ -110,15 +118,28 @@ export default function Hero() {
               respectReducedMotion={true}
               loop={false}
               loopDelay={0}
-              startDelay={Math.max(getDelay(8.4), 0)}
+              startDelay={Math.max(getDelay(2.7), 0)}
               className="inline-block"
             />
+            <motion.span
+              className="relative inline-flex items-center justify-center w-3 h-3 md:w-4 md:h-4 ml-1 md:ml-1.5 -mr-0.5"
+              initial={{ opacity: 0, scale: 0, rotateZ: 180 }}
+              animate={morphDone ? { opacity: 1, scale: 1, rotateZ: 0 } : { opacity: 0, scale: 0, rotateZ: 180 }}
+              transition={{ duration: 0.9, ease: [0.34, 1.56, 0.64, 1] }}
+              style={{ perspective: "400px", transformStyle: "preserve-3d" }}
+            >
+              <span className="absolute inset-0 rounded-full bg-[#406093]/20 blur-sm will-change-transform" />
+              <motion.span
+                className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-[#406093] will-change-transform"
+                animate={morphDone ? { y: [0, -3, 0] } : { y: 0 }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </motion.span>
           </motion.h2>
           <motion.div variants={staggerItem} className="w-full">
             <SplitText
               tag="h1"
               text="PORTOFOLIO"
-<<<<<<< HEAD
               className="text-[clamp(2.5rem,11vw,8rem)] md:text-[clamp(3rem,8vw,10rem)] lg:text-[85px] xl:text-[105px] font-black uppercase tracking-tighter leading-none text-[#1E293B] whitespace-nowrap"
               delay={50}
               duration={1.25}
@@ -129,7 +150,7 @@ export default function Hero() {
               threshold={0.1}
               rootMargin="-100px"
               showCallback
-              startDelay={Math.max(getDelay(8.52), 0)}
+              startDelay={Math.max(getDelay(2.8), 0)}
             />
           </motion.div>
           <motion.div variants={staggerItem} className="w-full mt-2 md:mt-4">
@@ -140,7 +161,7 @@ export default function Hero() {
               speed={45}
               threshold={0.1}
               rootMargin="-100px"
-              startDelay={Math.max(getDelay(8.7), 0)}
+              startDelay={Math.max(getDelay(3.0), 0)}
             />
           </motion.div>
           
@@ -157,7 +178,7 @@ export default function Hero() {
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
-        transition={{ delayChildren: getDelay(8.8) }}
+        transition={{ delayChildren: getDelay(3.2) }}
       >
         <motion.div
           className="w-full md:w-auto px-5 py-2 md:py-2.5 rounded-full border border-[#1E293B]/20 text-center text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#475569] cursor-default"

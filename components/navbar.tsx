@@ -32,9 +32,9 @@ export default function Navbar() {
     { name: 'Beranda', href: '/' },
     { name: 'Profil', href: '/profil' },
     { name: 'Artefak', href: '/artefak' },
-    { name: 'Analisis', href: '/analisis' },
+
     { name: 'Lampiran', href: '/lampiran' },
-    { name: 'Pedoman', href: '/pedoman' },
+    { name: 'Refleksi', href: '/refleksi' },
   ], []);
 
   useEffect(() => {

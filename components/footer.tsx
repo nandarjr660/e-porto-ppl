@@ -2,7 +2,7 @@
 
 import { memo, useState, useRef, FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { fadeUp, VIEWPORT } from '@/lib/motion';
+import { staggerContainer, staggerItem, fadeUp, VIEWPORT } from '@/lib/motion';
 
 type FooterVariant = 'full' | 'simple';
 
@@ -10,8 +10,8 @@ const EMAIL = 'hasmunandar660@gmail.com';
 const ACCESS_KEY = 'bc434b7e-e03f-43a1-b20c-f61bc69e6fc0';
 
 const socials = [
-  { name: 'Instagram', href: 'https://instagram.com/hsmnandar' },
-  { name: 'LinkedIn', href: 'https://linkedin.com/in/hasmunandar' },
+  { name: 'Instagram', href: 'https://instagram.com/hsmnandar', icon: 'M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.258 1.228.601 1.789 1.162.561.561.904 1.129 1.162 1.789.248.638.415 1.363.465 2.428.05 1.066.06 1.405.06 4.122 0 2.717-.01 3.056-.06 4.122-.05 1.065-.217 1.79-.465 2.428a4.828 4.828 0 0 1-1.162 1.789c-.561.561-1.129.904-1.789 1.162-.638.248-1.363.415-2.428.465-1.066.05-1.405.06-4.122.06-2.717 0-3.056-.01-4.122-.06-1.065-.05-1.79-.217-2.428-.465a4.828 4.828 0 0 1-1.789-1.162c-.561-.561-.904-1.129-1.162-1.789-.248-.638-.415-1.363-.465-2.428C2.013 15.056 2 14.717 2 12c0-2.717.01-3.056.06-4.122.05-1.065.217-1.79.465-2.428a4.828 4.828 0 0 1 1.162-1.789c.561-.561 1.129-.904 1.789-1.162.638-.248 1.363-.415 2.428-.465C8.944 2.013 9.283 2 12 2zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.25a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5zM12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z' },
+  { name: 'LinkedIn', href: 'https://linkedin.com/in/hasmunandar', icon: 'M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z' },
 ];
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
@@ -63,12 +63,12 @@ function FooterContent({ variant }: { variant: FooterVariant }) {
         </>
       )}
 
-      <motion.div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12 pt-14 pb-10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+      <motion.div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12 pt-14 pb-10" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
         {variant === 'full' && (
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#1E293B] via-[#1a2540] to-[#0F172A] shadow-[0_32px_80px_rgba(0,0,0,0.4)] mb-10">
+          <motion.div variants={staggerItem} className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#1E293B] via-[#1a2540] to-[#0F172A] shadow-[0_32px_80px_rgba(0,0,0,0.4)] mb-10 hover:scale-[1.005] hover:shadow-[0_40px_100px_rgba(0,0,0,0.5)] transition-all duration-500 will-change-transform">
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#406093] to-transparent" />
-            <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-[#406093]/10 blur-[80px] pointer-events-none" />
-            <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-[#60A5FA]/5 blur-[60px] pointer-events-none" />
+            <motion.div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-[#406093]/10 blur-[80px] pointer-events-none will-change-transform" animate={{ y: [0, -12, 0] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} />
+            <motion.div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-[#60A5FA]/5 blur-[60px] pointer-events-none will-change-transform" animate={{ y: [0, 10, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} />
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-5 gap-0">
               <div className="lg:col-span-2 flex flex-col justify-between p-8 md:p-10 lg:border-r border-white/[0.06]">
                 <div>
@@ -109,17 +109,17 @@ function FooterContent({ variant }: { variant: FooterVariant }) {
                   <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-4 h-full">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[10px] font-black uppercase tracking-[0.28em] text-white/80">Pesan / Saran / Komentar</label>
-                      <textarea name="message" required rows={5} placeholder="Tulis apapun yang ingin kamu sampaikan..." aria-describedby="message-desc" className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#406093]/60 focus:bg-white/[0.06] focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A] transition-all duration-300 resize-none leading-relaxed" />
+                      <textarea name="message" required rows={5} placeholder="Tulis apapun yang ingin kamu sampaikan..." aria-describedby="message-desc" className="w-full bg-white/[0.04] backdrop-blur-sm border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#406093]/60 focus:bg-white/[0.06] focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A] transition-all duration-300 resize-none leading-relaxed" />
                       <span id="message-desc" className="sr-only">Tulis pesan, saran, atau komentar untuk penulis</span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="flex flex-col gap-1.5">
                         <label className="text-[10px] font-black uppercase tracking-[0.28em] text-white/80">Nama</label>
-                        <input type="text" name="name" required placeholder="Nama atau alias" className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#406093]/60 focus:bg-white/[0.06] focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A] transition-all duration-300" />
+                        <input type="text" name="name" required placeholder="Nama atau alias" className="w-full bg-white/[0.04] backdrop-blur-sm border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#406093]/60 focus:bg-white/[0.06] focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A] transition-all duration-300" />
                       </div>
                       <div className="flex flex-col gap-1.5">
                         <label className="text-[10px] font-black uppercase tracking-[0.28em] text-white/80">Email <span className="normal-case tracking-normal text-white/40">(opsional)</span></label>
-                        <input type="email" name="email" inputMode="email" placeholder="email@contoh.com" className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#406093]/60 focus:bg-white/[0.06] focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A] transition-all duration-300" />
+                        <input type="email" name="email" inputMode="email" placeholder="email@contoh.com" className="w-full bg-white/[0.04] backdrop-blur-sm border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#406093]/60 focus:bg-white/[0.06] focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A] transition-all duration-300" />
                       </div>
                     </div>
                     {status === 'error' && (
@@ -139,10 +139,10 @@ function FooterContent({ variant }: { variant: FooterVariant }) {
                 )}
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
 
-        <div className={variant === 'full' ? '' : 'py-6'}>
+        <motion.div variants={staggerItem} className={variant === 'full' ? '' : 'py-6'}>
           <div className="flex flex-col md:flex-row justify-between items-center max-w-6xl mx-auto text-[#F8FAFC] gap-4 md:gap-0">
             <div className="flex items-center gap-3">
               <div className="w-2 h-2 bg-[#93C5FD] rounded-full animate-pulse" />
@@ -152,44 +152,42 @@ function FooterContent({ variant }: { variant: FooterVariant }) {
               Hasmunandar &copy; {new Date().getFullYear()} &middot; PPG E-Portfolio
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {variant === 'full' && (
-          <div className="mt-10 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
-            <div className="flex flex-col gap-2">
-              <h3 className="text-lg md:text-xl font-black uppercase tracking-widest text-[#F8FAFC]">Hasmunandar</h3>
-              <p className="text-sm text-[#F8FAFC]/40 font-medium">Calon Guru Profesional — SDN Pengasinan IX</p>
-            </div>
-
-            <div className="flex flex-col gap-5 items-start md:items-end">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#F8FAFC]/30 mr-2">Sosial</span>
-                <div className="h-3 w-px bg-white/10" />
-                {socials.map((s, i) => (
-                  <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 px-3.5 py-2 rounded-xl border border-white/10 bg-white/[0.04] text-[#F8FAFC]/60 hover:text-[#93C5FD] hover:border-[#93C5FD]/30 hover:bg-[#93C5FD]/[0.06] hover:shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A]">
-                    <span className="text-[10px] font-bold uppercase tracking-widest">{s.name}</span>
-                  </a>
-                ))}
+          <motion.div variants={staggerItem} className="relative mt-8 pt-8">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent backdrop-blur-sm" />
+            <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
+              <div className="flex flex-col gap-2">
+                <h3 className="text-lg md:text-xl font-black uppercase tracking-widest text-[#F8FAFC]">Hasmunandar</h3>
+                <p className="text-sm text-[#F8FAFC]/40 font-medium">Calon Guru Profesional — SDN Pengasinan IX</p>
               </div>
-              <div className="w-full flex flex-col gap-2">
-                <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#F8FAFC]/30">Surel</span>
-                <div className="flex items-center gap-2 w-full">
-                  <a href={`mailto:${EMAIL}`} className="flex-1 flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-[#F8FAFC]/80 hover:text-[#93C5FD] hover:border-[#93C5FD]/30 hover:bg-[#93C5FD]/[0.06] transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A]">
-                    <svg className="w-4 h-4 shrink-0 text-[#F8FAFC]/40 group-hover:text-[#93C5FD] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M22 7l-10 7L2 7" /></svg>
-                    <span className="text-xs font-medium tracking-tight">{EMAIL}</span>
+
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.06] rounded-2xl px-4 py-3 backdrop-blur-sm hover:bg-white/[0.05] transition-all duration-300">
+                  {socials.map((s, i) => (
+                    <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 px-3.5 py-2 rounded-xl text-[#F8FAFC]/60 hover:text-[#93C5FD] hover:bg-[#93C5FD]/[0.06] transition-all duration-300 hover:-translate-y-0.5 will-change-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A]">
+                      <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={s.icon} /></svg>
+                      <span className="text-[10px] font-bold uppercase tracking-widest">{s.name}</span>
+                    </a>
+                  ))}
+                  <div className="h-5 w-px bg-white/[0.06]" />
+                  <a href={`mailto:${EMAIL}`} className="group flex items-center gap-2 px-3.5 py-2 rounded-xl text-[#F8FAFC]/60 hover:text-[#93C5FD] hover:bg-[#93C5FD]/[0.06] transition-all duration-300 hover:-translate-y-0.5 will-change-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A]">
+                    <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M22 7l-10 7L2 7" /></svg>
+                    <span className="text-[10px] font-bold uppercase tracking-widest">Email</span>
                   </a>
-                  <button onClick={handleCopy} className="shrink-0 px-3.5 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-[#F8FAFC]/50 hover:text-[#10B981] hover:border-[#10B981]/30 hover:bg-[#10B981]/[0.06] transition-all duration-300 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A]">
+                  <button onClick={handleCopy} className="px-2.5 py-2 rounded-xl text-[#F8FAFC]/50 hover:text-[#10B981] hover:bg-[#10B981]/[0.06] transition-all duration-300 relative will-change-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#406093] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A]">
                     {copied ? (
-                      <svg className="w-4 h-4 text-[#10B981]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                      <svg className="w-3.5 h-3.5 text-[#10B981]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
                     ) : (
-                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>
+                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>
                     )}
-                    {copied && <span className="absolute -top-10 left-1/2 -translate-x-1/2 text-[9px] font-bold uppercase tracking-widest bg-[#10B981] text-white px-2.5 py-1 rounded-lg whitespace-nowrap shadow-lg z-50">Tersalin</span>}
+                    {copied && <span className="absolute -top-9 left-1/2 -translate-x-1/2 text-[9px] font-bold uppercase tracking-widest bg-[#10B981] text-white px-2.5 py-1 rounded-lg whitespace-nowrap shadow-lg z-50">Tersalin</span>}
                   </button>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
       </motion.div>
     </footer>
