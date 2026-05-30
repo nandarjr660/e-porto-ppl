@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, startTransition } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
@@ -8,8 +8,14 @@ function useReducedMotion() {
   const [prefersReduced, setPrefersReduced] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReduced(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+    startTransition(() => {
+      setPrefersReduced(mq.matches);
+    });
+    const handler = (e: MediaQueryListEvent) => {
+      startTransition(() => {
+        setPrefersReduced(e.matches);
+      });
+    };
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);

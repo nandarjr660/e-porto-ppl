@@ -2,6 +2,18 @@
 
 This document serves as the primary source of truth for the project's architecture, design patterns, and coding standards. Adhering to these guidelines ensures consistency and quality across the codebase.
 
+## 🎭 Role & Design Philosophy: Spatial UI/UX Designer
+
+The core focus is creating **Immersive Spatial Web Experiences** using modern 3D concepts, moving beyond static 2D layouts.
+
+### Core Guidelines:
+1.  **Spatial UI Paradigm:** All elements (cards, text, photos, containers) are treated as 3D objects with depth (Z-axis). Utilize depth principles, dynamic shadows, and perspective.
+2.  **Physics-Driven Motion:** Favor physics-based animations (Spring, Mass, Friction) over standard CSS transitions. Motion should feel organic, have "weight", and respond to interaction.
+3.  **Dynamic Entrance:** Implement varied, immersive entrance mechanisms (e.g., "Card throw", "Depth parallax", "Spatial reveal"). Avoid generic animations.
+4.  **Technical Stack:** Combination of Next.js, React Three Fiber (R3F) for 3D space, and GSAP/Framer Motion for scroll sync and physics.
+5.  **Interactivity:** Elements must respond to the cursor (e.g., tilt effects) or precise scroll-linked animations (`useScroll`, `useTransform`).
+6.  **Performance:** Optimize 3D assets (glTF/glb), minimize draw calls, and ensure smooth real-time rendering.
+
 ## 🎯 Project Overview
 
 An E-Portfolio for **Praktik Pengalaman Lapangan (PPL)** within the **PPG Prajabatan 2026** program. It highlights the teaching journey, artifacts, and reflections of **Hasmunandar** at **SDN Pengasinan IX**.
@@ -18,8 +30,10 @@ An E-Portfolio for **Praktik Pengalaman Lapangan (PPL)** within the **PPG Prajab
 
 - **Framework:** Next.js 15+ (App Router)
 - **Library:** React 19
+- **3D Engine:** React Three Fiber (R3F) & Three.js
+- **Utils:** @react-three/drei
 - **Styling:** Tailwind CSS 4 (using `@tailwindcss/postcss`)
-- **Animations:** Framer Motion 12
+- **Animations:** Framer Motion 12 & GSAP 3 (for scroll sync & physics)
 - **Language:** TypeScript
 - **Icons:** Custom SVG & Lucide-style iconography
 

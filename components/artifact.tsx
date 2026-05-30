@@ -1,10 +1,11 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { fadeUp, staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
+import { fadeUp, VIEWPORT } from '@/lib/motion';
 import Image from 'next/image';
 import SplitText from '@/components/split-text';
 import TypingText from '@/components/typing-text';
+import TiltCard from '@/components/spatial/tilt-card';
 
 interface SiklusItem {
   id: string;
@@ -305,7 +306,7 @@ const cardItem = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.6, ease: [0.25, 1, 0.5, 1] as const },
+    transition: { type: "spring", stiffness: 100, damping: 20 },
   },
 };
 
@@ -464,6 +465,7 @@ export default function Artifact() {
                   whileInView="visible"
                   viewport={VIEWPORT}
                   className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-white/70 backdrop-blur-xl rounded-[2rem] border border-white/80 p-6 md:p-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)]"
+                  style={{ perspective: "1200px" }}
                 >
                   <div className="space-y-4">
                     <motion.div variants={cardItem} className="flex items-center gap-3">
@@ -474,9 +476,9 @@ export default function Artifact() {
                       </div>
                     </motion.div>
                     <motion.div variants={cardItem} className="flex flex-wrap gap-2">
-                      <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg">{data.tanggal}</span>
-                      <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg">{data.durasi}</span>
-                      <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg">{data.kelas}</span>
+                      <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg shadow-sm">{data.tanggal}</span>
+                      <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg shadow-sm">{data.durasi}</span>
+                      <span className="px-3 py-1.5 bg-[#406093]/10 text-[#406093] text-[11px] font-black uppercase tracking-widest rounded-lg shadow-sm">{data.kelas}</span>
                     </motion.div>
                     <motion.p variants={cardItem} className="text-base text-[#475569] leading-relaxed font-medium text-left">{data.desc}</motion.p>
 
@@ -492,8 +494,10 @@ export default function Artifact() {
                     </motion.div>
                   </div>
 
-                  <motion.div variants={cardItem} className="relative rounded-2xl overflow-hidden aspect-video bg-[#E2E8F0] shadow-xl border border-[#1E293B]/10 group">
-                    <Image src={data.img} alt={data.title} fill quality={60} className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px" />
+                  <motion.div variants={cardItem} className="relative group">
+                    <TiltCard className="relative rounded-2xl overflow-hidden aspect-video bg-[#E2E8F0] shadow-xl border border-[#1E293B]/10">
+                      <Image src={data.img} alt={data.title} fill quality={60} className="object-cover transition-transform duration-700" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px" />
+                    </TiltCard>
                   </motion.div>
                 </motion.div>
 

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { staggerContainer, staggerItem, fadeUp, VIEWPORT } from '@/lib/motion';
 import SplitText from '@/components/split-text';
+import TiltCard from '@/components/spatial/tilt-card';
 
 const archiveData = [
   {
@@ -65,20 +66,22 @@ export default function Lampiran() {
         </motion.div>
 
         <motion.div className="relative" variants={staggerItem}>
-          <div className="absolute -inset-4 bg-[#406093]/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <div className="relative backdrop-blur-xl bg-white/30 border border-white/60 rounded-2xl px-6 py-4 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-[#1E293B]/40 mb-1">Rata-Rata Nilai Akhir</p>
-            <div className="flex items-baseline gap-2 md:justify-end">
-              <span className="text-5xl md:text-7xl font-black leading-none text-[#406093]">84,5</span>
-              <span className="text-lg md:text-xl font-bold text-[#1E293B]/20">/ 100</span>
+          <TiltCard className="relative group">
+            <div className="absolute -inset-4 bg-[#406093]/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative backdrop-blur-xl bg-white/30 border border-white/60 rounded-2xl px-6 py-4 shadow-lg transition-all duration-300">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1E293B]/40 mb-1">Rata-Rata Nilai Akhir</p>
+              <div className="flex items-baseline gap-2 md:justify-end">
+                <span className="text-5xl md:text-7xl font-black leading-none text-[#406093]">84,5</span>
+                <span className="text-lg md:text-xl font-bold text-[#1E293B]/20">/ 100</span>
+              </div>
+              <div className="mt-2 flex items-center gap-1.5 md:justify-end">
+                {[1,2,3].map(i => (
+                  <div key={i} className={`w-2 h-2 rounded-full ${i <= 2 ? 'bg-[#406093]' : 'bg-[#1E293B]/10'}`} />
+                ))}
+                <span className="text-[8px] font-bold uppercase tracking-widest text-[#1E293B]/30 ml-1">2/3 Siklus</span>
+              </div>
             </div>
-            <div className="mt-2 flex items-center gap-1.5 md:justify-end">
-              {[1,2,3].map(i => (
-                <div key={i} className={`w-2 h-2 rounded-full ${i <= 2 ? 'bg-[#406093]' : 'bg-[#1E293B]/10'}`} />
-              ))}
-              <span className="text-[8px] font-bold uppercase tracking-widest text-[#1E293B]/30 ml-1">2/3 Siklus</span>
-            </div>
-          </div>
+          </TiltCard>
         </motion.div>
       </motion.header>
 
@@ -121,14 +124,18 @@ export default function Lampiran() {
       {/* ——— DOKUMEN LIST ——— */}
       <div className="flex-1 w-full relative z-10 space-y-6">
         {archiveData.map((item, idx) => (
-          <motion.div
+          <TiltCard
             key={idx}
-            className="group backdrop-blur-xl bg-white/40 border border-white/60 rounded-3xl p-6 md:p-8 hover:bg-white/60 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-500"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={VIEWPORT}
+            className="group relative"
           >
+            <motion.div
+              className="backdrop-blur-xl bg-white/40 border border-white/60 rounded-3xl p-6 md:p-8 hover:bg-white/60 transition-all duration-500"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT}
+              transition={{ type: "spring", stiffness: 100, damping: 20 }}
+            >
             <div className="flex flex-col lg:flex-row gap-6 lg:gap-16">
               <motion.div className="lg:w-1/4 flex flex-row lg:flex-col gap-4 lg:gap-3 items-center lg:items-start shrink-0" variants={staggerItem}>
                 <div className="relative">
@@ -205,6 +212,7 @@ export default function Lampiran() {
               </div>
             </div>
           </motion.div>
+          </TiltCard>
         ))}
       </div>
 

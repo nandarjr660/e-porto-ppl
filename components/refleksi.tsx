@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { fadeUp, VIEWPORT } from '@/lib/motion';
+import TiltCard from '@/components/spatial/tilt-card';
 
 const dataPilar = [
   {
@@ -148,7 +149,7 @@ const cardUp = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.7, ease: [0.25, 1, 0.5, 1] as const },
+    transition: { type: "spring", stiffness: 100, damping: 20 },
   },
 };
 
@@ -266,11 +267,14 @@ export default function Pedoman() {
               const c = colorMap[card.color];
 
               return (
-                <motion.article
+                <TiltCard
                   key={card.id}
-                  variants={cardUp}
-                  className={`group relative overflow-hidden rounded-[2rem] border p-7 shadow-[0_18px_60px_rgba(15,23,42,0.08)] transition-all duration-500 hover:shadow-[0_24px_70px_rgba(15,23,42,0.12)] hover:-translate-y-1 hover:border-[#406093]/20 md:p-8 ${c.bg} ${c.border}`}
+                  className="group relative"
                 >
+                  <motion.article
+                    variants={cardUp}
+                    className={`relative overflow-hidden rounded-[2rem] border p-7 shadow-[0_18px_60px_rgba(15,23,42,0.08)] transition-all duration-500 hover:border-[#406093]/20 md:p-8 ${c.bg} ${c.border}`}
+                  >
                   <div className={`pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r ${isDark ? 'from-white/50 via-white/20 to-transparent' : 'from-[#406093]/80 via-[#60A5FA]/25 to-transparent'}`} />
                   <div className={`pointer-events-none absolute -right-8 -top-8 h-36 w-36 rounded-full blur-3xl transition-transform duration-500 group-hover:scale-125 ${c.glow}`} />
                   <div className={`pointer-events-none absolute right-6 top-5 text-6xl font-black tracking-[-0.08em] ${isDark ? 'text-white/[0.05]' : 'text-[#1E293B]/[0.05]'}`}>
@@ -310,6 +314,7 @@ export default function Pedoman() {
                     </p>
                   </div>
                 </motion.article>
+                </TiltCard>
               );
             })}
           </motion.div>
@@ -348,7 +353,6 @@ export default function Pedoman() {
                   const c = colorMap[item.color];
                   const isEmerald = item.color === 'emerald';
                   const isAmber = item.color === 'amber';
-                  const isBlue = item.color === 'blue';
 
                   return (
                     <motion.div

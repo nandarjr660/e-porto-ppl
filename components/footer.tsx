@@ -2,7 +2,7 @@
 
 import { memo, useState, useRef, FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { staggerContainer, staggerItem, fadeUp, VIEWPORT } from '@/lib/motion';
+import { staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
 
 type FooterVariant = 'full' | 'simple';
 

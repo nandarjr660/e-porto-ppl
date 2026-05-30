@@ -14,7 +14,7 @@ const NavigationEvents = dynamic(() => import("@/components/navigation-events"))
 const inter = Inter({ subsets: ["latin"] });
 
 // Set TRUE untuk mengaktifkan mode maintenance di seluruh web secara instan
-const IS_MAINTENANCE_MODE = false;
+const IS_MAINTENANCE_MODE = true;
 
 export const viewport = {
   width: 'device-width',

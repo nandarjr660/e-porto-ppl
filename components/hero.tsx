@@ -1,21 +1,38 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef, startTransition } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { fadeUp, staggerContainer, staggerItem, fadeLeft } from '@/lib/motion';
 import Image from 'next/image';
 import Shuffle from '@/components/shuffle';
 import SplitText from '@/components/split-text';
 import TypingText from '@/components/typing-text';
+import HeroScene from '@/components/canvas/hero-scene';
+import TiltCard from '@/components/spatial/tilt-card';
 
 export default function Hero() {
   const [isFirstVisit, setIsFirstVisit] = useState(true);
   const [morphDone, setMorphDone] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-based parallax
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const springScroll = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
+  const yText = useTransform(springScroll, [0, 1], [0, 200]);
+  const yImage = useTransform(springScroll, [0, 1], [0, -100]);
+  const opacity = useTransform(springScroll, [0, 0.8], [1, 0]);
 
   useEffect(() => {
     const hasSeenPreloader = sessionStorage.getItem('hasSeenPreloader');
     if (hasSeenPreloader === 'true') {
-      setMorphDone(true);
+      startTransition(() => {
+        setMorphDone(true);
+      });
       setTimeout(() => {
         setIsFirstVisit(false);
       }, 0);
@@ -33,14 +50,12 @@ export default function Hero() {
   return (
     <section
       id="hero"
+      ref={containerRef}
       className="relative w-full min-h-[100svh] bg-[#F8FAFC] text-[#1E293B] px-4 pb-6 pt-24 md:px-10 md:pb-8 md:pt-28 flex flex-col overflow-hidden font-sans"
+      style={{ perspective: "1200px" }}
     >
-
-      {/* --- GRAPHIC ELEMENTS (Original) --- */}
-      <div className="absolute top-0 right-0 w-[40vw] h-[40vw] bg-gradient-to-bl from-[#406093]/5 to-transparent rounded-full blur-[80px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-gradient-to-tr from-[#406093]/3 to-transparent rounded-full blur-[60px] pointer-events-none" />
-      <div className="absolute top-1/3 left-10 w-40 h-40 opacity-[0.04] pointer-events-none hidden md:block" style={{ backgroundImage: 'radial-gradient(#1E293B 2px, transparent 2px)', backgroundSize: '16px 16px' }} />
-      <div className="absolute bottom-1/3 right-10 w-40 h-40 opacity-[0.04] pointer-events-none hidden md:block" style={{ backgroundImage: 'radial-gradient(#1E293B 2px, transparent 2px)', backgroundSize: '16px 16px' }} />
+      {/* --- SPATIAL BACKGROUND --- */}
+      <HeroScene />
 
       {/* --- TOP HEADER (Original) --- */}
       <motion.header
@@ -49,6 +64,7 @@ export default function Hero() {
         initial="hidden"
         animate="visible"
         transition={{ delay: getDelay(2.2) }}
+        style={{ opacity }}
       >
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-[#406093] animate-pulse" />
@@ -64,20 +80,17 @@ export default function Hero() {
       {/* --- MAIN AREA --- */}
       <main className="flex-1 relative z-10 flex flex-col md:flex-row justify-center items-center md:items-center w-full min-h-0 py-8 md:py-0 gap-10 md:gap-16 lg:gap-20 max-w-7xl mx-auto">
         
-        {/* Kiri: Foto dengan Bingkai Modern & Efek Hover (Pusatkan di Mobile) */}
+        {/* Kiri: Foto dengan Spatial Tilt Card */}
         <motion.div 
           className="relative w-full md:w-[45%] h-auto md:h-auto flex-shrink-0 flex flex-col items-center md:items-end justify-center z-10"
           variants={fadeLeft}
           initial="hidden"
           animate="visible"
           transition={{ delay: getDelay(2.5) }}
+          style={{ y: yImage, opacity }}
         >
-          <div className="relative w-[65%] sm:w-[55%] md:w-[90%] lg:w-[85%] aspect-[4/5] md:translate-x-0 lg:translate-x-4 group cursor-default">
-            {/* Outer Glow/Shadow - Only visible on hover */}
-            <div className="absolute inset-0 bg-[#406093]/20 blur-2xl rounded-full scale-90 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
-            
-            {/* Image Frame (Modern Format) */}
-            <div className="relative w-full h-full rounded-2xl overflow-hidden border border-transparent bg-transparent transition-all duration-700 ease-out group-hover:scale-[1.02] group-hover:-translate-y-2 group-hover:rotate-1 group-hover:bg-white/50 group-hover:backdrop-blur-sm group-hover:border-[#406093]/40 group-hover:shadow-[0_40px_80px_rgba(64,96,147,0.3)]">
+          <TiltCard className="w-[65%] sm:w-[55%] md:w-[90%] lg:w-[85%] aspect-[4/5] md:translate-x-0 lg:translate-x-4">
+            <div className="relative w-full h-full rounded-2xl overflow-hidden border border-[#406093]/20 bg-white/50 backdrop-blur-sm shadow-[0_40px_80px_rgba(64,96,147,0.15)] group transition-transform duration-700">
               <Image 
                 src="/image/berandaaa.png" 
                 alt="Hero Portofolio Hasmunandar" 
@@ -90,18 +103,19 @@ export default function Hero() {
             </div>
 
             {/* Decorative Corner Elements */}
-            <div className="absolute -top-4 -left-4 w-12 h-12 border-t-2 border-l-2 border-[#406093]/40 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 group-hover:translate-y-2 transition-all duration-500" />
-            <div className="absolute -bottom-4 -right-4 w-12 h-12 border-b-2 border-r-2 border-[#406093]/40 opacity-0 group-hover:opacity-100 group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all duration-500" />
-          </div>
+            <div className="absolute -top-4 -left-4 w-12 h-12 border-t-2 border-l-2 border-[#406093]/40" />
+            <div className="absolute -bottom-4 -right-4 w-12 h-12 border-b-2 border-r-2 border-[#406093]/40" />
+          </TiltCard>
         </motion.div>
 
-        {/* Kanan: Teks Hero Utama (Original Font & Layout) */}
+        {/* Kanan: Teks Hero Utama dengan Parallax */}
         <motion.div 
           className="w-full md:w-[55%] flex flex-col items-center md:items-start justify-center text-center md:text-left z-20 md:pl-0"
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
           transition={{ delayChildren: getDelay(2.7) }}
+          style={{ y: yText, opacity }}
         >
           <motion.h2 variants={staggerItem} className="relative text-3xl md:text-4xl lg:text-[48px] xl:text-[58px] font-medium tracking-tight text-[#406093] mb-1 md:mb-2 leading-none font-serif italic lowercase inline-flex items-center gap-0">
             <Shuffle
@@ -179,6 +193,7 @@ export default function Hero() {
         initial="hidden"
         animate="visible"
         transition={{ delayChildren: getDelay(3.2) }}
+        style={{ opacity }}
       >
         <motion.div
           className="w-full md:w-auto px-5 py-2 md:py-2.5 rounded-full border border-[#1E293B]/20 text-center text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#475569] cursor-default"

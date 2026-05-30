@@ -1,9 +1,10 @@
 'use client';
 
-import { memo } from 'react';
-import { motion } from 'framer-motion';
+import { memo, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
 import Image from 'next/image';
+import TiltCard from '@/components/spatial/tilt-card';
 
 const Institusi = memo(function Institusi() {
   const kampusMapUrl = "https://maps.app.goo.gl/LPfTj2g1xCYwtz8U7";
@@ -11,13 +12,29 @@ const Institusi = memo(function Institusi() {
   const kampusWebUrl = "https://unismabekasi.ac.id/";
   const sekolahWebUrl = "https://sekolahanak.com/sekolah/sd-negeri-pengasinan-ix/";
 
+  const kampusRef = useRef<HTMLElement>(null);
+  const sekolahRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress: scrollKampus } = useScroll({
+    target: kampusRef,
+    offset: ["start end", "end start"]
+  });
+
+  const { scrollYProgress: scrollSekolah } = useScroll({
+    target: sekolahRef,
+    offset: ["start end", "end start"]
+  });
+
+  const yKampus = useTransform(scrollKampus, [0, 1], [-100, 100]);
+  const ySekolah = useTransform(scrollSekolah, [0, 1], [-100, 100]);
+
   return (
-    <div id="institusi" className="w-full flex flex-col font-sans bg-[#F8FAFC] relative overflow-hidden">
+    <div id="institusi" className="w-full flex flex-col font-sans bg-[#F8FAFC] relative overflow-hidden" style={{ perspective: "1500px" }}>
       <div className="pointer-events-none absolute left-1/4 top-0 h-72 w-72 rounded-full bg-[#406093]/[0.04] blur-[120px]" />
       <div className="pointer-events-none absolute right-1/4 bottom-0 h-72 w-72 rounded-full bg-emerald-200/25 blur-[120px]" />
 
       {/* KAMPUS LPTK */}
-      <section className="group/section relative z-10 flex flex-col md:flex-row">
+      <section ref={kampusRef} className="group/section relative z-10 flex flex-col md:flex-row">
         <div className="relative z-10 flex w-full flex-col border-b border-[#1E293B]/10 bg-white/60 backdrop-blur-xl transition-all duration-500 md:w-1/2 md:border-b-0 md:border-r md:border-[#1E293B]/10 hover:bg-white/80">
           <div className="flex min-h-[30vh] flex-col justify-end border-b border-[#1E293B]/10 p-8 md:min-h-[35vh] md:p-12 lg:p-16">
             <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
@@ -38,7 +55,7 @@ const Institusi = memo(function Institusi() {
               </div>
               <div>
                 <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[#1E293B]/50">Lokasi</p>
-                <p className="text-xs font-bold uppercase tracking-widest text-[#1E293B] md:text-sm">Bekasi, Jawa Barat</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-[#1E293B] md:sm">Bekasi, Jawa Barat</p>
               </div>
             </div>
             <div className="flex items-start gap-3 p-6 transition-all duration-300 hover:bg-white/80 md:p-8 lg:p-10">
@@ -47,14 +64,14 @@ const Institusi = memo(function Institusi() {
               </div>
               <div>
                 <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[#1E293B]/50">Program</p>
-                <p className="text-xs font-bold uppercase tracking-widest text-[#1E293B] md:text-sm">PPG Prajab 2026</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-[#1E293B] md:sm">PPG Prajab 2026</p>
               </div>
             </div>
           </div>
 
           <div className="flex-1 bg-gradient-to-b from-transparent to-[#F1F5F9]/30 p-8 md:p-12 lg:p-16">
-            <div className="relative rounded-2xl border border-[#406093]/10 bg-white/60 p-6 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_12px_40px_rgba(64,96,147,0.08)] md:p-8">
-              <div className="pointer-events-none absolute -right-4 -top-4 text-6xl font-serif italic text-[#406093]/5">"</div>
+            <TiltCard className="relative rounded-2xl border border-[#406093]/10 bg-white/60 p-6 backdrop-blur-sm transition-all duration-500 md:p-8">
+              <div className="pointer-events-none absolute -right-4 -top-4 text-6xl font-serif italic text-[#406093]/5">&quot;</div>
               <p className="text-sm leading-relaxed text-[#1E293B]/80 md:text-base lg:text-lg font-medium text-justify">
                 Universitas Muhammadiyah Indonesia (UM Indonesia)—sebelumnya Universitas Islam 45 (UNISMA)—merupakan Lembaga Pendidikan Tenaga Kependidikan (LPTK) tempat saya menempuh program <strong className="text-[#406093]">Pendidikan Profesi Guru (PPG) Prajabatan</strong>. Di kampus inilah fondasi pedagogik, kompetensi profesional, dan filosofi pendidikan saya ditempa secara komprehensif sebelum diimplementasikan langsung di sekolah mitra.
               </p>
@@ -67,21 +84,23 @@ const Institusi = memo(function Institusi() {
                 <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                 Kunjungi Website
               </a>
-            </div>
+            </TiltCard>
           </div>
         </div>
 
         <div className="relative h-[50vh] w-full overflow-hidden md:h-auto md:w-1/2">
           <div className="absolute inset-0 z-10 bg-[#406093]/10 mix-blend-overlay" />
-          <Image
-            src="/image/kampus.jpg"
-            alt="Kampus LPTK"
-            fill
-            quality={50}
-            loading="lazy"
-            className="scale-100 object-cover transition-all duration-700 ease-in-out md:grayscale md:group-hover/section:grayscale-0 md:group-hover/section:scale-105"
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
+          <motion.div style={{ y: yKampus }} className="absolute inset-0 h-[120%] -top-[10%]">
+            <Image
+              src="/image/kampus.jpg"
+              alt="Kampus LPTK"
+              fill
+              quality={50}
+              loading="lazy"
+              className="scale-100 object-cover transition-all duration-700 ease-in-out md:grayscale md:group-hover/section:grayscale-0 md:group-hover/section:scale-105"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#1E293B]/30 to-transparent opacity-0 transition-opacity duration-500 md:group-hover/section:opacity-100" />
           <a
             href={kampusMapUrl}
@@ -96,7 +115,7 @@ const Institusi = memo(function Institusi() {
       </section>
 
       {/* SEKOLAH PPL */}
-      <section className="group/section relative z-10 flex flex-col md:flex-row-reverse">
+      <section ref={sekolahRef} className="group/section relative z-10 flex flex-col md:flex-row-reverse">
         <div className="relative z-10 flex w-full flex-col border-b border-[#1E293B]/10 bg-white/60 backdrop-blur-xl transition-all duration-500 md:w-1/2 md:border-b-0 md:border-l md:border-[#1E293B]/10 hover:bg-white/80">
           <div className="flex min-h-[30vh] flex-col justify-end border-b border-[#1E293B]/10 p-8 md:min-h-[35vh] md:p-12 lg:p-16">
             <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT} className="md:text-right">
@@ -117,7 +136,7 @@ const Institusi = memo(function Institusi() {
               </div>
               <div>
                 <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[#1E293B]/50">Lokasi</p>
-                <p className="text-xs font-bold uppercase tracking-widest text-[#1E293B] md:text-sm">Bekasi, Jawa Barat</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-[#1E293B] md:sm">Bekasi, Jawa Barat</p>
               </div>
             </div>
             <div className="flex items-start gap-3 p-6 transition-all duration-300 hover:bg-white/80 md:p-8 lg:p-10">
@@ -126,14 +145,14 @@ const Institusi = memo(function Institusi() {
               </div>
               <div>
                 <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[#1E293B]/50">Fokus</p>
-                <p className="text-xs font-bold uppercase tracking-widest text-[#1E293B] md:text-sm">PPL Terbimbing</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-[#1E293B] md:sm">PPL Terbimbing</p>
               </div>
             </div>
           </div>
 
           <div className="flex-1 bg-gradient-to-b from-transparent to-[#F1F5F9]/30 p-8 md:p-12 lg:p-16">
-            <div className="relative rounded-2xl border border-[#406093]/10 bg-white/60 p-6 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_12px_40px_rgba(64,96,147,0.08)] md:p-8">
-              <div className="pointer-events-none absolute -left-4 -top-4 text-6xl font-serif italic text-[#406093]/5">"</div>
+            <TiltCard className="relative rounded-2xl border border-[#406093]/10 bg-white/60 p-6 backdrop-blur-sm transition-all duration-500 md:p-8">
+              <div className="pointer-events-none absolute -left-4 -top-4 text-6xl font-serif italic text-[#406093]/5">&quot;</div>
               <p className="text-sm leading-relaxed text-[#1E293B]/80 md:text-base lg:text-lg font-medium text-justify">
                 Sekolah ini menjadi lokasi pengabdian saya dalam mempraktikkan ilmu pedagogik secara langsung. Selama masa PPL, saya bertanggung jawab sebagai <strong className="text-[#406093]">guru model di kelas 3</strong>, merancang alur pembelajaran yang aktif, serta mengelola dinamika kelas secara profesional.
               </p>
@@ -146,21 +165,23 @@ const Institusi = memo(function Institusi() {
                 <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                 Kunjungi Website
               </a>
-            </div>
+            </TiltCard>
           </div>
         </div>
 
         <div className="relative h-[50vh] w-full overflow-hidden md:h-auto md:w-1/2">
           <div className="absolute inset-0 z-10 bg-[#406093]/10 mix-blend-overlay" />
-          <Image
-            src="/image/sekolah.jpg"
-            alt="SDN Pengasinan IX"
-            fill
-            quality={50}
-            loading="lazy"
-            className="scale-100 object-cover transition-all duration-700 ease-in-out md:grayscale md:group-hover/section:grayscale-0 md:group-hover/section:scale-105"
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
+          <motion.div style={{ y: ySekolah }} className="absolute inset-0 h-[120%] -top-[10%]">
+            <Image
+              src="/image/sekolah.jpg"
+              alt="SDN Pengasinan IX"
+              fill
+              quality={50}
+              loading="lazy"
+              className="scale-100 object-cover transition-all duration-700 ease-in-out md:grayscale md:group-hover/section:grayscale-0 md:group-hover/section:scale-105"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#1E293B]/30 to-transparent opacity-0 transition-opacity duration-500 md:group-hover/section:opacity-100" />
           <a
             href={sekolahMapUrl}

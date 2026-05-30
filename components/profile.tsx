@@ -1,16 +1,33 @@
 'use client';
 
+import { useRef } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { fadeUp, fadeLeft, staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { fadeUp, staggerContainer, staggerItem, VIEWPORT } from '@/lib/motion';
 import SplitText from '@/components/split-text';
 import BlurText from '@/components/blur-text';
+import TiltCard from '@/components/spatial/tilt-card';
 
 export default function Profile() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Scroll parallax for content
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const springScroll = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  
+  const yContent = useTransform(springScroll, [0, 1], [100, -100]);
+  const yImage = useTransform(springScroll, [0, 1], [50, -50]);
+
   return (
     <section 
       id="profil" 
+      ref={containerRef}
       className="relative w-full min-h-screen bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] text-[#1E293B] px-6 py-24 md:px-12 lg:px-24 font-sans overflow-hidden flex flex-col justify-center"
+      style={{ perspective: "1200px" }}
     >
       {/* ——— DECORATIVE ——— */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#406093]/[0.03] to-transparent pointer-events-none z-0" />
@@ -24,13 +41,10 @@ export default function Profile() {
         {/* ——— KIRI: FOTO PROFIL ——— */}
         <motion.div
           className="lg:col-span-5 w-full flex flex-col gap-6"
-          variants={fadeLeft}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VIEWPORT}
+          style={{ y: yImage }}
         >
           <div className="relative w-full aspect-[4/5] md:aspect-auto md:w-fit mx-auto lg:mx-0 group">
-             <div className="relative rounded-[2.5rem] overflow-hidden border-[6px] border-white shadow-[0_20px_60px_rgba(0,0,0,0.12)] group-hover:shadow-[0_30px_80px_rgba(0,0,0,0.18)] group-hover:-translate-y-1 transition-all duration-500">
+             <TiltCard className="relative rounded-[2.5rem] overflow-hidden border-[6px] border-white shadow-[0_20px_60px_rgba(0,0,0,0.12)]">
                 <div className="relative overflow-hidden">
                   <Image
                     src="/image/nandar.png" 
@@ -38,14 +52,17 @@ export default function Profile() {
                     width={500}
                     height={625}
                     priority
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    className="object-cover transition-transform duration-700 ease-out"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#1E293B]/50 via-transparent to-transparent opacity-60" />
                 </div>
-             </div>
+             </TiltCard>
              
              {/* Badge Nama — floating */}
-             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[85%] md:w-[80%] bg-[#0F172A]/40 backdrop-blur-2xl text-white px-6 py-2.5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.3)] z-20 border border-white/10 hover:bg-[#0F172A]/50 transition-all duration-500 overflow-hidden group/badge flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(0,0,0,0.4)]">
+             <motion.div 
+               className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[85%] md:w-[80%] bg-[#0F172A]/40 backdrop-blur-2xl text-white px-6 py-2.5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.3)] z-20 border border-white/10 hover:bg-[#0F172A]/50 transition-all duration-500 overflow-hidden group/badge flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(0,0,0,0.4)]"
+               style={{ transform: "translateZ(40px)" }}
+             >
                 <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/badge:opacity-100 transition-opacity duration-500" />
                 <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
                 
@@ -60,7 +77,7 @@ export default function Profile() {
                       <p className="text-xs md:text-sm font-bold tracking-tight truncate text-white drop-shadow-md">Hasmunandar, S.Pd.</p>
                    </div>
                 </div>
-             </div>
+             </motion.div>
 
              <div className="absolute -top-3 -left-3 w-16 h-16 border-t-2 border-l-2 border-[#406093]/20 rounded-tl-2xl pointer-events-none hidden md:block" />
           </div>
@@ -73,11 +90,16 @@ export default function Profile() {
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
+          style={{ y: yContent }}
         >
           {/* 01. TENTANG SAYA */}
-          <motion.div variants={staggerItem} className="space-y-4">
+          <motion.div 
+            variants={staggerItem} 
+            className="space-y-4"
+            transition={{ type: "spring", stiffness: 100 }}
+          >
             <div className="flex items-center gap-3">
-              <span className="w-8 h-8 rounded-lg bg-[#406093] text-white flex items-center justify-center text-[10px] font-black">01</span>
+              <span className="w-8 h-8 rounded-lg bg-[#406093] text-white flex items-center justify-center text-[10px] font-black shadow-lg shadow-[#406093]/20">01</span>
               <div className="h-[1px] flex-1 bg-gradient-to-r from-[#406093]/30 to-transparent"></div>
             </div>
             <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter leading-none text-[#1E293B]">
@@ -102,9 +124,13 @@ export default function Profile() {
           </motion.div>
 
           {/* 02. INSPIRASI */}
-          <motion.div variants={staggerItem} className="space-y-4">
+          <motion.div 
+            variants={staggerItem} 
+            className="space-y-4"
+            transition={{ type: "spring", stiffness: 100 }}
+          >
             <div className="flex items-center gap-3">
-              <span className="w-8 h-8 rounded-lg bg-[#406093] text-white flex items-center justify-center text-[10px] font-black">02</span>
+              <span className="w-8 h-8 rounded-lg bg-[#406093] text-white flex items-center justify-center text-[10px] font-black shadow-lg shadow-[#406093]/20">02</span>
               <div className="h-[1px] flex-1 bg-gradient-to-r from-[#406093]/30 to-transparent"></div>
             </div>
             <h4 className="text-xl font-bold uppercase tracking-tight text-[#1E293B]">
@@ -125,10 +151,9 @@ export default function Profile() {
         whileInView="visible"
         viewport={VIEWPORT}
       >
-        <div className="relative group">
+        <TiltCard className="relative group">
           <div className="absolute -inset-1 bg-gradient-to-r from-[#406093]/30 via-[#60A5FA]/20 to-[#406093]/30 rounded-[2.3rem] blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <div className="relative backdrop-blur-xl bg-white/70 border border-white/80 px-8 md:px-16 py-8 md:py-10 rounded-[2.5rem] shadow-xl flex flex-col md:flex-row items-center justify-center gap-4 md:gap-10 overflow-hidden group-hover:shadow-2xl group-hover:scale-[1.01] transition-all duration-500">
-            <div className="absolute -inset-1 rounded-[2.1rem]" />
+          <div className="relative backdrop-blur-xl bg-white/70 border border-white/80 px-8 md:px-16 py-8 md:py-10 rounded-[2.5rem] shadow-xl flex flex-col md:flex-row items-center justify-center gap-4 md:gap-10 overflow-hidden group-hover:shadow-2xl transition-all duration-500">
             <div className="absolute top-0 left-1/4 w-32 h-full bg-gradient-to-r from-[#406093]/8 to-transparent blur-2xl rounded-full pointer-events-none" />
 
             <div className="flex items-start gap-4">
@@ -147,7 +172,7 @@ export default function Profile() {
               <div className="h-px w-8 bg-gradient-to-l from-[#406093]/30 to-transparent hidden md:block" />
             </div>
           </div>
-        </div>
+        </TiltCard>
       </motion.div>
     </section>
   );
